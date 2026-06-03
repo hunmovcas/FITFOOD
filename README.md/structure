@@ -1,0 +1,68 @@
+healthy-food-platform/
+│
+├── index.html                  ← Entry point DUY NHẤT (login/landing page)
+├── README.md
+│
+├── src/
+│   ├── customer/
+│   │   ├── home.html           ← Trang chủ sau login
+│   │   ├── menu.html
+│   │   ├── cart.html
+│   │   ├── checkout.html
+│   │   ├── orders.html         ← Lịch sử đơn hàng + tracking
+│   │   ├── subscription.html   ← Gói ăn định kỳ
+│   │   └── profile.html
+│   │
+│   ├── kitchen/
+│   │   ├── pos.html            ← Point of Sale (thu ngân)
+│   │   ├── kds.html            ← Kitchen Display System
+│   │   ├── inventory.html      ← Quản lý kho nguyên liệu
+│   │   └── label-print.html    ← In tem dinh dưỡng
+│   │
+│   └── admin/
+│       ├── dashboard.html      ← Business Intelligence / tổng quan
+│       ├── menu-plan.html      ← Lên lịch thực đơn
+│       ├── suppliers.html      ← Nhà cung cấp
+│       ├── marketing.html      ← Voucher / campaigns
+│       ├── staff.html          ← Nhân sự
+│       └── reports.html        ← Báo cáo chi tiết
+│
+├── assets/
+│   ├── css/
+│   │   ├── main.css
+│   │   ├── customer.css
+│   │   ├── kitchen.css
+│   │   └── admin.css
+│   ├── js/
+│   │   ├── auth.js             ← Logic xác thực & routing theo role
+│   │   ├── api.js              ← Wrapper gọi API chung
+│   │   ├── customer.js
+│   │   ├── kitchen.js
+│   │   └── admin.js
+│   └── images/
+│
+├── sql/
+│   ├── 01_schema.sql
+│   ├── 02_sample_data.sql
+│   ├── 03_stored_procedures.sql
+│   └── 04_views_triggers.sql
+│
+└── server/
+    ├── package.json
+    ├── server.js
+    ├── db.js
+    └── routes/
+        ├── auth.js
+        ├── products.js
+        ├── orders.js
+        ├── inventory.js
+        ├── users.js
+        └── suppliers.js
+
+server/ → Render.com
+
+Database → Railway
+
+frontend/ → GitHub Pages
+
+Tôi có một bài tập lớn môn Cơ sở dữ liệu được mô tả như sau, cần sử dụng SQL Serve. Tôi sẽ tạo web host trên Github. 
