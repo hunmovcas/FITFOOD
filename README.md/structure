@@ -51,8 +51,10 @@ healthy-food-platform/
     ├── package.json
     ├── server.js
     ├── db.js
+    ├── middleware/
+    │   └── jwtAuth.js
     └── routes/
-        ├── auth.js
+        ├── authRoutes.js
         ├── products.js
         ├── orders.js
         ├── inventory.js
