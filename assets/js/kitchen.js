@@ -1,0 +1,271 @@
+< !DOCTYPE html >
+    <html lang="vi">
+        <head>
+            <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>GreenBite — Nền tảng ăn uống lành mạnh</title>
+                    <link rel="stylesheet" href="assets/css/main.css">
+                        <style>
+                            body {min - height: 100vh; display: flex; background: var(--green-900); overflow: hidden; }
+                            .landing {
+                                display: flex; width: 100%; min-height: 100vh;
+    }
+                            /* Left panel */
+                            .left-panel {
+                                flex: 1; display: flex; flex-direction: column; justify-content: center;
+                            padding: 4rem 3rem; position: relative; overflow: hidden;
+    }
+                            .left-panel::before {
+                                content: ''; position: absolute; inset: 0;
+                            background: radial-gradient(ellipse at 30% 50%, rgba(58,173,104,.25) 0%, transparent 60%),
+                            radial-gradient(ellipse at 80% 20%, rgba(181,229,80,.1) 0%, transparent 40%);
+    }
+                            .left-bg-text {
+                                position: absolute; bottom: -2rem; left: -1rem;
+                            font-family: var(--font-display); font-size: 14rem; font-weight: 700;
+                            color: rgba(255,255,255,.03); line-height: 1; pointer-events: none; user-select: none;
+    }
+                            .left-content {position: relative; z-index: 1; max-width: 540px; }
+                            .lp-badge {
+                                display: inline-flex; align-items: center; gap: .5rem;
+                            background: rgba(58,173,104,.2); border: 1px solid rgba(58,173,104,.4);
+                            color: var(--green-300); padding: .35rem 1rem; border-radius: 99px;
+                            font-size: .78rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+                            margin-bottom: 2rem;
+    }
+                            .lp-title {
+                                font - family: var(--font-display); font-size: clamp(2.5rem,5vw,4rem);
+                            font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 1.25rem;
+    }
+                            .lp-title .highlight {color: var(--accent-lime); display: block; }
+                            .lp-desc {font - size: 1rem; color: rgba(255,255,255,.65); line-height: 1.7; margin-bottom: 3rem; max-width: 440px; }
+                            .lp-features {display: flex; flex-direction: column; gap: 1rem; }
+                            .lp-feature {
+                                display: flex; align-items: flex-start; gap: 1rem;
+                            background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+                            border-radius: var(--radius-lg); padding: 1rem 1.25rem;
+    }
+                            .lp-feature-icon {
+                                width: 40px; height: 40px; border-radius: var(--radius-md);
+                            background: rgba(58,173,104,.2); display: flex; align-items: center; justify-content: center;
+                            font-size: 1.2rem; flex-shrink: 0;
+    }
+                            .lp-feature-text h4 {color: #fff; font-size: .9rem; font-weight: 600; margin-bottom: .25rem; }
+                            .lp-feature-text p  {font - size: .8rem; color: rgba(255,255,255,.55); line-height: 1.5; }
+
+                            /* Right panel */
+                            .right-panel {
+                                width: 460px; background: var(--cream);
+                            display: flex; flex-direction: column; justify-content: center;
+                            padding: 3rem 2.5rem; position: relative;
+    }
+                            .rp-top {
+                                display: flex; align-items: center; gap: .75rem; margin-bottom: 2.5rem;
+    }
+                            .rp-logo {
+                                width: 44px; height: 44px; background: var(--green-600); border-radius: var(--radius-md);
+                            display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+                            .rp-brand {font - family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--green-900); }
+                            .rp-brand small {display: block; font-size: .7rem; font-weight: 400; color: var(--gray-600); font-family: var(--font-body); }
+
+                            .login-title {font - family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--green-900); margin-bottom: .4rem; }
+                            .login-sub   {font - size: .88rem; color: var(--gray-600); margin-bottom: 2rem; }
+
+                            .demo-accounts {
+                                background: var(--green-50); border: 1px solid var(--green-200); border-radius: var(--radius-lg);
+                            padding: 1rem 1.25rem; margin-bottom: 1.75rem;
+    }
+                            .demo-accounts h4 {font - size: .78rem; font-weight: 700; color: var(--green-800); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .75rem; }
+                            .demo-list {display: flex; flex-direction: column; gap: .4rem; }
+                            .demo-item {
+                                display: flex; align-items: center; gap: .75rem; cursor: pointer;
+                            padding: .4rem .5rem; border-radius: var(--radius-sm); transition: var(--transition);
+    }
+                            .demo-item:hover {background: var(--green-100); }
+                            .demo-role {
+                                width: 70px; font-size: .7rem; font-weight: 700; padding: .15rem .5rem;
+                            border-radius: 99px; text-align: center;
+    }
+                            .demo-email {font - size: .78rem; color: var(--gray-600); font-family: var(--font-mono); }
+                            .demo-arrow {margin - left: auto; font-size: .8rem; color: var(--gray-400); }
+
+                            .login-form {display: flex; flex-direction: column; gap: 1rem; }
+                            .pw-toggle {position: absolute; right: .75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-400); font-size: .9rem; }
+                            .pw-wrap {position: relative; }
+                            .pw-wrap input {padding - right: 2.5rem; }
+
+                            .login-btn {margin - top: .5rem; }
+                            .login-divider {
+                                display: flex; align-items: center; gap: 1rem; margin: 1rem 0;
+                            font-size: .78rem; color: var(--gray-400);
+    }
+                            .login-divider::before, .login-divider::after {
+                                content: ''; flex: 1; height: 1px; background: #e2e8f0;
+    }
+                            .rp-bottom {
+                                margin - top: 1.5rem; text-align: center; font-size: .78rem; color: var(--gray-400);
+    }
+                            .error-msg {display: none; }
+
+                            @media (max-width: 900px) {
+      .left - panel {display: none; }
+                            .right-panel {width: 100%; max-width: 440px; margin: 0 auto; }
+    }
+                        </style>
+                    </head>
+                    <body>
+
+                        <div class="landing">
+                            <!-- Left -->
+                            <div class="left-panel">
+                                <div class="left-bg-text">GREEN</div>
+                                <div class="left-content animate-in">
+                                    <div class="lp-badge">🌿 Nền tảng F&B Healthy #1 Việt Nam</div>
+                                    <h1 class="lp-title">
+                                        Quản lý toàn diện
+                                        <span class="highlight">Ẩm thực Lành mạnh</span>
+                                    </h1>
+                                    <p class="lp-desc">
+                                        Hệ sinh thái công nghệ khép kín — từ đặt hàng online, nhà bếp thông minh,
+                                        đến quản trị chuỗi cung ứng theo thời gian thực.
+                                    </p>
+                                    <div class="lp-features">
+                                        <div class="lp-feature">
+                                            <div class="lp-feature-icon">🛒</div>
+                                            <div class="lp-feature-text">
+                                                <h4>Cổng khách hàng thông minh</h4>
+                                                <p>Đặt món lẻ hoặc gói ăn định kỳ, theo dõi calo, giao hàng real-time.</p>
+                                            </div>
+                                        </div>
+                                        <div class="lp-feature">
+                                            <div class="lp-feature-icon">👨‍🍳</div>
+                                            <div class="lp-feature-text">
+                                                <h4>Nhà bếp & POS tích hợp</h4>
+                                                <p>KDS hiển thị đơn hàng tức thì, in tem dinh dưỡng, quản lý kho nguyên liệu.</p>
+                                            </div>
+                                        </div>
+                                        <div class="lp-feature">
+                                            <div class="lp-feature-icon">📊</div>
+                                            <div class="lp-feature-text">
+                                                <h4>Admin Dashboard & BI</h4>
+                                                <p>Phân tích doanh thu, tỷ lệ hao hụt, dự báo nhu cầu, quản lý toàn chuỗi.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right -->
+                            <div class="right-panel">
+                                <div class="rp-top">
+                                    <div class="rp-logo">🌿</div>
+                                    <div class="rp-brand">GreenBite <small>Platform v1.0</small></div>
+                                </div>
+
+                                <h2 class="login-title">Chào mừng trở lại!</h2>
+                                <p class="login-sub">Đăng nhập để tiếp tục hành trình sức khỏe của bạn.</p>
+
+                                <div class="demo-accounts">
+                                    <h4>🚀 Demo nhanh — click để điền:</h4>
+                                    <div class="demo-list">
+                                        <div class="demo-item" onclick="fillDemo('customer@demo.com')">
+                                            <span class="demo-role badge badge-green">Khách hàng</span>
+                                            <span class="demo-email">customer@demo.com</span>
+                                            <span class="demo-arrow">→</span>
+                                        </div>
+                                        <div class="demo-item" onclick="fillDemo('cashier@demo.com')">
+                                            <span class="demo-role badge badge-lime">Thu ngân</span>
+                                            <span class="demo-email">cashier@demo.com</span>
+                                            <span class="demo-arrow">→</span>
+                                        </div>
+                                        <div class="demo-item" onclick="fillDemo('kitchen@demo.com')">
+                                            <span class="demo-role badge badge-orange">Bếp trưởng</span>
+                                            <span class="demo-email">kitchen@demo.com</span>
+                                            <span class="demo-arrow">→</span>
+                                        </div>
+                                        <div class="demo-item" onclick="fillDemo('admin@demo.com')">
+                                            <span class="demo-role badge badge-red">Admin</span>
+                                            <span class="demo-email">admin@demo.com</span>
+                                            <span class="demo-arrow">→</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-danger error-msg" id="errorMsg">❌ Email hoặc mật khẩu không đúng.</div>
+
+                                <div class="login-form">
+                                    <div class="form-group" style="margin:0">
+                                        <label>Email</label>
+                                        <input type="email" id="emailInput" class="form-control" placeholder="email@example.com" autocomplete="username">
+                                    </div>
+                                    <div class="form-group" style="margin:0">
+                                        <label>Mật khẩu</label>
+                                        <div class="pw-wrap">
+                                            <input type="password" id="pwInput" class="form-control" placeholder="••••••••" autocomplete="current-password">
+                                                <button class="pw-toggle" onclick="togglePw()" type="button" id="eyeBtn">👁</button>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-block btn-lg login-btn" onclick="handleLogin()">
+                                        🌿 Đăng nhập
+                                    </button>
+                                </div>
+
+                                <div class="rp-bottom">
+                                    Mật khẩu demo: <strong>123456</strong> &nbsp;•&nbsp; Đây là ứng dụng học thuật
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="toast-container"></div>
+
+                        <script src="assets/js/auth.js"></script>
+                        <script>
+  // Check if already logged in
+                            const existing = getAuth();
+                            if (existing) redirectByRole(existing.role);
+
+                            function fillDemo(email) {
+                                document.getElementById('emailInput').value = email;
+                            document.getElementById('pwInput').value = '123456';
+                            document.getElementById('errorMsg').style.display = 'none';
+  }
+
+                            function togglePw() {
+    const inp = document.getElementById('pwInput');
+                            const btn = document.getElementById('eyeBtn');
+                            if (inp.type === 'password') {inp.type = 'text'; btn.textContent = '🙈'; }
+                            else {inp.type = 'password'; btn.textContent = '👁'; }
+  }
+
+                            function handleLogin() {
+    const email = document.getElementById('emailInput').value.trim();
+                            const pw    = document.getElementById('pwInput').value;
+                            const errEl = document.getElementById('errorMsg');
+                            errEl.style.display = 'none';
+
+                            if (!email || !pw) {showToast('Vui lòng nhập đầy đủ thông tin.', 'warning'); return; }
+
+    const user = USERS.find(u => u.email === email && u.password === pw);
+                            if (!user) {errEl.style.display = 'flex'; return; }
+
+                            setAuth(user);
+                            showToast(`Chào mừng, ${user.name}! 🌿`,'success',1500);
+    setTimeout(() => redirectByRole(user.role), 1000);
+  }
+
+                            function redirectByRole(role) {
+    const map = {
+                                customer: 'src/customer/home.html',
+                            cashier:  'src/kitchen/pos.html',
+                            kitchen:  'src/kitchen/kds.html',
+                            admin:    'src/admin/dashboard.html',
+    };
+                            window.location.href = map[role] || 'src/customer/home.html';
+  }
+
+  // Enter key
+  document.addEventListener('keydown', e => { if (e.key==='Enter') handleLogin(); });
+                        </script>
+                    </body>
+                </html>

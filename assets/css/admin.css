@@ -1,0 +1,446 @@
+/* ── Admin Dashboard Styles ── */
+
+/* Chart containers */
+.chart-container {
+    position: relative;
+    width: 100%;
+}
+
+.chart-placeholder {
+    background: var(--gray-100);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-400);
+    font-size: .85rem;
+    min-height: 180px;
+}
+
+/* Mini bar chart */
+.mini-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 60px;
+}
+
+.mini-bar {
+    flex: 1;
+    background: var(--green-200);
+    border-radius: 3px 3px 0 0;
+    transition: background .2s;
+    cursor: pointer;
+    min-width: 8px;
+}
+
+.mini-bar:hover {
+    background: var(--green-500);
+}
+
+.mini-bar.highlight {
+    background: var(--green-500);
+}
+
+/* Donut chart fake */
+.donut-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.donut-center {
+    position: absolute;
+    text-align: center;
+}
+
+.donut-center .val {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.donut-center .lbl {
+    font-size: .7rem;
+    color: var(--gray-600);
+}
+
+/* Menu planner */
+.week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: .75rem;
+    overflow-x: auto;
+}
+
+.day-col {
+    min-width: 130px;
+}
+
+.day-header {
+    text-align: center;
+    padding: .6rem;
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--gray-600);
+    margin-bottom: .5rem;
+}
+
+.day-header.today .day-header-inner {
+    background: var(--green-600);
+    color: #fff;
+    border-radius: var(--radius-md);
+    padding: .3rem .6rem;
+    display: inline-block;
+}
+
+.meal-slot {
+    border: 2px dashed #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: .75rem .6rem;
+    text-align: center;
+    margin-bottom: .5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .25rem;
+    font-size: .78rem;
+    color: var(--gray-400);
+}
+
+.meal-slot:hover {
+    border-color: var(--green-400);
+    background: var(--green-50);
+    color: var(--green-700);
+}
+
+.meal-slot.filled {
+    border-style: solid;
+    border-color: var(--green-200);
+    background: var(--green-50);
+    color: var(--gray-800);
+}
+
+.meal-slot .slot-emoji {
+    font-size: 1.4rem;
+}
+
+.meal-slot .slot-name {
+    font-weight: 600;
+    font-size: .78rem;
+}
+
+.meal-slot .slot-cal {
+    font-size: .68rem;
+    color: var(--gray-400);
+}
+
+.meal-type-label {
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--gray-400);
+    margin-bottom: .25rem;
+}
+
+/* Supplier cards */
+.supplier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+}
+
+.supplier-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1px solid #f0f0ed;
+    padding: 1.25rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.supplier-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--green-200);
+}
+
+.supplier-header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.supplier-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--green-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.supplier-rating {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: .82rem;
+    color: #f59e0b;
+}
+
+.supplier-tags {
+    display: flex;
+    gap: .4rem;
+    flex-wrap: wrap;
+    margin-top: .75rem;
+}
+
+/* Marketing / voucher */
+.voucher-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+}
+
+.voucher-card {
+    background: linear-gradient(135deg, var(--green-900), var(--green-700));
+    color: #fff;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    position: relative;
+    padding: 1.5rem;
+}
+
+.voucher-card::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--gray-100);
+}
+
+.voucher-code {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    margin-bottom: .5rem;
+    background: rgba(255, 255, 255, .15);
+    display: inline-block;
+    padding: .2rem .75rem;
+    border-radius: var(--radius-sm);
+}
+
+.voucher-discount {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+}
+
+.voucher-meta {
+    font-size: .78rem;
+    opacity: .7;
+    margin-top: .5rem;
+}
+
+.voucher-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.voucher-stat .val {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.voucher-stat .lbl {
+    font-size: .7rem;
+    opacity: .65;
+}
+
+/* Staff table enhancements */
+.staff-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--green-100);
+    color: var(--green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .85rem;
+    flex-shrink: 0;
+}
+
+.role-chip {
+    padding: .2rem .65rem;
+    border-radius: 99px;
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.role-admin {
+    background: #fde8f8;
+    color: #8b0060;
+}
+
+.role-cashier {
+    background: var(--green-100);
+    color: var(--green-800);
+}
+
+.role-kitchen {
+    background: #fff3e0;
+    color: #7a4500;
+}
+
+.role-shipper {
+    background: #e8f0fe;
+    color: #1967d2;
+}
+
+/* BI Reports */
+.bi-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.bi-kpi {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    border-left: 4px solid var(--green-500);
+    box-shadow: var(--shadow-sm);
+}
+
+.bi-kpi.orange {
+    border-left-color: var(--accent-orange);
+}
+
+.bi-kpi.red {
+    border-left-color: var(--accent-red);
+}
+
+.bi-kpi.blue {
+    border-left-color: #4285f4;
+}
+
+.bi-kpi .kpi-val {
+    font-size: 1.75rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+}
+
+.bi-kpi .kpi-lbl {
+    font-size: .78rem;
+    color: var(--gray-600);
+    margin-top: .2rem;
+}
+
+.bi-kpi .kpi-trend {
+    font-size: .75rem;
+    font-weight: 600;
+    margin-top: .5rem;
+}
+
+/* Food waste chart */
+.waste-bar {
+    display: flex;
+    align-items: center;
+    gap .75rem;
+    margin-bottom: .75rem;
+}
+
+.waste-label {
+    width: 100px;
+    font-size: .82rem;
+    color: var(--gray-600);
+}
+
+.waste-track {
+    flex: 1;
+    height: 10px;
+    background: var(--gray-100);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.waste-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--accent-orange);
+}
+
+.waste-pct {
+    min-width: 36px;
+    font-size: .78rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+/* Report table */
+.report-highlight {
+    background: var(--green-50) !important;
+}
+
+.rank-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.rank-1 {
+    background: #fde68a;
+    color: #7a4000;
+}
+
+.rank-2 {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.rank-3 {
+    background: #fcd7ba;
+    color: #7a3300;
+}
+
+/* Demand forecast sparkline placeholder */
+.sparkline {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+.spark-bar {
+    width: 6px;
+    background: var(--green-300);
+    border-radius: 2px 2px 0 0;
+}
+
+.spark-bar.high {
+    background: var(--green-600);
+}
