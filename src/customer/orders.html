@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Đơn hàng của tôi</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/customer.css">
+</head>
+
+<body>
+    <nav class="customer-nav">
+        <div class="container nav-inner">
+            <a href="home.html" class="nav-logo">
+                <div class="nav-logo-icon">🥗</div>
+                <span class="nav-logo-text">Fit<span>Food</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="home.html">Trang chủ</a></li>
+                <li><a href="menu.html">Thực đơn</a></li>
+                <li><a href="orders.html" class="active">Đơn hàng</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="cart.html" class="cart-btn">🛒<span class="cart-count" style="display:none">0</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <div style="padding:var(--space-10) 0 var(--space-16)">
+        <div class="container">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-8)">
+                <h2>📦 Đơn hàng của tôi</h2>
+                <div style="display:flex;gap:var(--space-2)">
+                    <button class="filter-chip active" data-status="all" onclick="filterOrders('all')">Tất cả</button>
+                    <button class="filter-chip" data-status="pending" onclick="filterOrders('pending')">Đang
+                        chờ</button>
+                    <button class="filter-chip" data-status="preparing" onclick="filterOrders('preparing')">Đang
+                        nấu</button>
+                    <button class="filter-chip" data-status="delivering" onclick="filterOrders('delivering')">Đang
+                        giao</button>
+                    <button class="filter-chip" data-status="done" onclick="filterOrders('done')">Hoàn thành</button>
+                </div>
+            </div>
+
+            <!-- Đơn hàng đang giao (nổi bật) -->
+            <div id="active-order-banner" style="display:none;
+        background:linear-gradient(135deg,var(--green-600),var(--green-800));
+        border-radius:var(--radius-xl);padding:var(--space-6);margin-bottom:var(--space-6);color:white">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-5)">
+                    <div>
+                        <div style="font-size:.8125rem;opacity:.8;margin-bottom:4px">🏍 ĐANG GIAO HÀNG</div>
+                        <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700"
+                            id="active-order-id">
+                            #FF-2401
+                        </div>
+                    </div>
+                    <span class="badge" style="background:rgba(255,255,255,.2);color:white">Dự kiến: 15 phút</span>
+                </div>
+
+                <!-- Tracking steps -->
+                <div class="tracking-steps">
+                    <div class="tracking-step done">
+                        <div class="step-icon">✓</div>
+                        <div class="step-label">Đặt hàng</div>
+                    </div>
+                    <div class="tracking-step done">
+                        <div class="step-icon">✓</div>
+                        <div class="step-label">Xác nhận</div>
+                    </div>
+                    <div class="tracking-step done">
+                        <div class="step-icon">🍳</div>
+                        <div class="step-label">Đang nấu</div>
+                    </div>
+                    <div class="tracking-step active">
+                        <div class="step-icon">🏍</div>
+                        <div class="step-label">Đang giao</div>
+                    </div>
+                    <div class="tracking-step">
+                        <div class="step-icon">🏠</div>
+                        <div class="step-label">Đã nhận</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danh sách đơn hàng -->
+            <div id="orders-list">
+                <div class="empty-state">
+                    <div class="spinner" style="width:32px;height:32px;border-width:3px"></div>
+                    <p>Đang tải đơn hàng...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/socket.js"></script>
+    <script src="../../assets/js/customer.js"></script>
+    <script>
+        let allOrders = [];
+
+        /* --- Tải danh sách đơn hàng --- */
+        async function loadOrders() {
+            try {
+                const res = await API.get('/api/orders/my');
+                allOrders = res.data || MOCK.orders;
+            } catch {
+                allOrders = MOCK.orders;
+            }
+
+            // Hiển thị banner đơn đang giao
+            const delivering = allOrders.find(o => o.status === 'delivering');
+            if (delivering) {
+                document.getElementById('active-order-banner').style.display = 'block';
+                document.getElementById('active-order-id').textContent = delivering.id;
+            }
+
+            renderOrders(allOrders);
+            listenRealtime();
+        }
+
+        /* --- Render danh sách --- */
+        function renderOrders(orders) {
+            const list = document.getElementById('orders-list');
+            if (orders.length === 0) {
+                list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📦</div>
+            <h3>Chưa có đơn hàng nào</h3>
+            <p>Đặt ngay một bữa ăn healthy cho hôm nay!</p>
+            <a href="menu.html" class="btn btn-primary" style="margin-top:var(--space-4)">
+              Đặt hàng →
+            </a>
+          </div>`;
+                return;
+            }
+
+            list.innerHTML = orders.map(o => `
+        <div class="card" style="margin-bottom:var(--space-4);cursor:pointer"
+          onclick="toggleOrderDetail('${o.id}')">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;align-items:center;gap:var(--space-4)">
+              <div style="font-size:2rem">${orderIcon(o.status)}</div>
+              <div>
+                <div class="font-bold">${o.id}</div>
+                <div class="text-sm text-muted">${o.time || formatDate(o.created_at || new Date())} · ${o.items?.length || 0} món</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--space-4)">
+              <span class="badge ${statusBadgeClass(o.status)}">${statusLabel(o.status)}</span>
+              <span class="font-bold text-green">${formatPrice(o.total)}</span>
+              <span style="color:var(--neutral-300)">›</span>
+            </div>
+          </div>
+          <!-- Chi tiết expandable -->
+          <div id="order-detail-${o.id}" style="display:none;margin-top:var(--space-4);
+            padding-top:var(--space-4);border-top:1px solid var(--neutral-100)">
+            ${(o.items || []).map(i => `
+              <div style="display:flex;justify-content:space-between;padding:var(--space-2) 0;
+                font-size:.875rem;color:var(--neutral-600)">
+                <span>${i.name || i} x${i.qty || 1}</span>
+                <span>${formatPrice((i.price || 0) * (i.qty || 1))}</span>
+              </div>`).join('')}
+            ${o.status === 'done' ? `
+              <button class="btn btn-secondary btn-sm" style="margin-top:var(--space-4)"
+                onclick="event.stopPropagation();reorder('${o.id}')">
+                🔄 Đặt lại
+              </button>` : ''}
+          </div>
+        </div>`).join('');
+        }
+
+        function toggleOrderDetail(id) {
+            const el = document.getElementById(`order-detail-${id}`);
+            if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function filterOrders(status) {
+            document.querySelectorAll('[data-status]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.status === status);
+            });
+            const filtered = status === 'all' ? allOrders : allOrders.filter(o => o.status === status);
+            renderOrders(filtered);
+        }
+
+        function orderIcon(status) {
+            const map = { pending: '⏳', preparing: '🍳', ready: '✅', delivering: '🏍', done: '📦' };
+            return map[status] || '📦';
+        }
+
+        function statusBadgeClass(status) {
+            const map = {
+                pending: 'badge-amber', preparing: 'badge-blue', ready: 'badge-green',
+                delivering: 'badge-blue', done: 'badge-gray'
+            };
+            return map[status] || 'badge-gray';
+        }
+
+        function statusLabel(status) {
+            const map = {
+                pending: 'Chờ xác nhận', preparing: 'Đang nấu', ready: 'Sẵn sàng giao',
+                delivering: 'Đang giao', done: 'Đã giao'
+            };
+            return map[status] || status;
+        }
+
+        /* --- Realtime tracking --- */
+        function listenRealtime() {
+            SocketManager.connect();
+            SocketManager.on('order_status_update', (update) => {
+                const o = allOrders.find(x => x.id === update.id);
+                if (o) {
+                    o.status = update.status;
+                    renderOrders(allOrders);
+                    Toast.show(`Đơn ${update.id}: ${statusLabel(update.status)}`, 'info');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
+</body>
+
+</html>

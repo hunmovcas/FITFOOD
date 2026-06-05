@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Nền tảng Quản lý Đồ ăn Healthy</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        /* Trang landing điều hướng chọn portal */
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #f0f9ff 100%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .landing-hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-12) var(--space-6);
+            text-align: center;
+        }
+
+        .landing-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+        }
+
+        .landing-logo-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--green-500), var(--green-700));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 8px 32px rgba(34, 197, 94, .35);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .landing-logo-text {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--neutral-900);
+        }
+
+        .landing-logo-text span {
+            color: var(--green-600);
+        }
+
+        .landing-tagline {
+            font-size: 1.2rem;
+            color: var(--neutral-500);
+            max-width: 560px;
+            margin-bottom: var(--space-12);
+        }
+
+        /* Cards chọn portal */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-6);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .portal-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            border: 2px solid var(--neutral-100);
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-out);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--card-accent, var(--green-500));
+        }
+
+        .portal-card:hover {
+            border-color: var(--card-accent, var(--green-500));
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .12);
+            transform: translateY(-6px);
+        }
+
+        .portal-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: var(--radius-lg);
+            background: var(--card-bg, var(--green-50));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+        }
+
+        .portal-name {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--neutral-900);
+            text-align: center;
+        }
+
+        .portal-desc {
+            font-size: .875rem;
+            color: var(--neutral-500);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .portal-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: var(--card-accent, var(--green-600));
+            color: white;
+            padding: var(--space-2) var(--space-5);
+            border-radius: var(--radius-full);
+            font-size: .8125rem;
+            font-weight: 700;
+            margin-top: auto;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: var(--space-12);
+        }
+
+        .tech-badge {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: white;
+            border: 1px solid var(--neutral-200);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            font-size: .8125rem;
+            color: var(--neutral-600);
+            font-weight: 500;
+        }
+
+        .landing-footer {
+            text-align: center;
+            padding: var(--space-6);
+            font-size: .8125rem;
+            color: var(--neutral-400);
+            border-top: 1px solid var(--neutral-100);
+        }
+
+        @media (max-width: 768px) {
+            .portal-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .landing-logo-text {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="landing-hero">
+        <!-- Logo & tagline -->
+        <div class="landing-logo">
+            <div class="landing-logo-icon">🥗</div>
+            <div>
+                <div class="landing-logo-text">Fit<span>Food</span></div>
+                <div
+                    style="font-size:.8125rem;color:var(--neutral-400);margin-top:2px;letter-spacing:.08em;text-transform:uppercase">
+                    Healthy Food Platform
+                </div>
+            </div>
+        </div>
+
+        <p class="landing-tagline">
+            Hệ thống quản lý đồ ăn healthy tích hợp — Kết nối khách hàng, bếp và vận hành trên một nền tảng duy nhất
+        </p>
+
+        <!-- Chọn Portal -->
+        <div class="portal-grid">
+            <!-- Customer Portal -->
+            <a href="src/customer/home.html" class="portal-card" style="--card-accent:#22c55e;--card-bg:#f0fdf4">
+                <div class="portal-icon">🛒</div>
+                <div class="portal-name">Cổng Khách Hàng</div>
+                <p class="portal-desc">
+                    Đặt món, gói ăn định kỳ, theo dõi dinh dưỡng và trạng thái giao hàng
+                </p>
+                <span class="portal-cta">Vào cổng →</span>
+            </a>
+
+            <!-- Kitchen / POS -->
+            <a href="src/kitchen/kds.html" class="portal-card" style="--card-accent:#3b82f6;--card-bg:#eff6ff">
+                <div class="portal-icon">👨‍🍳</div>
+                <div class="portal-name">Bếp & Thu Ngân</div>
+                <p class="portal-desc">
+                    KDS nhận đơn realtime, POS tại quầy, quản lý kho nguyên liệu
+                </p>
+                <span class="portal-cta" style="background:#3b82f6">Vào bếp →</span>
+            </a>
+
+            <!-- Admin Dashboard -->
+            <a href="src/admin/dashboard.html" class="portal-card" style="--card-accent:#8b5cf6;--card-bg:#f5f3ff">
+                <div class="portal-icon">📊</div>
+                <div class="portal-name">Quản Trị Trung Tâm</div>
+                <p class="portal-desc">
+                    Báo cáo BI, lên lịch thực đơn, quản lý nhà cung cấp và nhân sự
+                </p>
+                <span class="portal-cta" style="background:#8b5cf6">Vào admin →</span>
+            </a>
+        </div>
+
+        <!-- Tech stack badges -->
+        <div class="tech-stack">
+            <span class="tech-badge">🗄 SQL Server</span>
+            <span class="tech-badge">⚡ Node.js + Express</span>
+            <span class="tech-badge">🔄 Socket.io Realtime</span>
+            <span class="tech-badge">🔐 JWT Auth</span>
+            <span class="tech-badge">☁️ GitHub Pages</span>
+        </div>
+    </main>
+
+    <footer class="landing-footer">
+        © 2025 FitFood Platform — Bài tập lớn môn Cơ sở dữ liệu
+    </footer>
+</body>
+
+</html>

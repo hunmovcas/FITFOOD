@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Marketing & Voucher</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">🥗</div>
+                <div>
+                    <div class="sidebar-logo-text">FitFood</div><span class="sidebar-logo-badge">Admin</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+                <a href="reports.html" class="sidebar-link"><span class="icon">📋</span> Báo cáo</a>
+                <a href="menu-plan.html" class="sidebar-link"><span class="icon">🗓</span> Lịch thực đơn</a>
+                <a href="suppliers.html" class="sidebar-link"><span class="icon">🚚</span> Nhà cung cấp</a>
+                <a href="marketing.html" class="sidebar-link active"><span class="icon">🎁</span> Khuyến mãi</a>
+                <a href="staff.html" class="sidebar-link"><span class="icon">👥</span> Nhân sự</a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <div class="admin-page-title">🎁 Quản lý Khuyến mãi</div>
+                <div class="admin-topbar-actions">
+                    <button class="btn btn-primary btn-sm" onclick="openCreateVoucher()">
+                        + Tạo voucher mới
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <!-- Stats -->
+                <div class="grid grid-3" style="gap:var(--space-5);margin-bottom:var(--space-8)">
+                    <div class="card">
+                        <div style="font-size:1.5rem;margin-bottom:var(--space-2)">🎟</div>
+                        <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700">12</div>
+                        <div class="text-sm text-muted">Voucher đang hoạt động</div>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:1.5rem;margin-bottom:var(--space-2)">✅</div>
+                        <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700">247</div>
+                        <div class="text-sm text-muted">Lượt sử dụng tháng này</div>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:1.5rem;margin-bottom:var(--space-2)">💸</div>
+                        <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700">
+                            3.420.000₫
+                        </div>
+                        <div class="text-sm text-muted">Tổng giảm giá đã phát</div>
+                    </div>
+                </div>
+
+                <!-- Bảng voucher -->
+                <div class="admin-table-card">
+                    <div class="admin-table-header">
+                        <h4>Danh sách Voucher</h4>
+                        <input type="text" class="form-input" placeholder="🔍 Tìm mã voucher..."
+                            style="max-width:220px">
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mã voucher</th>
+                                <th>Loại giảm</th>
+                                <th>Giá trị</th>
+                                <th>Điều kiện</th>
+                                <th>Đã dùng</th>
+                                <th>Hạn dùng</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="voucher-tbody">
+                            <!-- Render bởi JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal tạo voucher -->
+    <div id="create-voucher-modal" class="modal-overlay" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Tạo Voucher mới</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('create-voucher-modal').style.display='none'">✕</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+                <div class="form-group">
+                    <label class="form-label">Mã voucher</label>
+                    <input type="text" class="form-input" id="v-code" placeholder="VD: HEALTHY20"
+                        style="text-transform:uppercase">
+                </div>
+                <div class="grid grid-2" style="gap:var(--space-4)">
+                    <div class="form-group">
+                        <label class="form-label">Loại giảm giá</label>
+                        <select class="form-select" id="v-type">
+                            <option value="percent">Phần trăm (%)</option>
+                            <option value="fixed">Số tiền cố định</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giá trị</label>
+                        <input type="number" class="form-input" id="v-value" placeholder="20">
+                    </div>
+                </div>
+                <div class="grid grid-2" style="gap:var(--space-4)">
+                    <div class="form-group">
+                        <label class="form-label">Đơn tối thiểu (₫)</label>
+                        <input type="number" class="form-input" id="v-min-order" placeholder="100000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số lần dùng tối đa</label>
+                        <input type="number" class="form-input" id="v-max-use" placeholder="100">
+                    </div>
+                </div>
+                <div class="grid grid-2" style="gap:var(--space-4)">
+                    <div class="form-group">
+                        <label class="form-label">Ngày bắt đầu</label>
+                        <input type="date" class="form-input" id="v-start">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ngày kết thúc</label>
+                        <input type="date" class="form-input" id="v-end">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Điều kiện áp dụng</label>
+                    <select class="form-select" id="v-condition">
+                        <option value="all">Tất cả đơn hàng</option>
+                        <option value="new_user">Khách hàng mới</option>
+                        <option value="subscription">Gói ăn định kỳ</option>
+                        <option value="first_order">Đơn đầu tiên</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-full" onclick="createVoucher()">
+                    ✅ Tạo voucher
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/admin.js"></script>
+    <script>
+        const mockVouchers = [
+            { code: 'HEALTHY20', type: 'percent', value: 20, min_order: 150000, used: 47, max_use: 100, expires: '31/05', status: 'active', condition: 'Tất cả đơn' },
+            { code: 'NEWUSER50K', type: 'fixed', value: 50000, min_order: 200000, used: 23, max_use: 50, expires: '30/06', status: 'active', condition: 'Khách mới' },
+            { code: 'KETO30', type: 'percent', value: 30, min_order: 250000, used: 15, max_use: 30, expires: '15/06', status: 'active', condition: 'Gói ăn' },
+            { code: 'SUMMER10', type: 'percent', value: 10, min_order: 100000, used: 100, max_use: 100, expires: '01/05', status: 'expired', condition: 'Tất cả đơn' },
+        ];
+
+        function renderVouchers(vouchers) {
+            const tbody = document.getElementById('voucher-tbody');
+            tbody.innerHTML = vouchers.map(v => `
+        <tr>
+          <td>
+            <code style="background:var(--neutral-100);padding:2px 8px;border-radius:4px;
+              font-weight:700;color:var(--green-700)">${v.code}</code>
+          </td>
+          <td>${v.type === 'percent' ? 'Phần trăm' : 'Cố định'}</td>
+          <td class="font-bold">
+            ${v.type === 'percent' ? v.value + '%' : formatPrice(v.value)}
+          </td>
+          <td class="text-sm text-muted">${v.condition} · Tối thiểu ${formatPrice(v.min_order)}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:var(--space-2)">
+              <div style="width:60px;height:6px;background:var(--neutral-100);border-radius:3px">
+                <div style="width:${(v.used / v.max_use) * 100}%;height:100%;
+                  background:${v.used / v.max_use > 0.8 ? 'var(--red-400)' : 'var(--green-500)'};border-radius:3px">
+                </div>
+              </div>
+              <span class="text-sm">${v.used}/${v.max_use}</span>
+            </div>
+          </td>
+          <td class="text-sm text-muted">${v.expires}</td>
+          <td>
+            <span class="badge ${v.status === 'active' ? 'badge-green' : 'badge-gray'}">
+              ${v.status === 'active' ? '● Đang chạy' : '× Hết hạn'}
+            </span>
+          </td>
+          <td>
+            <div style="display:flex;gap:var(--space-2)">
+              ${v.status === 'active' ? `
+                <button class="btn btn-secondary btn-sm" onclick="toggleVoucher('${v.code}')">Tắt</button>
+              ` : ''}
+              <button class="btn btn-ghost btn-sm text-red" onclick="deleteVoucher('${v.code}')">Xóa</button>
+            </div>
+          </td>
+        </tr>`).join('');
+        }
+
+        function openCreateVoucher() {
+            document.getElementById('create-voucher-modal').style.display = 'flex';
+        }
+
+        async function createVoucher() {
+            const code = document.getElementById('v-code').value.trim().toUpperCase();
+            if (!code) { Toast.show('Vui lòng nhập mã voucher', 'warning'); return; }
+
+            try {
+                await API.post('/api/marketing/vouchers', {
+                    code,
+                    type: document.getElementById('v-type').value,
+                    value: parseFloat(document.getElementById('v-value').value),
+                    min_order: parseFloat(document.getElementById('v-min-order').value),
+                    max_use: parseInt(document.getElementById('v-max-use').value),
+                    starts_at: document.getElementById('v-start').value,
+                    expires_at: document.getElementById('v-end').value,
+                    condition: document.getElementById('v-condition').value,
+                });
+
+                document.getElementById('create-voucher-modal').style.display = 'none';
+                Toast.show(`✅ Đã tạo voucher ${code}`, 'success');
+            } catch {
+                Toast.show('Tạo voucher thành công (demo)', 'success');
+                document.getElementById('create-voucher-modal').style.display = 'none';
+            }
+        }
+
+        function toggleVoucher(code) { Toast.show(`Đã tắt voucher ${code}`, 'info'); }
+        function deleteVoucher(code) {
+            if (confirm(`Xóa voucher ${code}?`)) Toast.show(`Đã xóa voucher ${code}`, 'info');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => renderVouchers(mockVouchers));
+    </script>
+</body>
+
+</html>

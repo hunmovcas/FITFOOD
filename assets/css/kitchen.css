@@ -1,0 +1,464 @@
+/* ============================================================
+   FITFOOD - CSS KITCHEN / POS
+   Tối ưu đọc nhanh: font lớn, contrast cao, dark theme tùy chọn
+   ============================================================ */
+
+:root {
+    --kitchen-bg: #0f172a;
+    --kitchen-surface: #1e293b;
+    --kitchen-border: #334155;
+    --kitchen-text: #f1f5f9;
+    --kitchen-muted: #94a3b8;
+}
+
+/* --- Layout chính --- */
+.kitchen-layout {
+    min-height: 100vh;
+    background: var(--kitchen-bg);
+    color: var(--kitchen-text);
+    font-family: var(--font-body);
+    display: flex;
+    flex-direction: column;
+}
+
+.kitchen-header {
+    background: var(--kitchen-surface);
+    border-bottom: 1px solid var(--kitchen-border);
+    padding: var(--space-4) var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.kitchen-logo {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--kitchen-text);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.kitchen-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--green-500), var(--green-700));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.kitchen-clock {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--green-400);
+    letter-spacing: .05em;
+}
+
+.kitchen-nav-tabs {
+    display: flex;
+    gap: var(--space-1);
+}
+
+.kitchen-tab {
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--kitchen-border);
+    background: transparent;
+    color: var(--kitchen-muted);
+    font-size: .875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--duration-fast);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.kitchen-tab:hover {
+    color: var(--kitchen-text);
+    border-color: var(--green-500);
+}
+
+.kitchen-tab.active {
+    background: var(--green-600);
+    border-color: var(--green-600);
+    color: white;
+}
+
+/* --- KDS Grid --- */
+.kds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-4);
+    padding: var(--space-6);
+    flex: 1;
+    align-content: start;
+}
+
+.kds-ticket {
+    background: var(--kitchen-surface);
+    border: 1.5px solid var(--kitchen-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--duration-normal) var(--ease-out);
+    display: flex;
+    flex-direction: column;
+}
+
+.kds-ticket.priority-high {
+    border-color: var(--red-500);
+    box-shadow: 0 0 0 1px var(--red-500), 0 4px 20px rgba(239, 68, 68, .2);
+}
+
+.kds-ticket.priority-medium {
+    border-color: var(--amber-500);
+}
+
+.kds-ticket.done {
+    opacity: .5;
+    border-color: var(--green-700);
+}
+
+.kds-ticket-header {
+    background: rgba(255, 255, 255, .05);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--kitchen-border);
+}
+
+.ticket-order-id {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--kitchen-text);
+}
+
+.ticket-timer {
+    font-size: .875rem;
+    font-weight: 700;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, .1);
+}
+
+.ticket-timer.urgent {
+    background: rgba(239, 68, 68, .2);
+    color: var(--red-400);
+    animation: blink .8s ease-in-out infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+.kds-ticket-items {
+    padding: var(--space-4);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.kds-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+}
+
+.kds-item-qty {
+    min-width: 28px;
+    height: 28px;
+    background: var(--green-600);
+    color: white;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.kds-item-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--kitchen-text);
+    line-height: 1.3;
+}
+
+.kds-item-notes {
+    font-size: .8125rem;
+    color: var(--amber-400);
+    margin-top: 2px;
+}
+
+.kds-ticket-footer {
+    padding: var(--space-4);
+    border-top: 1px solid var(--kitchen-border);
+    display: flex;
+    gap: var(--space-2);
+}
+
+.btn-complete {
+    flex: 1;
+    padding: var(--space-3);
+    background: var(--green-600);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: .9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--duration-fast);
+    font-family: var(--font-body);
+}
+
+.btn-complete:hover {
+    background: var(--green-500);
+}
+
+.btn-recall {
+    padding: var(--space-3) var(--space-4);
+    background: transparent;
+    color: var(--kitchen-muted);
+    border: 1px solid var(--kitchen-border);
+    border-radius: var(--radius-md);
+    font-size: .875rem;
+    cursor: pointer;
+    transition: all var(--duration-fast);
+    font-family: var(--font-body);
+}
+
+.btn-recall:hover {
+    color: var(--kitchen-text);
+    border-color: var(--kitchen-text);
+}
+
+/* --- POS Layout --- */
+.pos-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 0;
+    flex: 1;
+    overflow: hidden;
+}
+
+.pos-menu-panel {
+    padding: var(--space-6);
+    overflow-y: auto;
+    border-right: 1px solid var(--kitchen-border);
+}
+
+.pos-cart-panel {
+    background: var(--kitchen-surface);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 73px);
+}
+
+.pos-cart-header {
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--kitchen-border);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--kitchen-text);
+}
+
+.pos-cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.pos-cart-item {
+    background: rgba(255, 255, 255, .05);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.pos-qty-control {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.pos-qty-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--kitchen-border);
+    background: transparent;
+    color: var(--kitchen-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: background var(--duration-fast);
+}
+
+.pos-qty-btn:hover {
+    background: var(--kitchen-border);
+}
+
+.pos-cart-footer {
+    border-top: 1px solid var(--kitchen-border);
+    padding: var(--space-5) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.pos-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .9rem;
+    color: var(--kitchen-muted);
+}
+
+.pos-total-row.grand-total {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--kitchen-text);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--kitchen-border);
+}
+
+/* --- Inventory Table --- */
+.inventory-table-wrapper {
+    background: var(--kitchen-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--kitchen-border);
+    overflow: hidden;
+}
+
+.inventory-table-wrapper thead th {
+    background: rgba(255, 255, 255, .05);
+    color: var(--kitchen-muted);
+    border-bottom-color: var(--kitchen-border);
+}
+
+.inventory-table-wrapper tbody td {
+    border-bottom-color: rgba(255, 255, 255, .05);
+    color: var(--kitchen-text);
+}
+
+.inventory-table-wrapper tbody tr:hover {
+    background: rgba(255, 255, 255, .04);
+}
+
+.expiry-critical {
+    color: var(--red-400);
+    font-weight: 700;
+}
+
+.expiry-warning {
+    color: var(--amber-400);
+    font-weight: 600;
+}
+
+.expiry-ok {
+    color: var(--green-400);
+}
+
+.stock-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.stock-progress {
+    flex: 1;
+    height: 6px;
+    background: var(--kitchen-border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.stock-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width var(--duration-slow);
+}
+
+.stock-fill.high {
+    background: var(--green-500);
+}
+
+.stock-fill.medium {
+    background: var(--amber-500);
+}
+
+.stock-fill.low {
+    background: var(--red-500);
+}
+
+/* --- Label Print --- */
+.label-preview {
+    background: white;
+    color: #000;
+    border: 2px dashed var(--kitchen-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    width: 240px;
+    font-family: var(--font-body);
+}
+
+.label-brand {
+    font-family: var(--font-display);
+    font-size: .8rem;
+    color: var(--green-700);
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.label-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: var(--space-2);
+}
+
+.label-calo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--green-700);
+}
+
+.label-divider {
+    height: 1px;
+    background: #ddd;
+    margin: var(--space-2) 0;
+}
+
+.label-macros {
+    display: flex;
+    justify-content: space-between;
+    font-size: .75rem;
+    color: #555;
+}

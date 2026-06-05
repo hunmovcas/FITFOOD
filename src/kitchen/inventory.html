@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Quản lý Kho</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/kitchen.css">
+</head>
+
+<body>
+    <div class="kitchen-layout">
+        <div class="kitchen-header">
+            <div class="kitchen-logo">
+                <div class="kitchen-logo-icon">🥗</div>
+                FitFood Kho
+            </div>
+            <div class="kitchen-nav-tabs">
+                <a href="kds.html" class="kitchen-tab">📋 KDS</a>
+                <a href="pos.html" class="kitchen-tab">🛒 POS</a>
+                <a href="inventory.html" class="kitchen-tab active">📦 Kho</a>
+                <a href="label-print.html" class="kitchen-tab">🏷 In nhãn</a>
+            </div>
+            <div class="kitchen-clock" id="clock">--:--</div>
+        </div>
+
+        <!-- Nội dung kho -->
+        <div style="padding:var(--space-6);flex:1;overflow-y:auto">
+
+            <!-- Stats cảnh báo -->
+            <div class="grid grid-3" style="gap:var(--space-4);margin-bottom:var(--space-6)">
+                <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);
+          border-radius:var(--radius-lg);padding:var(--space-4);display:flex;align-items:center;gap:var(--space-4)">
+                    <span style="font-size:1.5rem">🚨</span>
+                    <div>
+                        <div style="font-size:1.25rem;font-weight:700;color:var(--red-400)" id="critical-count">0</div>
+                        <div style="font-size:.8125rem;color:var(--kitchen-muted)">Hết hạn hôm nay / ngày mai</div>
+                    </div>
+                </div>
+                <div style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);
+          border-radius:var(--radius-lg);padding:var(--space-4);display:flex;align-items:center;gap:var(--space-4)">
+                    <span style="font-size:1.5rem">⚠️</span>
+                    <div>
+                        <div style="font-size:1.25rem;font-weight:700;color:var(--amber-400)" id="warning-count">0</div>
+                        <div style="font-size:.8125rem;color:var(--kitchen-muted)">Sắp hết hạn (2-3 ngày)</div>
+                    </div>
+                </div>
+                <div style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);
+          border-radius:var(--radius-lg);padding:var(--space-4);display:flex;align-items:center;gap:var(--space-4)">
+                    <span style="font-size:1.5rem">✅</span>
+                    <div>
+                        <div style="font-size:1.25rem;font-weight:700;color:var(--green-400)" id="ok-count">0</div>
+                        <div style="font-size:.8125rem;color:var(--kitchen-muted)">Nguyên liệu còn tốt</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bảng kho -->
+            <div class="inventory-table-wrapper">
+                <!-- Toolbar -->
+                <div style="padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--kitchen-border);
+          display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)">
+                    <div style="display:flex;gap:var(--space-2)">
+                        <button class="kitchen-tab active" data-cat="all" onclick="filterInventory('all')">Tất
+                            cả</button>
+                        <button class="kitchen-tab" data-cat="Rau củ" onclick="filterInventory('Rau củ')">Rau
+                            củ</button>
+                        <button class="kitchen-tab" data-cat="Thịt" onclick="filterInventory('Thịt')">Thịt</button>
+                        <button class="kitchen-tab" data-cat="Hải sản" onclick="filterInventory('Hải sản')">Hải
+                            sản</button>
+                        <button class="kitchen-tab" data-cat="Ngũ cốc" onclick="filterInventory('Ngũ cốc')">Ngũ
+                            cốc</button>
+                    </div>
+                    <div style="display:flex;gap:var(--space-3)">
+                        <a href="receiving.html" class="btn btn-sm" style="background:var(--green-600);color:white">
+                            + Nhập hàng
+                        </a>
+                        <button class="btn-recall" onclick="loadInventory()">🔄 Làm mới</button>
+                    </div>
+                </div>
+
+                <!-- Bảng dữ liệu -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã SP</th>
+                            <th>Loại</th>
+                            <th>Tên nguyên liệu</th>
+                            <th>Tồn kho</th>
+                            <th>Ngày nhập</th>
+                            <th>Hết hạn</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody">
+                        <tr>
+                            <td colspan="8" style="text-align:center;padding:var(--space-8);color:var(--kitchen-muted)">
+                                <div class="spinner" style="margin:0 auto var(--space-3)"></div>
+                                Đang tải dữ liệu kho...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/kitchen.js"></script>
+    <script>
+        let inventoryData = [];
+
+        /* --- Tải dữ liệu kho --- */
+        async function loadInventory() {
+            try {
+                const res = await API.get('/api/inventory');
+                inventoryData = res.data || MOCK.inventory;
+            } catch {
+                inventoryData = MOCK.inventory;
+            }
+            updateStats();
+            renderInventory(inventoryData);
+        }
+
+        /* --- Cập nhật thống kê --- */
+        function updateStats() {
+            document.getElementById('critical-count').textContent = inventoryData.filter(i => i.status === 'critical').length;
+            document.getElementById('warning-count').textContent = inventoryData.filter(i => i.status === 'warning').length;
+            document.getElementById('ok-count').textContent = inventoryData.filter(i => i.status === 'ok').length;
+        }
+
+        /* --- Render bảng --- */
+        function renderInventory(data) {
+            const tbody = document.getElementById('inventory-tbody');
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:var(--space-8);
+          color:var(--kitchen-muted)">Không có dữ liệu</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+        <tr>
+          <td><code style="font-size:.8rem;color:var(--kitchen-muted)">${item.id}</code></td>
+          <td>
+            <span class="badge ${item.category === 'Rau củ' ? 'badge-green' :
+                    item.category === 'Thịt' ? 'badge-red' :
+                        item.category === 'Hải sản' ? 'badge-blue' : 'badge-amber'}">
+              ${item.category}
+            </span>
+          </td>
+          <td style="font-weight:600;color:var(--kitchen-text)">${item.name}</td>
+          <td>
+            <div class="stock-bar">
+              <span style="color:var(--kitchen-text);font-weight:600;min-width:40px">${item.qty}${item.unit}</span>
+              <div class="stock-progress">
+                <div class="stock-fill ${item.qty > 8 ? 'high' : item.qty > 3 ? 'medium' : 'low'}"
+                  style="width:${Math.min(100, item.qty * 8)}%"></div>
+              </div>
+            </div>
+          </td>
+          <td style="color:var(--kitchen-muted)">${item.import_date}</td>
+          <td class="${item.status === 'critical' ? 'expiry-critical' :
+                    item.status === 'warning' ? 'expiry-warning' : 'expiry-ok'}">
+            ${item.expiry}
+          </td>
+          <td>
+            <span class="badge ${item.status === 'critical' ? 'badge-red' :
+                    item.status === 'warning' ? 'badge-amber' : 'badge-green'}">
+              ${item.status === 'critical' ? '🚨 Hết hạn sớm' :
+                    item.status === 'warning' ? '⚠️ Sắp hết hạn' : '✅ Còn tốt'}
+            </span>
+          </td>
+          <td>
+            <div style="display:flex;gap:var(--space-2)">
+              <button class="btn-recall" style="font-size:.75rem"
+                onclick="updateQty('${item.id}')">Cập nhật</button>
+              ${item.status !== 'ok' ? `
+                <button class="btn-recall" style="font-size:.75rem;color:var(--amber-400)"
+                  onclick="requestRestock('${item.id}', '${item.name}')">Nhập thêm</button>` : ''}
+            </div>
+          </td>
+        </tr>`).join('');
+        }
+
+        /* --- Lọc theo danh mục --- */
+        function filterInventory(category) {
+            document.querySelectorAll('[data-cat]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.cat === category);
+            });
+            const filtered = category === 'all' ? inventoryData : inventoryData.filter(i => i.category === category);
+            renderInventory(filtered);
+        }
+
+        function requestRestock(id, name) {
+            Toast.show(`📦 Đã gửi yêu cầu nhập thêm: ${name}`, 'info');
+        }
+
+        function updateQty(id) {
+            const qty = prompt('Nhập số lượng mới (kg):');
+            if (!qty || isNaN(qty)) return;
+            const item = inventoryData.find(i => i.id === id);
+            if (item) { item.qty = parseFloat(qty); updateStats(); renderInventory(inventoryData); }
+        }
+
+        setInterval(() => {
+            document.getElementById('clock').textContent =
+                new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+        }, 1000);
+
+        document.addEventListener('DOMContentLoaded', loadInventory);
+    </script>
+</body>
+
+</html>

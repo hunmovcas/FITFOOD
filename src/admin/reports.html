@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Báo cáo</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar (reuse) -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">🥗</div>
+                <div>
+                    <div class="sidebar-logo-text">FitFood</div><span class="sidebar-logo-badge">Admin</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+                <a href="analytics.html" class="sidebar-link"><span class="icon">📈</span> Phân tích</a>
+                <a href="reports.html" class="sidebar-link active"><span class="icon">📋</span> Báo cáo</a>
+                <a href="menu-plan.html" class="sidebar-link"><span class="icon">🗓</span> Lịch thực đơn</a>
+                <a href="suppliers.html" class="sidebar-link"><span class="icon">🚚</span> Nhà cung cấp</a>
+                <a href="marketing.html" class="sidebar-link"><span class="icon">🎁</span> Khuyến mãi</a>
+                <a href="staff.html" class="sidebar-link"><span class="icon">👥</span> Nhân sự</a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <div class="admin-page-title">📋 Báo cáo & BI</div>
+                <div class="admin-topbar-actions">
+                    <button class="btn btn-primary btn-sm" onclick="exportAllReports()">
+                        📥 Xuất báo cáo
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <!-- Bộ lọc thời gian -->
+                <div class="card" style="margin-bottom:var(--space-6);display:flex;align-items:center;
+          gap:var(--space-4);flex-wrap:wrap">
+                    <span class="font-semibold text-sm">Khoảng thời gian:</span>
+                    <div style="display:flex;gap:var(--space-2)">
+                        <button class="filter-chip active" onclick="loadReportData('7days')">7 ngày</button>
+                        <button class="filter-chip" onclick="loadReportData('30days')">30 ngày</button>
+                        <button class="filter-chip" onclick="loadReportData('90days')">3 tháng</button>
+                    </div>
+                    <div style="margin-left:auto;display:flex;gap:var(--space-3)">
+                        <input type="date" class="form-input" style="max-width:160px" id="date-from">
+                        <input type="date" class="form-input" style="max-width:160px" id="date-to">
+                        <button class="btn btn-secondary btn-sm">Áp dụng</button>
+                    </div>
+                </div>
+
+                <!-- Metrics chính -->
+                <div class="grid grid-4" style="gap:var(--space-5);margin-bottom:var(--space-8)">
+                    <div class="card text-center">
+                        <div style="font-size:1.75rem;margin-bottom:var(--space-2)">💰</div>
+                        <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700" id="r-revenue">
+                            59.780.000₫
+                        </div>
+                        <div class="text-sm text-muted">Tổng doanh thu</div>
+                        <div class="text-xs text-green" style="margin-top:4px">↑ 12.4% so với kỳ trước</div>
+                    </div>
+                    <div class="card text-center">
+                        <div style="font-size:1.75rem;margin-bottom:var(--space-2)">📦</div>
+                        <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700">329</div>
+                        <div class="text-sm text-muted">Tổng đơn hàng</div>
+                        <div class="text-xs text-green" style="margin-top:4px">↑ 5% so với kỳ trước</div>
+                    </div>
+                    <div class="card text-center">
+                        <div style="font-size:1.75rem;margin-bottom:var(--space-2)">🗑</div>
+                        <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700">3.2%</div>
+                        <div class="text-sm text-muted">Tỷ lệ Food Waste</div>
+                        <div class="text-xs text-green" style="margin-top:4px">↓ 0.8% (tốt hơn)</div>
+                    </div>
+                    <div class="card text-center">
+                        <div style="font-size:1.75rem;margin-bottom:var(--space-2)">🔄</div>
+                        <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700">78.5%</div>
+                        <div class="text-sm text-muted">Retention Rate</div>
+                        <div class="text-xs text-green" style="margin-top:4px">↑ 2.1% so với kỳ trước</div>
+                    </div>
+                </div>
+
+                <!-- Bảng báo cáo chi tiết -->
+                <div class="admin-table-card" style="margin-bottom:var(--space-6)">
+                    <div class="admin-table-header">
+                        <h4>🏆 Hiệu suất theo món ăn</h4>
+                        <button class="btn btn-secondary btn-sm"
+                            onclick="AdminDashboard.exportCSV(getProductReportData(), 'product-report')">
+                            📥 Xuất CSV
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tên món</th>
+                                <th>Danh mục</th>
+                                <th>Số đơn</th>
+                                <th>Doanh thu</th>
+                                <th>% Tổng DT</th>
+                                <th>Đánh giá TB</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-report-tbody">
+                            <!-- Render bởi JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bảng phân tích subscription -->
+                <div class="admin-table-card">
+                    <div class="admin-table-header">
+                        <h4>📅 Gói ăn đăng ký</h4>
+                        <button class="btn btn-secondary btn-sm"
+                            onclick="AdminDashboard.exportCSV(getSubscriptionData(), 'subscription-report')">
+                            📥 Xuất CSV
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Gói</th>
+                                <th>Đang hoạt động</th>
+                                <th>Mới tháng này</th>
+                                <th>Huỷ tháng này</th>
+                                <th>Retention</th>
+                                <th>Doanh thu/tháng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold">Starter Clean</td>
+                                <td>48</td>
+                                <td class="text-green">+12</td>
+                                <td class="text-red">-3</td>
+                                <td><span class="badge badge-green">93.8%</span></td>
+                                <td class="font-semibold text-green">23.520.000₫</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Full Day</td>
+                                <td>73</td>
+                                <td class="text-green">+18</td>
+                                <td class="text-red">-5</td>
+                                <td><span class="badge badge-green">93.2%</span></td>
+                                <td class="font-semibold text-green">59.860.000₫</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Total Wellness</td>
+                                <td>29</td>
+                                <td class="text-green">+7</td>
+                                <td class="text-red">-1</td>
+                                <td><span class="badge badge-green">96.6%</span></td>
+                                <td class="font-semibold text-green">33.350.000₫</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/admin.js"></script>
+    <script>
+        function getProductReportData() {
+            return MOCK.products.map(p => ({
+                'Tên món': p.name,
+                'Danh mục': p.tags?.[0] || '',
+                'Số đơn': Math.floor(Math.random() * 80) + 20,
+                'Doanh thu': Math.floor(Math.random() * 5000000) + 1000000,
+            }));
+        }
+
+        function getSubscriptionData() {
+            return [
+                { Gói: 'Starter Clean', 'Đang hoạt động': 48, 'Mới': 12, 'Huỷ': 3 },
+                { Gói: 'Full Day', 'Đang hoạt động': 73, 'Mới': 18, 'Huỷ': 5 },
+                { Gói: 'Premium', 'Đang hoạt động': 29, 'Mới': 7, 'Huỷ': 1 },
+            ];
+        }
+
+        function exportAllReports() {
+            AdminDashboard.exportCSV(getProductReportData(), 'fitfood-full-report');
+        }
+
+        function loadReportData(period) {
+            document.querySelectorAll('.filter-chip').forEach(c =>
+                c.classList.remove('active'));
+            event.target.classList.add('active');
+            Toast.show(`Đã cập nhật báo cáo: ${period}`, 'info');
+        }
+
+        // Render bảng sản phẩm
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('product-report-tbody');
+            if (tbody) {
+                tbody.innerHTML = MOCK.products.map(p => {
+                    const sold = Math.floor(Math.random() * 80) + 20;
+                    const rev = p.price * sold;
+                    return `
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:var(--space-3)">
+                  <span>${p.image}</span>
+                  <span class="font-semibold">${p.name}</span>
+                </div>
+              </td>
+              <td><span class="badge badge-green">${p.tags?.[0] || ''}</span></td>
+              <td>${sold}</td>
+              <td class="font-semibold">${formatPrice(rev)}</td>
+              <td>
+                <div style="display:flex;align-items:center;gap:var(--space-2)">
+                  <div style="flex:1;height:6px;background:var(--neutral-100);border-radius:3px">
+                    <div style="width:${Math.floor(Math.random() * 40) + 10}%;height:100%;
+                      background:var(--green-500);border-radius:3px"></div>
+                  </div>
+                  <span class="text-sm">${Math.floor(Math.random() * 40) + 10}%</span>
+                </div>
+              </td>
+              <td>⭐ ${(Math.random() * 1 + 4).toFixed(1)}</td>
+            </tr>`;
+                }).join('');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,5 +1,64 @@
-server/ → Render.com
+# 🥗 FitFood Platform
 
-Database → Railway
+Hệ thống nền tảng quản lý đồ ăn healthy tích hợp — Bài tập lớn môn Cơ sở dữ liệu
 
-frontend/ → GitHub Pages
+## 📁 Cấu trúc hệ thống
+
+| Portal | URL | Mô tả |
+|--------|-----|-------|
+| 🛒 Khách hàng | `/src/customer/home.html` | Đặt món, gói ăn, tracking |
+| 👨‍🍳 Bếp / POS | `/src/kitchen/kds.html` | KDS realtime, thu ngân, kho |
+| 📊 Admin | `/src/admin/dashboard.html` | BI, quản trị toàn hệ thống |
+
+## 🚀 Cài đặt & Chạy
+
+### Frontend (GitHub Pages)
+Chỉ cần mở `index.html` bằng Live Server (VS Code) hoặc deploy lên GitHub Pages.
+
+### Backend (Node.js)
+```bash
+cd server
+npm install
+cp .env.example .env    # Điền thông tin DB
+npm run dev             # Chạy với nodemon
+```
+
+### Database (SQL Server)
+```sql
+-- Chạy lần lượt trong SQL Server Management Studio:
+-- 1. Tạo database
+CREATE DATABASE FitFoodDB;
+-- 2. Chạy các file SQL theo thứ tự:
+-- sql/01_schema.sql
+-- sql/02_sample_data.sql
+-- sql/03_stored_procedures.sql
+-- sql/04_views_triggers.sql
+-- sql/05_indexes.sql
+```
+
+## ⚙️ Environment Variables
+
+Tạo file `server/.env`:
+```env
+PORT=3000
+DB_HOST=localhost
+DB_PORT=1433
+DB_NAME=FitFoodDB
+DB_USER=sa
+DB_PASSWORD=YourPassword123!
+JWT_SECRET=fitfood-jwt-secret-change-in-production
+FRONTEND_URL=https://yourusername.github.io
+NODE_ENV=development
+```
+
+## 🛠 Tech Stack
+
+- **Frontend**: HTML5, CSS3 (thuần), Vanilla JS, Responsive Web
+- **Backend**: Node.js, Express.js, Socket.io
+- **Database**: SQL Server (mssql)
+- **Auth**: JWT (jsonwebtoken)
+- **Deploy**: GitHub Pages (frontend) + Render.com (backend) + Railway (database)
+
+## 🎯 Tính năng đã xây dựng
+
+Xem bên dưới phần tổng kết.

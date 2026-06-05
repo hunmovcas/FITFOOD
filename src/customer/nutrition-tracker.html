@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Theo dõi Dinh dưỡng</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/customer.css">
+</head>
+
+<body>
+    <nav class="customer-nav">
+        <div class="container nav-inner">
+            <a href="home.html" class="nav-logo">
+                <div class="nav-logo-icon">🥗</div>
+                <span class="nav-logo-text">Fit<span>Food</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="home.html">Trang chủ</a></li>
+                <li><a href="menu.html">Thực đơn</a></li>
+                <li><a href="nutrition-tracker.html" class="active">Dinh dưỡng</a></li>
+                <li><a href="orders.html">Đơn hàng</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="padding:var(--space-10) 0 var(--space-16)">
+        <div class="container">
+            <h2 style="margin-bottom:var(--space-2)">🔬 Theo dõi Dinh dưỡng</h2>
+            <p class="text-muted" style="margin-bottom:var(--space-8)">
+                Thống kê lượng calo và macro tiêu thụ từ đơn hàng FitFood của bạn
+            </p>
+
+            <!-- Summary cards hôm nay -->
+            <div class="grid grid-4" style="gap:var(--space-5);margin-bottom:var(--space-8)">
+                <div class="card" style="text-align:center;--kpi-color:var(--green-500)">
+                    <div style="position:relative;width:100px;height:100px;margin:0 auto var(--space-4)">
+                        <svg viewBox="0 0 100 100" width="100" height="100">
+                            <!-- Track -->
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="var(--neutral-100)" stroke-width="10" />
+                            <!-- Progress (animated) -->
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="var(--green-500)" stroke-width="10"
+                                stroke-dasharray="188" stroke-dashoffset="47" transform="rotate(-90 50 50)"
+                                style="transition:stroke-dashoffset 1s var(--ease-out)" />
+                        </svg>
+                        <div style="position:absolute;inset:0;display:flex;flex-direction:column;
+              align-items:center;justify-content:center">
+                            <span style="font-family:var(--font-display);font-size:1.1rem;font-weight:700">1520</span>
+                            <span style="font-size:.65rem;color:var(--neutral-400)">kcal</span>
+                        </div>
+                    </div>
+                    <div class="font-bold">Calories hôm nay</div>
+                    <div class="text-sm text-muted">Mục tiêu: 2000 kcal</div>
+                    <div class="text-xs text-green" style="margin-top:4px">76% mục tiêu</div>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size:2rem;margin-bottom:var(--space-3)">💪</div>
+                    <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700">84g</div>
+                    <div class="font-bold">Protein</div>
+                    <div class="text-sm text-muted">Mục tiêu: 100g</div>
+                    <div style="height:6px;background:var(--neutral-100);border-radius:3px;margin-top:var(--space-3)">
+                        <div style="width:84%;height:100%;background:var(--blue-500);border-radius:3px"></div>
+                    </div>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size:2rem;margin-bottom:var(--space-3)">🌾</div>
+                    <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700">135g</div>
+                    <div class="font-bold">Carbs</div>
+                    <div class="text-sm text-muted">Mục tiêu: 200g</div>
+                    <div style="height:6px;background:var(--neutral-100);border-radius:3px;margin-top:var(--space-3)">
+                        <div style="width:67%;height:100%;background:var(--amber-500);border-radius:3px"></div>
+                    </div>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size:2rem;margin-bottom:var(--space-3)">🥑</div>
+                    <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700">48g</div>
+                    <div class="font-bold">Fat</div>
+                    <div class="text-sm text-muted">Mục tiêu: 65g</div>
+                    <div style="height:6px;background:var(--neutral-100);border-radius:3px;margin-top:var(--space-3)">
+                        <div style="width:74%;height:100%;background:var(--green-500);border-radius:3px"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biểu đồ theo tuần -->
+            <div class="card" style="margin-bottom:var(--space-8)">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Calories 7 ngày qua 📈</div>
+                        <div class="chart-subtitle">Tổng hợp từ đơn hàng FitFood</div>
+                    </div>
+                    <div style="display:flex;gap:var(--space-2)">
+                        <button class="btn btn-secondary btn-sm" onclick="switchPeriod('7days')">7 ngày</button>
+                        <button class="btn btn-ghost btn-sm" onclick="switchPeriod('30days')">30 ngày</button>
+                    </div>
+                </div>
+
+                <div class="bar-chart" id="calories-chart">
+                    <!-- Render bởi JS -->
+                </div>
+
+                <div style="display:flex;justify-content:center;gap:var(--space-6);
+          margin-top:var(--space-4);font-size:.8125rem">
+                    <div style="display:flex;align-items:center;gap:var(--space-2)">
+                        <div style="width:12px;height:12px;background:var(--green-500);border-radius:2px"></div>
+                        <span class="text-muted">Calories thực tế</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:var(--space-2)">
+                        <div style="width:12px;height:3px;background:var(--red-400);border-radius:1px"></div>
+                        <span class="text-muted">Mục tiêu 2000 kcal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lịch sử bữa ăn -->
+            <div class="card">
+                <h4 style="margin-bottom:var(--space-5)">📋 Lịch sử bữa ăn hôm nay</h4>
+                <div id="meal-history">
+                    <!-- Render bởi JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/customer.js"></script>
+    <script>
+        /* --- Dữ liệu mẫu --- */
+        const weekData = {
+            labels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+            calories: [1850, 2100, 1650, 1920, 2050, 1800, 1520],
+        };
+
+        const todayMeals = [
+            { time: '07:30', name: 'Cháo yến mạch Detox', calories: 280, type: 'Bữa sáng' },
+            { time: '12:15', name: 'Cơm gà nướng Eat Clean', calories: 420, type: 'Bữa trưa' },
+            { time: '15:30', name: 'Salad Keto Bơ Trứng', calories: 380, type: 'Bữa phụ' },
+            { time: '19:00', name: 'Bowl Quinoa Low-Carb', calories: 350, type: 'Bữa tối' },
+        ];
+
+        /* --- Vẽ biểu đồ calo --- */
+        function renderCaloriesChart(data) {
+            const chartEl = document.getElementById('calories-chart');
+            if (!chartEl) return;
+            const max = Math.max(2000, ...data.calories);
+
+            chartEl.innerHTML = data.calories.map((val, i) => {
+                const pct = (val / max) * 100;
+                const color = val > 2000 ? 'var(--red-400)' : val < 1500 ? 'var(--amber-400)' : 'var(--green-500)';
+                return `
+          <div class="bar-item">
+            <div class="bar-fill" style="height:${pct}%;background:linear-gradient(to top,${color},${color}aa)"
+              title="${data.labels[i]}: ${val} kcal">
+              <span style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+                font-size:.7rem;font-weight:700;color:var(--neutral-600);white-space:nowrap">${val}</span>
+            </div>
+            <span class="bar-label">${data.labels[i]}</span>
+          </div>`;
+            }).join('');
+        }
+
+        /* --- Render lịch sử bữa ăn --- */
+        function renderMealHistory(meals) {
+            const el = document.getElementById('meal-history');
+            if (!el) return;
+
+            el.innerHTML = meals.map(m => `
+        <div style="display:flex;align-items:center;justify-content:space-between;
+          padding:var(--space-4) 0;border-bottom:1px solid var(--neutral-50)">
+          <div style="display:flex;align-items:center;gap:var(--space-4)">
+            <div style="width:44px;height:44px;background:var(--green-50);border-radius:var(--radius-md);
+              display:flex;align-items:center;justify-content:center;font-size:1.2rem">🍱</div>
+            <div>
+              <div class="font-semibold">${m.name}</div>
+              <div class="text-sm text-muted">${m.type} · ${m.time}</div>
+            </div>
+          </div>
+          <span class="font-bold text-green">${m.calories} kcal</span>
+        </div>`).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCaloriesChart(weekData);
+            renderMealHistory(todayMeals);
+        });
+    </script>
+</body>
+
+</html>

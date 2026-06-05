@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Thực đơn Healthy</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/customer.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="customer-nav">
+        <div class="container nav-inner">
+            <a href="home.html" class="nav-logo">
+                <div class="nav-logo-icon">🥗</div>
+                <span class="nav-logo-text">Fit<span>Food</span></span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="home.html" class="active">Trang chủ</a></li>
+                <li><a href="menu.html">Thực đơn</a></li>
+                <li><a href="subscription.html">Gói ăn</a></li>
+                <li><a href="nutrition-tracker.html">Dinh dưỡng</a></li>
+                <li><a href="orders.html">Đơn hàng</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="cart.html" class="cart-btn" title="Giỏ hàng">
+                    🛒
+                    <span class="cart-count" style="display:none">0</span>
+                </a>
+                <a href="profile.html" class="btn btn-secondary btn-sm">Tài khoản</a>
+                <button id="hamburger-btn" class="btn btn-ghost btn-sm hide-mobile" style="display:none"
+                    onclick="document.getElementById('mobile-menu').classList.toggle('open')">
+                    ☰
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="mobile-menu">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-6)">
+            <span class="nav-logo-text">Fit<span>Food</span></span>
+            <button onclick="document.getElementById('mobile-menu').classList.remove('open')"
+                style="background:none;border:none;font-size:1.5rem;cursor:pointer">✕</button>
+        </div>
+        <a href="home.html" style="padding:var(--space-4);font-size:1.1rem;font-weight:600;color:var(--neutral-700)">🏠
+            Trang chủ</a>
+        <a href="menu.html" style="padding:var(--space-4);font-size:1.1rem;font-weight:600;color:var(--neutral-700)">🍱
+            Thực đơn</a>
+        <a href="subscription.html"
+            style="padding:var(--space-4);font-size:1.1rem;font-weight:600;color:var(--neutral-700)">📅 Gói ăn</a>
+        <a href="cart.html" style="padding:var(--space-4);font-size:1.1rem;font-weight:600;color:var(--neutral-700)">🛒
+            Giỏ hàng</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-inner">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    🌿 Thực phẩm hữu cơ · Không chất bảo quản
+                </div>
+                <h1 class="hero-title">
+                    Ăn đúng để<br>
+                    <span class="highlight">sống khoẻ</span><br>
+                    mỗi ngày
+                </h1>
+                <p class="hero-subtitle">
+                    Thực đơn cá nhân hoá theo mục tiêu sức khoẻ — Eat Clean, Keto, Low-carb.
+                    Giao tận nơi trong 45 phút.
+                </p>
+                <div style="display:flex;gap:var(--space-4);flex-wrap:wrap">
+                    <a href="menu.html" class="btn btn-primary btn-lg">Xem thực đơn hôm nay →</a>
+                    <a href="subscription.html" class="btn btn-secondary btn-lg">Đăng ký gói ăn</a>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-value">50+</div>
+                        <div class="hero-stat-label">Món ăn healthy</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-value">2000+</div>
+                        <div class="hero-stat-label">Khách hàng</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-value">98%</div>
+                        <div class="hero-stat-label">Hài lòng</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-card-float">
+                    <div class="hero-food-img">🥗</div>
+                    <div
+                        style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:var(--space-1)">
+                        Salad Keto Bơ Trứng
+                    </div>
+                    <div style="font-size:.875rem;color:var(--neutral-500);margin-bottom:var(--space-3)">
+                        380 kcal · 18g protein · 8g carbs
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <span class="food-price">75.000₫</span>
+                        <span class="badge badge-green">Keto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bộ lọc mục tiêu sức khoẻ -->
+    <section style="padding:var(--space-8) 0 0">
+        <div class="container">
+            <div class="filter-bar">
+                <span style="font-size:.875rem;font-weight:600;color:var(--neutral-500);white-space:nowrap">Mục
+                    tiêu:</span>
+                <button class="filter-chip active" data-filter="all">🍽 Tất cả</button>
+                <button class="filter-chip" data-filter="eat-clean">🥗 Eat Clean</button>
+                <button class="filter-chip" data-filter="keto">🥑 Keto</button>
+                <button class="filter-chip" data-filter="low-carb">🌾 Low-Carb</button>
+                <button class="filter-chip" data-filter="high-protein">💪 Tăng cơ</button>
+                <button class="filter-chip" data-filter="giamcan">⚖️ Giảm cân</button>
+                <div style="margin-left:auto">
+                    <input type="text" id="search-input" class="form-input"
+                        style="max-width:200px;padding:var(--space-2) var(--space-4)" placeholder="🔍 Tìm món...">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Danh sách món ăn nổi bật -->
+    <section style="padding:var(--space-10) 0">
+        <div class="container">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-8)">
+                <div>
+                    <h2>Món ăn hôm nay 🌿</h2>
+                    <p class="text-muted">Chế biến từ nguyên liệu tươi, nhập hàng mỗi sáng</p>
+                </div>
+                <a href="menu.html" class="btn btn-secondary">Xem tất cả →</a>
+            </div>
+
+            <!-- Grid sản phẩm (được inject bởi JS) -->
+            <div id="products-grid" class="grid grid-3" style="gap:var(--space-5)">
+                <!-- Render bởi customer.js -->
+                <div class="empty-state" style="grid-column:1/-1">
+                    <div class="spinner" style="width:32px;height:32px;border-width:3px"></div>
+                    <p>Đang tải thực đơn...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gói ăn định kỳ teaser -->
+    <section style="background:linear-gradient(135deg,var(--green-800),var(--green-600));
+    padding:var(--space-16) 0;margin-top:var(--space-10)">
+        <div class="container" style="text-align:center">
+            <span class="badge" style="background:rgba(255,255,255,.2);color:white;margin-bottom:var(--space-4)">
+                ⭐ TIẾT KIỆM 20%
+            </span>
+            <h2 style="color:white;margin-bottom:var(--space-4)">Đăng ký Gói ăn định kỳ</h2>
+            <p style="color:rgba(255,255,255,.8);max-width:480px;margin:0 auto var(--space-8)">
+                Giao tận nhà mỗi ngày, tuỳ chỉnh khung giờ, ưu đãi hấp dẫn khi đăng ký theo tuần và tháng
+            </p>
+            <a href="subscription.html" class="btn btn-lg" style="background:white;color:var(--green-700)">
+                Khám phá gói ăn →
+            </a>
+        </div>
+    </section>
+
+    <!-- Đặc điểm nổi bật -->
+    <section style="padding:var(--space-16) 0">
+        <div class="container">
+            <h2 class="text-center" style="margin-bottom:var(--space-10)">Tại sao chọn FitFood?</h2>
+            <div class="grid grid-3" style="gap:var(--space-6)">
+                <div class="card text-center" style="padding:var(--space-8)">
+                    <div style="font-size:2.5rem;margin-bottom:var(--space-4)">🔬</div>
+                    <h4 style="margin-bottom:var(--space-3)">Minh bạch dinh dưỡng</h4>
+                    <p>Hiển thị đầy đủ Calories, Protein, Carbs, Fat trên từng món ăn</p>
+                </div>
+                <div class="card text-center" style="padding:var(--space-8)">
+                    <div style="font-size:2.5rem;margin-bottom:var(--space-4)">🏍</div>
+                    <h4 style="margin-bottom:var(--space-3)">Giao hàng trong 45 phút</h4>
+                    <p>Theo dõi shipper realtime, cập nhật trạng thái từng bước</p>
+                </div>
+                <div class="card text-center" style="padding:var(--space-8)">
+                    <div style="font-size:2.5rem;margin-bottom:var(--space-4)">🌿</div>
+                    <h4 style="margin-bottom:var(--space-3)">Nguyên liệu tươi hàng ngày</h4>
+                    <p>Nhập hàng từ nông trại hữu cơ, kiểm soát nghiêm ngặt hạn sử dụng</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/customer.js"></script>
+    <script>
+        // Tải sản phẩm khi trang load xong
+        document.addEventListener('DOMContentLoaded', () => {
+            MenuFilter.loadProducts();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Kitchen Display System</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/kitchen.css">
+</head>
+
+<body>
+    <div class="kitchen-layout">
+        <!-- Header bếp -->
+        <div class="kitchen-header">
+            <div class="kitchen-logo">
+                <div class="kitchen-logo-icon">🥗</div>
+                FitFood Kitchen
+            </div>
+
+            <!-- Tabs điều hướng -->
+            <div class="kitchen-nav-tabs">
+                <a href="kds.html" class="kitchen-tab active">📋 KDS</a>
+                <a href="pos.html" class="kitchen-tab">🛒 POS</a>
+                <a href="inventory.html" class="kitchen-tab">📦 Kho</a>
+                <a href="label-print.html" class="kitchen-tab">🏷 In nhãn</a>
+            </div>
+
+            <!-- Đồng hồ + trạng thái -->
+            <div style="display:flex;align-items:center;gap:var(--space-5)">
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                    <div style="display:flex;align-items:center;gap:var(--space-2);
+            font-size:.8rem;color:var(--kitchen-muted)">
+                        <span class="status-dot online"></span>
+                        Kết nối realtime
+                    </div>
+                    <div style="font-size:.8125rem;color:var(--kitchen-muted)" id="order-stats">
+                        <span id="pending-count">0</span> chờ ·
+                        <span id="preparing-count">0</span> đang nấu
+                    </div>
+                </div>
+                <div class="kitchen-clock" id="clock">--:--:--</div>
+            </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div style="background:rgba(255,255,255,.04);border-bottom:1px solid var(--kitchen-border);
+      padding:var(--space-3) var(--space-6);display:flex;align-items:center;
+      justify-content:space-between;gap:var(--space-4)">
+            <div style="display:flex;gap:var(--space-2)">
+                <button class="kitchen-tab active filter-tab-btn" data-status="all" onclick="KDS.setFilter('all')">Tất
+                    cả</button>
+                <button class="kitchen-tab filter-tab-btn" data-status="pending" onclick="KDS.setFilter('pending')">⏳
+                    Chờ nấu</button>
+                <button class="kitchen-tab filter-tab-btn" data-status="preparing"
+                    onclick="KDS.setFilter('preparing')">🍳 Đang nấu</button>
+                <button class="kitchen-tab filter-tab-btn" data-status="done" onclick="KDS.setFilter('done')">✅ Hoàn
+                    thành</button>
+            </div>
+            <div style="display:flex;gap:var(--space-3);align-items:center">
+                <button class="btn btn-sm" style="background:var(--kitchen-surface);border:1px solid var(--kitchen-border);
+          color:var(--kitchen-muted)" onclick="KDS.loadOrders()">
+                    🔄 Làm mới
+                </button>
+                <div style="font-size:.8125rem;color:var(--kitchen-muted)" id="last-update">
+                    Cập nhật lúc --:--
+                </div>
+            </div>
+        </div>
+
+        <!-- KDS Grid - Danh sách ticket đơn hàng -->
+        <div id="kds-grid" class="kds-grid">
+            <!-- Render bởi kitchen.js -->
+            <div class="empty-state" style="grid-column:1/-1;color:var(--kitchen-muted)">
+                <div class="spinner"></div>
+                <p>Đang kết nối bếp...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/socket.js"></script>
+    <script src="../../assets/js/kitchen.js"></script>
+    <script>
+        /* --- Đồng hồ realtime --- */
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent =
+                now.toLocaleTimeString('vi-VN', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        /* --- Cập nhật thống kê đơn --- */
+        setInterval(() => {
+            const lastUpdateEl = document.getElementById('last-update');
+            if (lastUpdateEl) {
+                lastUpdateEl.textContent = `Cập nhật lúc ${new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}`;
+            }
+        }, 30000);
+    </script>
+</body>
+
+</html>

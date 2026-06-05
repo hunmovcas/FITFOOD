@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Thanh toán</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/customer.css">
+</head>
+
+<body>
+    <nav class="customer-nav">
+        <div class="container nav-inner">
+            <a href="home.html" class="nav-logo">
+                <div class="nav-logo-icon">🥗</div>
+                <span class="nav-logo-text">Fit<span>Food</span></span>
+            </a>
+        </div>
+    </nav>
+
+    <div style="padding:var(--space-10) 0 var(--space-16)">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-8);
+        font-size:.875rem;color:var(--neutral-400)">
+                <a href="cart.html" style="color:var(--neutral-400)">Giỏ hàng</a>
+                <span>→</span>
+                <span style="color:var(--green-700);font-weight:600">Thanh toán</span>
+                <span>→</span>
+                <span>Xác nhận</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 380px;gap:var(--space-8)">
+                <!-- Form thông tin -->
+                <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+
+                    <!-- Địa chỉ giao hàng -->
+                    <div class="card">
+                        <h4 style="margin-bottom:var(--space-5)">📍 Địa chỉ giao hàng</h4>
+                        <div class="grid grid-2" style="gap:var(--space-4)">
+                            <div class="form-group">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" class="form-input" id="receiver-name" placeholder="Nguyễn Văn A">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-input" id="receiver-phone" placeholder="0912 345 678">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:var(--space-4)">
+                            <label class="form-label">Địa chỉ chi tiết</label>
+                            <input type="text" class="form-input" id="delivery-address"
+                                placeholder="Số nhà, tên đường, phường/xã...">
+                        </div>
+                        <div class="grid grid-2" style="gap:var(--space-4);margin-top:var(--space-4)">
+                            <div class="form-group">
+                                <label class="form-label">Quận/Huyện</label>
+                                <select class="form-select" id="delivery-district">
+                                    <option value="">-- Chọn quận --</option>
+                                    <option>Quận 1</option>
+                                    <option>Quận 2</option>
+                                    <option>Quận 3</option>
+                                    <option>Quận Bình Thạnh</option>
+                                    <option>Quận Tân Bình</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ghi chú cho shipper</label>
+                                <input type="text" class="form-input" id="delivery-note"
+                                    placeholder="VD: Gọi điện trước 5 phút">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Khung giờ giao hàng -->
+                    <div class="card">
+                        <h4 style="margin-bottom:var(--space-5)">⏰ Khung giờ giao hàng</h4>
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3)"
+                            id="time-slots">
+                            <!-- Render bởi JS -->
+                        </div>
+                    </div>
+
+                    <!-- Phương thức thanh toán -->
+                    <div class="card">
+                        <h4 style="margin-bottom:var(--space-5)">💳 Phương thức thanh toán</h4>
+                        <div style="display:flex;flex-direction:column;gap:var(--space-3)" id="payment-methods">
+                            <label style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-4);
+                border:1.5px solid var(--green-400);border-radius:var(--radius-md);cursor:pointer;
+                background:var(--green-50)">
+                                <input type="radio" name="payment" value="cod" checked
+                                    style="accent-color:var(--green-600)">
+                                <span style="font-size:1.3rem">💵</span>
+                                <div>
+                                    <div class="font-semibold">Tiền mặt khi nhận (COD)</div>
+                                    <div class="text-sm text-muted">Thanh toán trực tiếp cho shipper</div>
+                                </div>
+                            </label>
+                            <label style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-4);
+                border:1.5px solid var(--neutral-200);border-radius:var(--radius-md);cursor:pointer">
+                                <input type="radio" name="payment" value="bank" style="accent-color:var(--green-600)">
+                                <span style="font-size:1.3rem">🏦</span>
+                                <div>
+                                    <div class="font-semibold">Chuyển khoản ngân hàng</div>
+                                    <div class="text-sm text-muted">MB Bank · Techcombank · VCB</div>
+                                </div>
+                            </label>
+                            <label style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-4);
+                border:1.5px solid var(--neutral-200);border-radius:var(--radius-md);cursor:pointer">
+                                <input type="radio" name="payment" value="momo" style="accent-color:var(--green-600)">
+                                <span style="font-size:1.3rem">📱</span>
+                                <div>
+                                    <div class="font-semibold">Ví MoMo / ZaloPay</div>
+                                    <div class="text-sm text-muted">Thanh toán nhanh qua QR</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tóm tắt đơn hàng -->
+                <div>
+                    <div class="card" style="position:sticky;top:90px">
+                        <h4 style="margin-bottom:var(--space-5)">📋 Đơn hàng của bạn</h4>
+                        <div id="checkout-items" style="margin-bottom:var(--space-5)"></div>
+                        <div class="divider"></div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2)">
+                            <span class="text-muted text-sm">Tạm tính</span>
+                            <span id="co-subtotal" class="font-semibold">0₫</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-5)">
+                            <span class="text-muted text-sm">Phí vận chuyển</span>
+                            <span class="font-semibold text-green">Miễn phí</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;
+              margin-bottom:var(--space-6)">
+                            <span class="font-bold">Tổng thanh toán</span>
+                            <span id="co-total" class="food-price" style="font-size:1.4rem">0₫</span>
+                        </div>
+                        <button class="btn btn-primary w-full btn-lg" id="place-order-btn" onclick="placeOrder()">
+                            ✅ Xác nhận đặt hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/customer.js"></script>
+    <script>
+        /* --- Render thông tin đặt hàng --- */
+        function initCheckout() {
+            const items = Cart.getItems();
+            const total = Cart.getTotal();
+
+            // Render danh sách món
+            const itemsEl = document.getElementById('checkout-items');
+            if (itemsEl) {
+                itemsEl.innerHTML = items.map(i => `
+          <div style="display:flex;justify-content:space-between;align-items:center;
+            padding:var(--space-3) 0;border-bottom:1px solid var(--neutral-50)">
+            <div style="display:flex;align-items:center;gap:var(--space-3)">
+              <span>${i.image || '🍱'}</span>
+              <div>
+                <div class="font-medium text-sm">${i.name}</div>
+                <div class="text-xs text-muted">x${i.qty}</div>
+              </div>
+            </div>
+            <span class="font-semibold text-sm">${formatPrice(i.price * i.qty)}</span>
+          </div>`).join('');
+            }
+
+            document.getElementById('co-subtotal').textContent = formatPrice(total);
+            document.getElementById('co-total').textContent = formatPrice(total);
+
+            // Render time slots
+            const slots = [
+                '07:00 - 09:00', '09:00 - 11:00', '11:00 - 13:00',
+                '13:00 - 15:00', '15:00 - 17:00', '17:00 - 20:00'
+            ];
+            const slotsEl = document.getElementById('time-slots');
+            if (slotsEl) {
+                slotsEl.innerHTML = slots.map((s, i) => `
+          <label style="padding:var(--space-3);border:1.5px solid var(--neutral-200);
+            border-radius:var(--radius-md);cursor:pointer;text-align:center;font-size:.8125rem;
+            transition:all var(--duration-fast);display:flex;flex-direction:column;align-items:center;gap:4px">
+            <input type="radio" name="timeslot" value="${s}" ${i === 2 ? 'checked' : ''}
+              style="accent-color:var(--green-600);margin-bottom:4px">
+            ${s}
+          </label>`).join('');
+
+                // Style radio đã chọn
+                slotsEl.querySelectorAll('label').forEach(label => {
+                    const radio = label.querySelector('input');
+                    if (radio?.checked) label.style.borderColor = 'var(--green-500)';
+                    radio?.addEventListener('change', () => {
+                        slotsEl.querySelectorAll('label').forEach(l => l.style.borderColor = 'var(--neutral-200)');
+                        if (radio.checked) label.style.borderColor = 'var(--green-500)';
+                    });
+                });
+            }
+        }
+
+        /* --- Đặt hàng --- */
+        async function placeOrder() {
+            const btn = document.getElementById('place-order-btn');
+
+            // Validation
+            const name = document.getElementById('receiver-name')?.value.trim();
+            const phone = document.getElementById('receiver-phone')?.value.trim();
+            const address = document.getElementById('delivery-address')?.value.trim();
+
+            if (!name || !phone || !address) {
+                Toast.show('Vui lòng điền đầy đủ địa chỉ giao hàng', 'warning');
+                return;
+            }
+
+            const items = Cart.getItems();
+            if (items.length === 0) { Toast.show('Giỏ hàng trống!', 'warning'); return; }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner" style="width:18px;height:18px;border-width:2px"></span> Đang xử lý...';
+
+            try {
+                const payment = document.querySelector('input[name="payment"]:checked')?.value || 'cod';
+                const timeslot = document.querySelector('input[name="timeslot"]:checked')?.value || '';
+
+                const orderData = {
+                    items: items.map(i => ({ product_id: i.id, qty: i.qty, price: i.price, notes: i.notes })),
+                    total: Cart.getTotal(),
+                    delivery: {
+                        name, phone, address, timeslot,
+                        district: document.getElementById('delivery-district')?.value,
+                        note: document.getElementById('delivery-note')?.value
+                    },
+                    payment_method: payment,
+                    type: 'online',
+                    status: 'pending'
+                };
+
+                const res = await API.post('/api/orders', orderData);
+                Cart.clear();
+                Toast.show('✅ Đặt hàng thành công! Đang chuẩn bị món cho bạn 🍱', 'success');
+
+                setTimeout(() => {
+                    window.location.href = `orders.html?highlight=${res.data?.id || ''}`;
+                }, 1200);
+            } catch (err) {
+                Toast.show('Lỗi khi đặt hàng. Vui lòng thử lại', 'error');
+                btn.disabled = false;
+                btn.textContent = '✅ Xác nhận đặt hàng';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initCheckout);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — POS Thu ngân</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/kitchen.css">
+</head>
+
+<body>
+    <div class="kitchen-layout">
+        <div class="kitchen-header">
+            <div class="kitchen-logo">
+                <div class="kitchen-logo-icon">🥗</div>
+                FitFood POS
+            </div>
+            <div class="kitchen-nav-tabs">
+                <a href="kds.html" class="kitchen-tab">📋 KDS</a>
+                <a href="pos.html" class="kitchen-tab active">🛒 POS</a>
+                <a href="inventory.html" class="kitchen-tab">📦 Kho</a>
+                <a href="label-print.html" class="kitchen-tab">🏷 In nhãn</a>
+            </div>
+            <div class="kitchen-clock" id="clock">--:--</div>
+        </div>
+
+        <!-- Layout POS: Menu trái | Giỏ phải -->
+        <div class="pos-layout">
+            <!-- Panel thực đơn -->
+            <div class="pos-menu-panel">
+                <!-- Tìm kiếm & lọc -->
+                <div style="display:flex;gap:var(--space-3);margin-bottom:var(--space-4)">
+                    <input type="text" class="form-input" style="background:var(--kitchen-surface);border-color:var(--kitchen-border);
+              color:var(--kitchen-text);flex:1" placeholder="🔍 Tìm món nhanh..." id="pos-search">
+                    <select class="form-select" style="background:var(--kitchen-surface);border-color:var(--kitchen-border);
+              color:var(--kitchen-text);max-width:140px">
+                        <option>Tất cả</option>
+                        <option>Eat Clean</option>
+                        <option>Keto</option>
+                        <option>Low-Carb</option>
+                    </select>
+                </div>
+
+                <!-- Grid món ăn -->
+                <div id="pos-menu-grid" class="grid grid-3" style="gap:var(--space-3)">
+                    <!-- Render bởi kitchen.js -->
+                    <div class="empty-state" style="grid-column:1/-1;color:var(--kitchen-muted)">
+                        <div class="spinner"></div>
+                        <p>Đang tải...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel giỏ hàng POS -->
+            <div class="pos-cart-panel">
+                <div class="pos-cart-header" style="display:flex;justify-content:space-between">
+                    <span>🛒 Đơn tại quầy</span>
+                    <button onclick="POS.renderCart()" class="btn-recall"
+                        style="font-size:.75rem;padding:var(--space-1) var(--space-3)">Xóa tất cả</button>
+                </div>
+
+                <!-- Items -->
+                <div class="pos-cart-items" id="pos-cart-items">
+                    <div class="empty-state" style="padding:var(--space-10) var(--space-4)">
+                        <div style="font-size:2rem;opacity:.3">🛒</div>
+                        <p style="color:var(--kitchen-muted);font-size:.875rem">Chưa có món nào</p>
+                    </div>
+                </div>
+
+                <!-- Footer thanh toán -->
+                <div class="pos-cart-footer">
+                    <!-- Voucher -->
+                    <div style="display:flex;gap:var(--space-2)">
+                        <input type="text" class="form-input" style="background:var(--kitchen-surface);border-color:var(--kitchen-border);
+                color:var(--kitchen-text);font-size:.875rem" placeholder="Mã voucher..." id="pos-voucher">
+                        <button class="btn-recall" onclick="applyPosVoucher()">Áp</button>
+                    </div>
+
+                    <!-- Tổng tiền -->
+                    <div class="pos-total-row"><span>Tạm tính</span><span id="pos-subtotal">0₫</span></div>
+                    <div class="pos-total-row"><span>Giảm giá</span><span id="pos-discount" class="text-red">-0₫</span>
+                    </div>
+                    <div class="pos-total-row grand-total">
+                        <span>Tổng cộng</span>
+                        <span id="pos-grand-total">0₫</span>
+                    </div>
+
+                    <!-- Chọn phương thức thanh toán -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)">
+                        <button class="btn-complete" onclick="POS.checkout('cash')">
+                            💵 Tiền mặt
+                        </button>
+                        <button class="btn-complete" style="background:var(--blue-500)"
+                            onclick="POS.checkout('transfer')">
+                            🏦 Chuyển khoản
+                        </button>
+                    </div>
+
+                    <button id="pos-checkout-btn" class="btn-complete" style="font-size:1.05rem"
+                        onclick="POS.checkout()">
+                        💳 Thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/kitchen.js"></script>
+    <script>
+        setInterval(() => {
+            document.getElementById('clock').textContent =
+                new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+        }, 1000);
+
+        // Tìm kiếm POS
+        document.getElementById('pos-search')?.addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            document.querySelectorAll('#pos-menu-grid > div').forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>

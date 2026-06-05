@@ -1,0 +1,670 @@
+/* ============================================================
+   FITFOOD - CSS PORTAL KHÁCH HÀNG
+   Phong cách "sống xanh" - Organic, tươi sáng, hiện đại
+   ============================================================ */
+
+/* --- Navbar --- */
+.customer-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--neutral-100);
+    transition: box-shadow var(--duration-normal);
+}
+
+.customer-nav.scrolled {
+    box-shadow: 0 2px 20px rgba(0, 0, 0, .08);
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    gap: var(--space-8);
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+}
+
+.nav-logo-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--green-500), var(--green-700));
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: var(--shadow-green);
+}
+
+.nav-logo-text {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--neutral-900);
+}
+
+.nav-logo-text span {
+    color: var(--green-600);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    list-style: none;
+}
+
+.nav-links a {
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: .9375rem;
+    font-weight: 500;
+    color: var(--neutral-600);
+    transition: all var(--duration-fast);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--green-700);
+    background: var(--green-50);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.cart-btn {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--neutral-100);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: background var(--duration-fast);
+    color: var(--neutral-700);
+}
+
+.cart-btn:hover {
+    background: var(--green-100);
+    color: var(--green-700);
+}
+
+.cart-count {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: var(--green-500);
+    color: white;
+    font-size: .65rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+/* --- Hero Section --- */
+.hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 40%, #bbf7d0 100%);
+    padding: var(--space-16) 0;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(74, 222, 128, .2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(34, 197, 94, .12) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--neutral-0);
+    border: 1.5px solid var(--green-200);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: .8125rem;
+    font-weight: 600;
+    color: var(--green-700);
+    margin-bottom: var(--space-5);
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: var(--space-5);
+    color: var(--neutral-900);
+}
+
+.hero-title .highlight {
+    color: var(--green-600);
+    position: relative;
+}
+
+.hero-subtitle {
+    font-size: 1.125rem;
+    color: var(--neutral-500);
+    margin-bottom: var(--space-8);
+    max-width: 480px;
+}
+
+.hero-stats {
+    display: flex;
+    gap: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--green-200);
+}
+
+.hero-stat-value {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--neutral-900);
+}
+
+.hero-stat-label {
+    font-size: .8125rem;
+    color: var(--neutral-500);
+}
+
+.hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-card-float {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-xl);
+    max-width: 340px;
+    width: 100%;
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+.hero-food-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--green-200), var(--green-400));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    margin-bottom: var(--space-4);
+}
+
+/* --- Filter Bar --- */
+.filter-bar {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5) var(--space-6);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    border: 1px solid var(--neutral-100);
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--neutral-200);
+    background: white;
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--neutral-600);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+    user-select: none;
+}
+
+.filter-chip:hover {
+    border-color: var(--green-400);
+    color: var(--green-700);
+    background: var(--green-50);
+}
+
+.filter-chip.active {
+    background: var(--green-600);
+    border-color: var(--green-600);
+    color: white;
+}
+
+/* --- Food Card --- */
+.food-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--neutral-100);
+    transition: all var(--duration-normal) var(--ease-out);
+    cursor: pointer;
+}
+
+.food-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+.food-card-img {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, var(--green-100), var(--green-200));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+}
+
+.food-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.food-card:hover .food-card-img img {
+    transform: scale(1.06);
+}
+
+.food-card-badges {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    display: flex;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+}
+
+.food-card-body {
+    padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.food-card-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--neutral-900);
+    margin-bottom: var(--space-1);
+}
+
+.food-card-desc {
+    font-size: .8375rem;
+    color: var(--neutral-500);
+    margin-bottom: var(--space-3);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.food-card-nutrition {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    padding: var(--space-3);
+    background: var(--neutral-50);
+    border-radius: var(--radius-md);
+}
+
+.nutrition-item {
+    flex: 1;
+    text-align: center;
+}
+
+.nutrition-value {
+    font-weight: 700;
+    font-size: .875rem;
+    color: var(--neutral-800);
+}
+
+.nutrition-label {
+    font-size: .7rem;
+    color: var(--neutral-400);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.food-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.food-price {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--green-700);
+}
+
+.add-to-cart-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--green-600);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all var(--duration-fast);
+    box-shadow: var(--shadow-green);
+}
+
+.add-to-cart-btn:hover {
+    background: var(--green-700);
+    transform: scale(1.1);
+}
+
+/* --- Subscription Plan Card --- */
+.plan-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    border: 2px solid var(--neutral-200);
+    transition: all var(--duration-normal) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+}
+
+.plan-card.popular {
+    border-color: var(--green-500);
+    box-shadow: var(--shadow-green);
+}
+
+.plan-card.popular::before {
+    content: '⭐ PHỔ BIẾN NHẤT';
+    position: absolute;
+    top: var(--space-4);
+    right: -var(--space-8);
+    background: var(--green-500);
+    color: white;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: var(--space-1) var(--space-6);
+    transform: rotate(12deg) translateX(20px);
+    letter-spacing: .08em;
+}
+
+.plan-price {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--neutral-900);
+    margin: var(--space-3) 0;
+}
+
+.plan-price span {
+    font-size: 1rem;
+    color: var(--neutral-500);
+    font-family: var(--font-body);
+    font-weight: 400;
+}
+
+.plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: var(--space-6) 0;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: .9rem;
+    color: var(--neutral-700);
+}
+
+.plan-features li::before {
+    content: '✓';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--green-100);
+    color: var(--green-700);
+    font-size: .75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* --- Order Tracking --- */
+.tracking-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: var(--space-6) 0;
+}
+
+.tracking-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    position: relative;
+}
+
+.tracking-step::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--neutral-200);
+    z-index: 0;
+}
+
+.tracking-step:last-child::after {
+    display: none;
+}
+
+.tracking-step.done::after {
+    background: var(--green-400);
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--neutral-200);
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    position: relative;
+    z-index: 1;
+    transition: all var(--duration-normal);
+}
+
+.tracking-step.done .step-icon {
+    background: var(--green-500);
+    border-color: var(--green-500);
+    color: white;
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, .2);
+}
+
+.tracking-step.active .step-icon {
+    border-color: var(--green-500);
+    color: var(--green-600);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, .15);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, .15);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(34, 197, 94, .08);
+    }
+}
+
+.step-label {
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--neutral-400);
+    text-align: center;
+}
+
+.tracking-step.done .step-label,
+.tracking-step.active .step-label {
+    color: var(--green-700);
+}
+
+/* --- Nutrition Tracker --- */
+.calorie-ring-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+}
+
+.calorie-ring-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.calorie-ring-value {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--neutral-900);
+}
+
+.calorie-ring-sub {
+    font-size: .7rem;
+    color: var(--neutral-400);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+/* --- Mobile Menu --- */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: white;
+    z-index: 200;
+    padding: var(--space-6);
+    flex-direction: column;
+    gap: var(--space-4);
+    animation: slideDown .3s var(--ease-out);
+}
+
+.mobile-menu.open {
+    display: flex;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .hamburger-btn {
+        display: flex;
+    }
+
+    .hero-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-visual {
+        display: none;
+    }
+}

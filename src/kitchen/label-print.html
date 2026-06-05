@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — In nhãn dinh dưỡng</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/kitchen.css">
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .label-sheet {
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="kitchen-layout">
+        <div class="kitchen-header no-print">
+            <div class="kitchen-logo">
+                <div class="kitchen-logo-icon">🥗</div>
+                In nhãn dinh dưỡng
+            </div>
+            <div class="kitchen-nav-tabs">
+                <a href="kds.html" class="kitchen-tab">📋 KDS</a>
+                <a href="pos.html" class="kitchen-tab">🛒 POS</a>
+                <a href="inventory.html" class="kitchen-tab">📦 Kho</a>
+                <a href="label-print.html" class="kitchen-tab active">🏷 In nhãn</a>
+            </div>
+            <div style="display:flex;gap:var(--space-3)" class="no-print">
+                <button class="btn-complete" onclick="window.print()" style="padding:var(--space-3) var(--space-6)">
+                    🖨 In nhãn
+                </button>
+            </div>
+        </div>
+
+        <div style="padding:var(--space-6);flex:1;overflow-y:auto">
+            <!-- Tìm kiếm đơn hàng -->
+            <div class="no-print" style="max-width:500px;margin-bottom:var(--space-6)">
+                <div style="display:flex;gap:var(--space-3)">
+                    <input type="text" class="form-input"
+                        style="background:var(--kitchen-surface);border-color:var(--kitchen-border);color:var(--kitchen-text)"
+                        placeholder="Nhập mã đơn hàng (VD: FF-2401)..." id="label-order-input">
+                    <button class="btn-complete" style="padding:var(--space-3) var(--space-5)"
+                        onclick="loadOrderLabels()">
+                        Tải nhãn
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview nhãn -->
+            <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+                <div style="color:var(--kitchen-muted);font-size:.875rem;margin-bottom:var(--space-2)" class="no-print">
+                    📋 Nhãn sẽ in cho đơn <strong style="color:var(--kitchen-text)" id="current-order-label">--</strong>
+                </div>
+
+                <!-- Sheet nhãn -->
+                <div class="label-sheet" id="labels-container" style="display:flex;flex-wrap:wrap;gap:var(--space-4)">
+                    <!-- Nhãn sẽ được render ở đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script>
+        /* --- Tải nhãn cho đơn hàng --- */
+        async function loadOrderLabels() {
+            const orderId = document.getElementById('label-order-input').value.trim();
+            if (!orderId) {
+                Toast.show('Vui lòng nhập mã đơn hàng', 'warning');
+                return;
+            }
+
+            // Dữ liệu mẫu (sẽ gọi API thực tế)
+            const sampleItems = [
+                { name: 'Cơm gà nướng Eat Clean', calories: 420, protein: 38, carbs: 45, fat: 8, qty: 1 },
+                { name: 'Salad Keto Bơ Trứng', calories: 380, protein: 18, carbs: 8, fat: 32, qty: 1 },
+            ];
+
+            document.getElementById('current-order-label').textContent = orderId;
+            renderLabels(sampleItems, orderId);
+            Toast.show(`✅ Đã tải ${sampleItems.length} nhãn cho đơn ${orderId}`, 'success');
+        }
+
+        /* --- Render nhãn --- */
+        function renderLabels(items, orderId) {
+            const container = document.getElementById('labels-container');
+            const today = new Date().toLocaleDateString('vi-VN');
+
+            container.innerHTML = items.map((item, i) => `
+                <div class="label-preview" style="position:relative">
+                    <div class="label-brand">🥗 FITFOOD</div>
+                    <div class="label-name">${item.name}</div>
+                    <div style="font-size:.7rem;color:#777;margin-bottom:var(--space-2)">
+                        Ngày: ${today} · #${orderId}-${String(i + 1).padStart(2, '0')}
+                    </div>
+                    <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:var(--space-1)">
+                        <span class="label-calo">${item.calories}</span>
+                        <span style="font-size:.8rem;color:#555">kcal</span>
+                    </div>
+                    <div class="label-divider"></div>
+                    <div class="label-macros">
+                        <div><strong>${item.protein}g</strong><br><span style="font-size:.65rem">Protein</span></div>
+                        <div><strong>${item.carbs}g</strong><br><span style="font-size:.65rem">Carbs</span></div>
+                        <div><strong>${item.fat}g</strong><br><span style="font-size:.65rem">Fat</span></div>
+                    </div>
+                    <div class="label-divider"></div>
+                    <div style="font-size:.65rem;color:#999;text-align:center">
+                        Bảo quản: &lt;8°C · Dùng trong ngày · Không chất bảo quản
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* --- Tải nhãn từ URL params nếu có --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('order');
+            if (orderId) {
+                document.getElementById('label-order-input').value = orderId;
+                loadOrderLabels();
+            } else {
+                // Hiển thị nhãn demo
+                renderLabels([
+                    { name: 'Cơm gà nướng Eat Clean', calories: 420, protein: 38, carbs: 45, fat: 8 }
+                ], 'DEMO');
+            }
+        });
+    </script>
+</body>
+
+</html>

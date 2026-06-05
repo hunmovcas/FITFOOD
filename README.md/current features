@@ -1,0 +1,52 @@
+✅ TỔNG KẾT CÁC TÍNH NĂNG ĐÃ XÂY DỰNG
+🛒 Customer Portal (5 trang)
+
+Trang chủ — Hero section, danh sách món nổi bật, stats, teaser gói ăn, bộ lọc chip
+Thực đơn — Grid 4 cột, bộ lọc 6 danh mục (Eat Clean/Keto/Low-Carb/Tăng cơ/Giảm cân), tìm kiếm realtime, sắp xếp
+Chi tiết món — Popup modal với macro đầy đủ, ghi chú cá nhân hóa, chỉnh số lượng
+Giỏ hàng — Quản lý món/số lượng/ghi chú, tính tổng calo, áp voucher, tóm tắt đơn
+Checkout — Form địa chỉ, chọn khung giờ giao, 3 phương thức thanh toán, đặt hàng API
+Đơn hàng — Tracking realtime 5 bước, lịch sử, expandable detail, filter theo status
+Gói ăn — 3 gói (Starter/Full Day/Premium), toggle tuần/tháng, đăng ký/gia hạn/tạm dừng/huỷ
+Dinh dưỡng Tracker — Ring chart calo, progress bar macro (P/C/F), biểu đồ 7 ngày, lịch sử bữa ăn
+
+👨‍🍳 Kitchen / POS (5 trang)
+
+KDS — Grid ticket realtime, màu priority theo thời gian, timer đếm ngược, cập nhật trạng thái, âm thanh thông báo
+POS Thu ngân — Grid menu, giỏ hàng realtime, tăng/giảm số lượng, 2 phương thức thanh toán
+Kho nguyên liệu — Bảng với mã #ID/loại/tên/tồn kho/ngày nhập/hết hạn, color-coded expiry, progress bar tồn kho, lọc danh mục, cảnh báo thống kê
+Nhập kho (receiving.html) — Route cơ bản tích hợp vào inventory
+In nhãn — Preview tem nhãn dinh dưỡng (brand/tên/kcal/macro/ngày), hỗ trợ in trình duyệt, tải từ URL params
+
+📊 Admin Dashboard (5 trang)
+
+Dashboard — 4 KPI cards (doanh thu/đơn hàng/food waste/retention), biểu đồ bar CSS, bảng đơn gần đây, cảnh báo kho
+Báo cáo — Bộ lọc thời gian, metrics BI, bảng top sản phẩm, bảng subscription analytics, xuất CSV
+Marketing — Stats voucher, bảng với progress bar usage, modal tạo voucher (loại/giá trị/điều kiện/hạn), toggle bật/tắt
+
+🗄 SQL Server
+
+Schema — 15 bảng chuẩn hóa: Users, Products, Categories, Orders, OrderItems, Subscriptions, Inventory, Suppliers, Vouchers, ShipperTracking, LoyaltyTransactions, Notifications...
+Sample Data — Dữ liệu demo đầy đủ cho tất cả bảng
+Stored Procedures — sp_CreateOrder (tạo đơn + tích điểm), sp_UpdateOrderStatus, sp_CalcIngredientNeeds, sp_RevenueReport
+Views — vw_OrderSummary, vw_InventoryStatus (tự tính trạng thái hạn dùng), vw_DashboardKPI
+Triggers — tr_OrderPreparing (tự động khấu trừ kho FIFO khi đơn sang "preparing"), tr_InventoryLowAlert (cảnh báo kho thấp)
+Indexes — 12 index tối ưu hiệu năng cho Orders, Products, Inventory, Subscriptions, Users...
+
+⚙️ Backend Node.js
+
+Auth — JWT sign/verify, bcrypt hash, login/register/change-password, role middleware
+Rate Limiter — Chống spam API (checkout, voucher validate)
+WebSocket — Socket.io server, phòng (kitchen/customer/shipper), realtime new_order/status/location
+9 Route modules — Products, Orders, Subscriptions, Inventory, Users, Suppliers, Marketing, Tracking, Notifications
+DB Connection Pool — mssql pool với graceful shutdown, transaction helper
+Mock fallback — Tự động dùng mock data khi không có DB, frontend hoạt động độc lập
+
+🎨 UI/UX
+
+Design system — CSS Variables, font Playfair Display + DM Sans, 5 màu semantic
+Toast Notifications — 4 loại (success/error/warning/info), auto-dismiss
+Modal system — backdrop blur, animation slide-up, close on click outside
+Responsive — Mobile-first breakpoints (768px/1024px), hamburger menu
+Dark Kitchen theme — Contrast cao, font lớn, tối ưu đọc nhanh trong bếp
+Animations — Float, pulse, blink urgent, bar chart transitions, fade-in

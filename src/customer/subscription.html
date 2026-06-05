@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Gói ăn định kỳ</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/customer.css">
+</head>
+
+<body>
+    <nav class="customer-nav">
+        <div class="container nav-inner">
+            <a href="home.html" class="nav-logo">
+                <div class="nav-logo-icon">🥗</div>
+                <span class="nav-logo-text">Fit<span>Food</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="home.html">Trang chủ</a></li>
+                <li><a href="menu.html">Thực đơn</a></li>
+                <li><a href="subscription.html" class="active">Gói ăn</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="cart.html" class="cart-btn">🛒<span class="cart-count" style="display:none">0</span></a>
+                <a href="profile.html" class="btn btn-secondary btn-sm">Tài khoản</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);padding:var(--space-12) 0;text-align:center">
+        <span class="badge badge-green" style="margin-bottom:var(--space-4)">⭐ TIẾT KIỆM ĐẾN 25%</span>
+        <h1 style="margin-bottom:var(--space-4)">Gói ăn định kỳ</h1>
+        <p class="text-muted" style="max-width:520px;margin:0 auto">
+            Đăng ký một lần, nhận bữa ăn healthy mỗi ngày — Không cần đặt lại, không lo quên
+        </p>
+    </div>
+
+    <!-- Chọn loại gói -->
+    <section style="padding:var(--space-12) 0">
+        <div class="container">
+            <!-- Toggle tuần/tháng -->
+            <div style="display:flex;justify-content:center;margin-bottom:var(--space-10)">
+                <div style="background:var(--neutral-100);border-radius:var(--radius-full);
+          display:inline-flex;padding:4px;gap:4px">
+                    <button id="tab-week" onclick="switchPlan('week')" class="btn btn-primary btn-sm"
+                        style="border-radius:var(--radius-full)">Theo tuần</button>
+                    <button id="tab-month" onclick="switchPlan('month')" class="btn btn-ghost btn-sm"
+                        style="border-radius:var(--radius-full)">Theo tháng</button>
+                </div>
+            </div>
+
+            <!-- Grid gói ăn -->
+            <div class="grid grid-3" style="gap:var(--space-6);max-width:960px;margin:0 auto">
+
+                <!-- Gói Cơ bản -->
+                <div class="plan-card">
+                    <div class="badge badge-green" style="margin-bottom:var(--space-4)">🌱 CƠ BẢN</div>
+                    <h3>Starter Clean</h3>
+                    <div class="plan-price" id="price-basic">
+                        490.000₫<span id="unit-basic">/tuần</span>
+                    </div>
+                    <p class="text-muted text-sm">1 bữa/ngày · 5 ngày/tuần</p>
+                    <ul class="plan-features">
+                        <li>Bữa trưa hoặc tối</li>
+                        <li>Chọn mục tiêu: Eat Clean / Giảm cân</li>
+                        <li>Giao trong ngày</li>
+                        <li>Đổi khung giờ linh hoạt</li>
+                    </ul>
+                    <button class="btn btn-secondary w-full" onclick="subscribePlan('basic')">
+                        Đăng ký ngay
+                    </button>
+                </div>
+
+                <!-- Gói Phổ biến -->
+                <div class="plan-card popular">
+                    <div class="badge badge-green" style="margin-bottom:var(--space-4)">⭐ PHỔ BIẾN</div>
+                    <h3>Full Day</h3>
+                    <div class="plan-price" id="price-standard">
+                        820.000₫<span id="unit-standard">/tuần</span>
+                    </div>
+                    <p class="text-muted text-sm">2 bữa/ngày · 5 ngày/tuần</p>
+                    <ul class="plan-features">
+                        <li>Bữa trưa + bữa tối</li>
+                        <li>Tất cả mục tiêu sức khỏe</li>
+                        <li>Ưu tiên giao sớm</li>
+                        <li>Đổi món linh hoạt mỗi tuần</li>
+                        <li>Báo cáo dinh dưỡng hàng tuần</li>
+                    </ul>
+                    <button class="btn btn-primary w-full" onclick="subscribePlan('standard')">
+                        Đăng ký ngay
+                    </button>
+                </div>
+
+                <!-- Gói Premium -->
+                <div class="plan-card">
+                    <div class="badge badge-amber" style="margin-bottom:var(--space-4)">👑 PREMIUM</div>
+                    <h3>Total Wellness</h3>
+                    <div class="plan-price" id="price-premium">
+                        1.150.000₫<span id="unit-premium">/tuần</span>
+                    </div>
+                    <p class="text-muted text-sm">3 bữa/ngày · 7 ngày/tuần</p>
+                    <ul class="plan-features">
+                        <li>Sáng + trưa + tối</li>
+                        <li>Cá nhân hoá 100% theo macro</li>
+                        <li>Tư vấn dinh dưỡng cơ bản</li>
+                        <li>Giao đúng giờ cam kết</li>
+                        <li>Ưu tiên hàng đầu trong bếp</li>
+                        <li>Tặng snack healthy hàng tuần</li>
+                    </ul>
+                    <button class="btn btn-secondary w-full" onclick="subscribePlan('premium')">
+                        Đăng ký ngay
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gói hiện tại (nếu đã đăng ký) -->
+            <div id="current-plan" style="display:none;max-width:600px;margin:var(--space-10) auto 0">
+                <div class="card" style="border-color:var(--green-400);background:var(--green-50)">
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+            margin-bottom:var(--space-4)">
+                        <h4 style="color:var(--green-800)">📅 Gói ăn đang hoạt động</h4>
+                        <span class="badge badge-green">● Đang chạy</span>
+                    </div>
+                    <div class="grid grid-2" style="gap:var(--space-4)">
+                        <div>
+                            <div class="text-sm text-muted">Gói</div>
+                            <div class="font-bold" id="plan-name">Full Day</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-muted">Ngày bắt đầu</div>
+                            <div class="font-bold" id="plan-start">17/05/2025</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-muted">Ngày kết thúc</div>
+                            <div class="font-bold" id="plan-end">24/05/2025</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-muted">Khung giờ giao</div>
+                            <div class="font-bold">11:00 - 13:00</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:var(--space-3);margin-top:var(--space-5)">
+                        <button class="btn btn-primary btn-sm" onclick="renewPlan()">🔄 Gia hạn</button>
+                        <button class="btn btn-secondary btn-sm" onclick="pausePlan()">⏸ Tạm dừng</button>
+                        <button class="btn btn-ghost btn-sm text-red" onclick="cancelPlan()">Huỷ gói</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal đăng ký gói -->
+    <div id="subscribe-modal" class="modal-overlay" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Đăng ký gói ăn</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('subscribe-modal').style.display='none'">✕</button>
+            </div>
+            <div class="form-group" style="margin-bottom:var(--space-4)">
+                <label class="form-label">Mục tiêu sức khoẻ</label>
+                <select class="form-select" id="sub-goal">
+                    <option value="eat-clean">Eat Clean</option>
+                    <option value="keto">Keto</option>
+                    <option value="low-carb">Low-Carb</option>
+                    <option value="weight-loss">Giảm cân</option>
+                    <option value="muscle-gain">Tăng cơ</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom:var(--space-4)">
+                <label class="form-label">Khung giờ giao hàng ưa thích</label>
+                <select class="form-select" id="sub-timeslot">
+                    <option>07:00 - 09:00 (Sáng)</option>
+                    <option selected>11:00 - 13:00 (Trưa)</option>
+                    <option>17:00 - 20:00 (Tối)</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom:var(--space-6)">
+                <label class="form-label">Địa chỉ giao hàng</label>
+                <input type="text" class="form-input" id="sub-address" placeholder="Địa chỉ nhận hàng mỗi ngày">
+            </div>
+            <button class="btn btn-primary w-full" id="confirm-subscribe-btn" onclick="confirmSubscribe()">✅ Xác nhận
+                đăng ký</button>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/customer.js"></script>
+    <script>
+        let selectedPlan = null;
+
+        const PLANS = {
+            week: { basic: '490.000₫', standard: '820.000₫', premium: '1.150.000₫' },
+            month: { basic: '1.750.000₫', standard: '2.950.000₫', premium: '4.200.000₫' }
+        };
+
+        /* --- Chuyển đổi gói tuần/tháng --- */
+        function switchPlan(period) {
+            const prices = PLANS[period];
+            document.getElementById('price-basic').firstChild.textContent = prices.basic;
+            document.getElementById('price-standard').firstChild.textContent = prices.standard;
+            document.getElementById('price-premium').firstChild.textContent = prices.premium;
+            const unit = period === 'week' ? '/tuần' : '/tháng';
+            ['basic', 'standard', 'premium'].forEach(p =>
+                document.getElementById(`unit-${p}`).textContent = unit
+            );
+            document.getElementById(`tab-${period === 'week' ? 'week' : 'month'}`).className = 'btn btn-primary btn-sm';
+            document.getElementById(`tab-${period === 'week' ? 'month' : 'week'}`).className = 'btn btn-ghost btn-sm';
+        }
+
+        /* --- Mở modal đăng ký --- */
+        function subscribePlan(plan) {
+            selectedPlan = plan;
+            document.getElementById('subscribe-modal').style.display = 'flex';
+        }
+
+        /* --- Xác nhận đăng ký --- */
+        async function confirmSubscribe() {
+            const btn = document.getElementById('confirm-subscribe-btn');
+            btn.disabled = true; btn.textContent = 'Đang xử lý...';
+
+            try {
+                await API.post('/api/subscriptions', {
+                    plan: selectedPlan,
+                    goal: document.getElementById('sub-goal').value,
+                    timeslot: document.getElementById('sub-timeslot').value,
+                    address: document.getElementById('sub-address').value,
+                });
+
+                document.getElementById('subscribe-modal').style.display = 'none';
+                document.getElementById('current-plan').style.display = 'block';
+                document.getElementById('plan-name').textContent = { basic: 'Starter Clean', standard: 'Full Day', premium: 'Total Wellness' }[selectedPlan];
+
+                Toast.show('🎉 Đăng ký gói ăn thành công! Chúng tôi sẽ giao từ ngày mai.', 'success');
+            } catch {
+                Toast.show('Lỗi đăng ký. Vui lòng thử lại', 'error');
+            } finally {
+                btn.disabled = false; btn.textContent = '✅ Xác nhận đăng ký';
+            }
+        }
+
+        async function pausePlan() { Toast.show('⏸ Gói ăn đã tạm dừng', 'info'); }
+        async function renewPlan() { Toast.show('🔄 Đã gia hạn gói ăn thêm 1 tuần', 'success'); }
+        async function cancelPlan() {
+            if (confirm('Bạn có chắc muốn huỷ gói ăn?')) {
+                document.getElementById('current-plan').style.display = 'none';
+                Toast.show('Gói ăn đã được huỷ', 'info');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => Cart.updateCartUI());
+    </script>
+</body>
+
+</html>
