@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenBite Admin — Nhà cung cấp</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon">🌿</div>
+                <div>
+                    <div class="brand-name">GreenBite</div>
+                    <div class="brand-tagline">Admin Portal</div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Quản trị</div>
+                <a class="nav-item" href="dashboard.html"> <span class="nav-icon">📊</span>Tổng quan</a>
+                <a class="nav-item" href="menu-plan.html"> <span class="nav-icon">📅</span>Lịch thực đơn</a>
+                <a class="nav-item active" href="suppliers.html"><span class="nav-icon">🚚</span>Nhà cung cấp</a>
+                <a class="nav-item" href="marketing.html"> <span class="nav-icon">🎁</span>Marketing / Voucher</a>
+                <a class="nav-item" href="staff.html"> <span class="nav-icon">👥</span>Nhân sự</a>
+                <a class="nav-item" href="reports.html"> <span class="nav-icon">📈</span>Báo cáo BI</a>
+            </nav>
+            <div class="sidebar-user">
+                <div class="avatar" id="sidebarAvatar">AD</div>
+                <div class="user-info">
+                    <div class="name" id="sidebarName">Admin</div>
+                    <div class="role">Quản trị viên</div>
+                </div>
+                <button class="logout-btn" onclick="logout()">🚪</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="topbar">
+                <span class="topbar-title">🚚 Quản lý Nhà Cung Cấp</span>
+                <div class="topbar-actions">
+                    <button class="btn btn-secondary" onclick="window.location.href='../kitchen/inventory.html'">📦 Xem
+                        kho</button>
+                    <button class="btn btn-primary" onclick="openAddSupplier()">+ Thêm NCC mới</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon green">🚚</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statTotal">0</div>
+                            <div class="stat-label">Tổng nhà cung cấp</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon lime">✅</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statCertified">0</div>
+                            <div class="stat-label">Đã kiểm định</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">⭐</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statAvgRating">0</div>
+                            <div class="stat-label">Đánh giá TB</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">📋</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="statOrders">0</div>
+                            <div class="stat-label">Đơn nhập tháng này</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter bar -->
+                <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+                    <input type="text" class="form-control" id="searchSupp" placeholder="🔍 Tìm nhà cung cấp..."
+                        style="width:260px" oninput="renderSuppliers()">
+                    <select class="form-control" id="filterCat" style="width:180px" onchange="renderSuppliers()">
+                        <option value="">Tất cả danh mục</option>
+                        <option>Thịt & Gia cầm</option>
+                        <option>Rau củ quả</option>
+                        <option>Hải sản</option>
+                        <option>Ngũ cốc</option>
+                        <option>Trứng & Gia cầm</option>
+                    </select>
+                    <select class="form-control" id="filterCert" style="width:160px" onchange="renderSuppliers()">
+                        <option value="">Tất cả</option>
+                        <option value="1">✅ Đã kiểm định</option>
+                        <option value="0">❌ Chưa kiểm định</option>
+                    </select>
+                    <div style="display:flex;gap:.4rem;margin-left:auto">
+                        <button class="btn btn-secondary btn-sm" id="btnGrid" onclick="setView('grid')"
+                            style="background:var(--green-100);color:var(--green-700)">⊞ Lưới</button>
+                        <button class="btn btn-secondary btn-sm" id="btnList" onclick="setView('list')">☰ Danh
+                            sách</button>
+                    </div>
+                </div>
+
+                <!-- Grid view -->
+                <div id="gridView">
+                    <div class="supplier-grid" id="supplierGrid"></div>
+                </div>
+
+                <!-- List view (table) -->
+                <div id="listView" class="hidden">
+                    <div class="card">
+                        <div class="table-wrapper">
+                            <table id="supplierTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nhà cung cấp</th>
+                                        <th>Danh mục</th>
+                                        <th>Liên hệ</th>
+                                        <th>Đánh giá</th>
+                                        <th>Kiểm định</th>
+                                        <th>Nhập gần nhất</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="supplierTbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Thêm/Sửa NCC -->
+    <div class="modal-overlay" id="supplierModal">
+        <div class="modal" style="max-width:600px">
+            <div class="modal-header">
+                <h3 id="supplierModalTitle">🚚 Thêm nhà cung cấp mới</h3>
+                <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editSuppId">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Tên nhà cung cấp <span style="color:red">*</span></label>
+                        <input class="form-control" id="sName" placeholder="Trang trại Hữu Cơ Xanh...">
+                    </div>
+                    <div class="form-group">
+                        <label>Danh mục <span style="color:red">*</span></label>
+                        <select class="form-control" id="sCat">
+                            <option>Thịt & Gia cầm</option>
+                            <option>Rau củ quả</option>
+                            <option>Hải sản</option>
+                            <option>Ngũ cốc</option>
+                            <option>Trứng & Gia cầm</option>
+                            <option>Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Người liên hệ</label>
+                        <input class="form-control" id="sContact" placeholder="Nguyễn Văn A">
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại <span style="color:red">*</span></label>
+                        <input class="form-control" id="sPhone" placeholder="09xxxxxxxx" type="tel">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class="form-control" id="sEmail" placeholder="supplier@email.com" type="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Đánh giá (1–5)</label>
+                        <input class="form-control" id="sRating" type="number" min="1" max="5" step="0.1" value="5">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input class="form-control" id="sAddress" placeholder="Địa chỉ cụ thể...">
+                </div>
+                <div class="form-group">
+                    <label>Chứng nhận (nhập và nhấn Enter)</label>
+                    <input class="form-control" id="sTagInput" placeholder="VD: VietGAP, Organic, HACCP..."
+                        onkeydown="addTagOnEnter(event)">
+                    <div id="sTagsDisplay" style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem"></div>
+                </div>
+                <div class="form-group" style="display:flex;align-items:center;gap:.75rem">
+                    <input type="checkbox" id="sCertified" style="width:18px;height:18px;accent-color:var(--green-600)">
+                    <label for="sCertified" style="margin:0;cursor:pointer;font-weight:600">✅ Đã được kiểm định
+                        ATTP</label>
+                </div>
+                <div class="form-group">
+                    <label>Ghi chú</label>
+                    <textarea class="form-control" id="sNotes" rows="2"
+                        placeholder="Ghi chú về nhà cung cấp..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('supplierModal')">Huỷ</button>
+                <button class="btn btn-primary" onclick="saveSupplier()">💾 Lưu nhà cung cấp</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Đặt hàng NCC -->
+    <div class="modal-overlay" id="poModal">
+        <div class="modal" style="max-width:660px">
+            <div class="modal-header">
+                <h3>📋 Tạo đơn nhập hàng — <span id="poSupplierName"></span></h3>
+                <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex;gap:1rem;margin-bottom:1rem">
+                    <div class="form-group" style="flex:1;margin:0">
+                        <label>Ngày giao dự kiến</label>
+                        <input class="form-control" id="poDelivery" type="date">
+                    </div>
+                    <div class="form-group" style="flex:1;margin:0">
+                        <label>Ghi chú đơn nhập</label>
+                        <input class="form-control" id="poNotes" placeholder="Yêu cầu đặc biệt...">
+                    </div>
+                </div>
+                <div
+                    style="font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-600);margin-bottom:.75rem">
+                    Sản phẩm cần nhập</div>
+                <div id="poItemsContainer"></div>
+                <button class="btn btn-secondary btn-sm mt-2" onclick="addPOItem()">+ Thêm sản phẩm</button>
+                <div id="poTotal" class="mt-2"
+                    style="text-align:right;font-weight:700;font-size:1rem;color:var(--green-700)"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('poModal')">Huỷ</button>
+                <button class="btn btn-primary" onclick="submitPO()">📦 Tạo đơn nhập</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/admin.js"></script>
+    <script>
+        const user = requireAuth(['admin']);
+        if (user) {
+            document.getElementById('sidebarAvatar').textContent = user.avatar;
+            document.getElementById('sidebarName').textContent = user.name;
+        }
+
+        let suppliers = [...MOCK_SUPPLIERS];
+        let suppTags = [];
+        let viewMode = 'grid';
+        let editingSuppId = null;
+
+        // ── Stats ──────────────────────────────────────────────────────────────────
+        function updateStats() {
+            document.getElementById('statTotal').textContent = suppliers.length;
+            document.getElementById('statCertified').textContent = suppliers.filter(s => s.certified || s.is_certified).length;
+            const avg = suppliers.reduce((s, x) => s + (x.rating || 5), 0) / suppliers.length;
+            document.getElementById('statAvgRating').textContent = avg.toFixed(1) + '⭐';
+            document.getElementById('statOrders').textContent = 12; // mock
+        }
+
+        // ── View toggle ────────────────────────────────────────────────────────────
+        function setView(mode) {
+            viewMode = mode;
+            document.getElementById('gridView').classList.toggle('hidden', mode === 'list');
+            document.getElementById('listView').classList.toggle('hidden', mode === 'grid');
+            document.getElementById('btnGrid').style.background = mode === 'grid' ? 'var(--green-100)' : '';
+            document.getElementById('btnGrid').style.color = mode === 'grid' ? 'var(--green-700)' : '';
+            document.getElementById('btnList').style.background = mode === 'list' ? 'var(--green-100)' : '';
+            document.getElementById('btnList').style.color = mode === 'list' ? 'var(--green-700)' : '';
+        }
+
+        // ── Render ─────────────────────────────────────────────────────────────────
+        function renderSuppliers() {
+            const q = document.getElementById('searchSupp').value.toLowerCase();
+            const cat = document.getElementById('filterCat').value;
+            const cert = document.getElementById('filterCert').value;
+            let items = suppliers.filter(s => {
+                const matchQ = !q || s.name.toLowerCase().includes(q) || s.email?.toLowerCase().includes(q);
+                const matchC = !cat || s.category === cat;
+                const matchCert = cert === '' ||
+                    (cert === '1' && (s.certified || s.is_certified)) ||
+                    (cert === '0' && !s.certified && !s.is_certified);
+                return matchQ && matchC && matchCert;
+            });
+
+            updateStats();
+
+            // Grid view
+            const grid = document.getElementById('supplierGrid');
+            if (!items.length) {
+                grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray-400)">
+        <div style="font-size:3rem">🚚</div><p class="mt-1">Không tìm thấy nhà cung cấp nào</p></div>`;
+            } else {
+                grid.innerHTML = items.map(s => renderSupplierCard(s)).join('');
+            }
+
+            // List view
+            const tbody = document.getElementById('supplierTbody');
+            tbody.innerHTML = items.map(s => {
+                const stars = '⭐'.repeat(Math.round(s.rating || 5));
+                return `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:.75rem">
+              <div style="width:36px;height:36px;border-radius:var(--radius-md);background:var(--green-100);display:flex;align-items:center;justify-content:center;font-size:1.1rem">🚚</div>
+              <div>
+                <div style="font-weight:700">${s.name}</div>
+                <div style="font-size:.75rem;color:var(--gray-600)">${s.email || '—'}</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="badge badge-green">${s.category}</span></td>
+          <td><a href="tel:${s.contact || s.phone}" style="color:var(--green-700)">${s.contact || s.phone}</a></td>
+          <td>${stars} ${s.rating}</td>
+          <td>${(s.certified || s.is_certified) ? '<span class="badge badge-lime">✅ Có</span>' : '<span class="badge badge-gray">❌ Chưa</span>'}</td>
+          <td class="text-sm">${s.lastOrder || s.last_order_date || '—'}</td>
+          <td>
+            <div style="display:flex;gap:.4rem">
+              <button class="btn btn-secondary btn-sm" onclick="openEditSupplier(${s.id})">✏️</button>
+              <button class="btn btn-primary btn-sm" onclick="openPurchaseOrder(${s.id},'${s.name}')">📋</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteSupplier(${s.id})">🗑</button>
+            </div>
+          </td>
+        </tr>
+      `;
+            }).join('');
+        }
+
+        // ── CRUD ───────────────────────────────────────────────────────────────────
+        function openAddSupplier() {
+            editingSuppId = null; suppTags = [];
+            document.getElementById('supplierModalTitle').textContent = '🚚 Thêm nhà cung cấp mới';
+            ['sName', 'sContact', 'sPhone', 'sEmail', 'sAddress', 'sNotes'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('sRating').value = '5';
+            document.getElementById('sCertified').checked = false;
+            document.getElementById('sTagsDisplay').innerHTML = '';
+            openModal('supplierModal');
+        }
+
+        function openEditSupplier(id) {
+            const s = suppliers.find(x => x.id === id);
+            if (!s) return;
+            editingSuppId = id;
+            suppTags = [...(s.tags || [])];
+            document.getElementById('supplierModalTitle').textContent = '✏️ Sửa nhà cung cấp';
+            document.getElementById('sName').value = s.name;
+            document.getElementById('sCat').value = s.category;
+            document.getElementById('sContact').value = s.contact || s.contact_person || '';
+            document.getElementById('sPhone').value = s.phone || s.contact || '';
+            document.getElementById('sEmail').value = s.email || '';
+            document.getElementById('sRating').value = s.rating || 5;
+            document.getElementById('sAddress').value = s.address || '';
+            document.getElementById('sNotes').value = s.notes || '';
+            document.getElementById('sCertified').checked = !!(s.certified || s.is_certified);
+            renderSuppTags();
+            openModal('supplierModal');
+        }
+
+        function saveSupplier() {
+            const name = document.getElementById('sName').value.trim();
+            const phone = document.getElementById('sPhone').value.trim();
+            if (!name) { showToast('Nhập tên nhà cung cấp', 'warning'); return; }
+            if (!phone) { showToast('Nhập số điện thoại', 'warning'); return; }
+            const payload = {
+                id: editingSuppId || (suppliers.length + 10),
+                name,
+                category: document.getElementById('sCat').value,
+                contact: document.getElementById('sContact').value,
+                phone,
+                email: document.getElementById('sEmail').value,
+                rating: parseFloat(document.getElementById('sRating').value) || 5,
+                address: document.getElementById('sAddress').value,
+                notes: document.getElementById('sNotes').value,
+                certified: document.getElementById('sCertified').checked,
+                tags: [...suppTags],
+                lastOrder: new Date().toISOString().split('T')[0]
+            };
+            if (editingSuppId) {
+                const idx = suppliers.findIndex(s => s.id === editingSuppId);
+                if (idx >= 0) suppliers[idx] = payload;
+                showToast('Đã cập nhật nhà cung cấp ✅');
+            } else {
+                suppliers.unshift(payload);
+                showToast('Đã thêm nhà cung cấp mới 🚚');
+            }
+            closeModal('supplierModal');
+            renderSuppliers();
+        }
+
+        function deleteSupplier(id) {
+            confirmAction('Xoá nhà cung cấp này?', () => {
+                suppliers = suppliers.filter(s => s.id !== id);
+                showToast('Đã xoá nhà cung cấp');
+                renderSuppliers();
+            });
+        }
+
+        // ── Tags ───────────────────────────────────────────────────────────────────
+        function addTagOnEnter(e) {
+            if (e.key !== 'Enter') return;
+            e.preventDefault();
+            const val = e.target.value.trim();
+            if (val && !suppTags.includes(val)) { suppTags.push(val); renderSuppTags(); }
+            e.target.value = '';
+        }
+        function removeTag(t) { suppTags = suppTags.filter(x => x !== t); renderSuppTags(); }
+        function renderSuppTags() {
+            document.getElementById('sTagsDisplay').innerHTML = suppTags.map(t => `
+      <span class="badge badge-lime" style="cursor:pointer" onclick="removeTag('${t}')">
+        ${t} ✕
+      </span>`).join('');
+        }
+
+        // ── Purchase Order ─────────────────────────────────────────────────────────
+        let _poItems = [];
+        let _poSuppId = null;
+
+        function openPurchaseOrder(supplierId, supplierName) {
+            _poSuppId = supplierId;
+            document.getElementById('poSupplierName').textContent = supplierName;
+            document.getElementById('poDelivery').valueAsDate = new Date(Date.now() + 2 * 86400000);
+            document.getElementById('poNotes').value = '';
+            _poItems = [];
+            document.getElementById('poItemsContainer').innerHTML = '';
+            addPOItem();
+            openModal('poModal');
+        }
+
+        function addPOItem() {
+            const id = Date.now();
+            _poItems.push(id);
+            const row = document.createElement('div');
+            row.id = `poi-${id}`;
+            row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr 1.2fr auto;gap:.5rem;margin-bottom:.5rem;align-items:center';
+            row.innerHTML = `
+      <input class="form-control" placeholder="Tên nguyên liệu *" data-f="name" onkeyup="calcPOTotal()">
+      <input class="form-control" placeholder="SL *"  type="number" min="0" data-f="qty"   onkeyup="calcPOTotal()">
+      <input class="form-control" placeholder="ĐVT"                data-f="unit">
+      <input class="form-control" placeholder="Đơn giá (VNĐ) *" type="number" min="0" data-f="price" onkeyup="calcPOTotal()">
+      <button class="btn btn-danger btn-sm" onclick="removePOItem(${id})">✕</button>
+    `;
+            document.getElementById('poItemsContainer').appendChild(row);
+        }
+
+        function removePOItem(id) {
+            document.getElementById(`poi-${id}`)?.remove();
+            _poItems = _poItems.filter(i => i !== id);
+            calcPOTotal();
+        }
+
+        function calcPOTotal() {
+            let total = 0;
+            _poItems.forEach(id => {
+                const row = document.getElementById(`poi-${id}`);
+                if (!row) return;
+                const qty = parseFloat(row.querySelector('[data-f="qty"]')?.value) || 0;
+                const price = parseFloat(row.querySelector('[data-f="price"]')?.value) || 0;
+                total += qty * price;
+            });
+            document.getElementById('poTotal').textContent = total ? `Tổng đơn: ${formatCurrency(total)}` : '';
+        }
+
+        async function submitPO() {
+            const items = _poItems.map(id => {
+                const row = document.getElementById(`poi-${id}`);
+                if (!row) return null;
+                const name = row.querySelector('[data-f="name"]')?.value;
+                const qty = parseFloat(row.querySelector('[data-f="qty"]')?.value);
+                const unit = row.querySelector('[data-f="unit"]')?.value || 'kg';
+                const price = parseFloat(row.querySelector('[data-f="price"]')?.value);
+                if (!name || !qty || !price) return null;
+                return { ingredient_name: name, quantity: qty, unit, unit_price: price };
+            }).filter(Boolean);
+            if (!items.length) { showToast('Thêm ít nhất 1 sản phẩm', 'warning'); return; }
+            try {
+                await API.suppliers.createPO(_poSuppId, {
+                    items,
+                    expected_delivery: document.getElementById('poDelivery').value,
+                    notes: document.getElementById('poNotes').value
+                });
+                showToast('Tạo đơn nhập hàng thành công! 📦');
+                closeModal('poModal');
+            } catch (e) { showToast(e.message, 'error'); }
+        }
+
+        renderSuppliers();
+    </script>
+</body>
+
+</html>

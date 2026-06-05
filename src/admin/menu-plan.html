@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenBite — Lên lịch thực đơn</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon">🌿</div>
+                <div>
+                    <div class="brand-name">GreenBite</div>
+                    <div class="brand-tagline">Admin Dashboard</div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Tổng quan</div>
+                <div class="nav-item" onclick="location.href='dashboard.html'"><span class="nav-icon">📊</span>
+                    Dashboard</div>
+                <div class="nav-item" onclick="location.href='reports.html'"><span class="nav-icon">📈</span> Báo cáo BI
+                </div>
+                <div class="nav-section-label">Vận hành</div>
+                <div class="nav-item active" onclick="location.href='menu-plan.html'"><span class="nav-icon">🗓</span>
+                    Lịch thực đơn</div>
+                <div class="nav-item" onclick="location.href='suppliers.html'"><span class="nav-icon">🚚</span> Nhà cung
+                    cấp</div>
+                <div class="nav-item" onclick="location.href='staff.html'"><span class="nav-icon">👥</span> Nhân sự
+                </div>
+                <div class="nav-section-label">Marketing</div>
+                <div class="nav-item" onclick="location.href='marketing.html'"><span class="nav-icon">🎯</span> Voucher
+                    & Campaign</div>
+            </nav>
+            <div class="sidebar-user">
+                <div class="avatar" id="sidebarAvatar">AD</div>
+                <div class="user-info">
+                    <div class="name" id="sidebarName">Admin</div>
+                    <div class="role">Quản trị viên</div>
+                </div>
+                <button class="logout-btn" onclick="confirmAction('Đăng xuất?', logout)">⏻</button>
+            </div>
+        </aside>
+
+        <!-- ── Main Content ── -->
+        <div class="main-content">
+            <div class="topbar">
+                <div class="topbar-title">🗓 Lịch thực đơn tuần</div>
+                <div class="topbar-actions">
+                    <!-- Chọn tuần hiển thị -->
+                    <button class="btn btn-secondary btn-sm" onclick="changeWeek(-1)">← Tuần trước</button>
+                    <span id="weekLabel"
+                        style="font-weight:600;font-size:.9rem;min-width:200px;text-align:center"></span>
+                    <button class="btn btn-secondary btn-sm" onclick="changeWeek(1)">Tuần sau →</button>
+                    <button class="btn btn-primary btn-sm" onclick="publishMenu()">📢 Xuất bản thực đơn</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+
+                <!-- ── Thông báo tổng kết nguyên liệu ── -->
+                <div class="alert alert-info mb-3" id="ingredientSummary">
+                    📊 Đang tính toán nguyên liệu cần chuẩn bị cho tuần...
+                </div>
+
+                <!-- ── Bộ lọc loại bữa ── -->
+                <div style="display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center">
+                    <span style="font-size:.85rem;font-weight:600;color:var(--gray-600)">Hiển thị bữa:</span>
+                    <button class="filter-tag active" onclick="setMealFilter('all',this)">Tất cả</button>
+                    <button class="filter-tag" onclick="setMealFilter('Sáng',this)">🌅 Sáng</button>
+                    <button class="filter-tag" onclick="setMealFilter('Trưa',this)">☀️ Trưa</button>
+                    <button class="filter-tag" onclick="setMealFilter('Tối',this)">🌙 Tối</button>
+                    <button class="filter-tag" onclick="setMealFilter('Snack',this)">🍎 Snack</button>
+                    <div style="margin-left:auto;display:flex;gap:.5rem">
+                        <button class="btn btn-secondary btn-sm" onclick="clearWeekMenu()">🗑 Xoá tuần</button>
+                        <button class="btn btn-outline btn-sm" onclick="autoFillMenu()">✨ Tự động điền</button>
+                    </div>
+                </div>
+
+                <!-- ── Lưới thực đơn 7 ngày ── -->
+                <div class="card mb-3">
+                    <div class="card-body" style="padding:1.25rem">
+                        <div class="week-grid" id="weekGrid"></div>
+                    </div>
+                </div>
+
+                <!-- ── Tóm tắt nguyên liệu cần nhập ── -->
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="section-title">🛒 Nguyên liệu cần đặt mua</span>
+                            <button class="btn btn-primary btn-sm" onclick="exportIngredientList()">📥 Xuất danh
+                                sách</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nguyên liệu</th>
+                                        <th>Danh mục</th>
+                                        <th>Cần dùng</th>
+                                        <th>Tồn kho</th>
+                                        <th>Cần đặt thêm</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ingredientTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="section-title">📊 Thống kê dinh dưỡng tuần</span>
+                        </div>
+                        <div class="card-body" id="nutritionSummary"></div>
+                    </div>
+                </div>
+
+            </div><!-- /page-content -->
+        </div><!-- /main-content -->
+    </div><!-- /app-layout -->
+
+    <!-- ── Modal thêm/chỉnh sửa món vào slot ── -->
+    <div class="modal-overlay" id="slotModal">
+        <div class="modal" style="max-width:600px">
+            <div class="modal-header">
+                <h3 id="slotModalTitle" style="font-family:var(--font-display)">Chọn món cho bữa ăn</h3>
+                <button class="modal-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Tìm kiếm món -->
+                <div style="margin-bottom:1rem">
+                    <input type="text" id="slotSearch" class="form-control" placeholder="🔍 Tìm tên món ăn..."
+                        oninput="filterSlotProducts()">
+                </div>
+                <!-- Bộ lọc danh mục -->
+                <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem" id="slotCatFilters"></div>
+                <!-- Danh sách sản phẩm -->
+                <div id="slotProductList"
+                    style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;max-height:360px;overflow-y:auto">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger btn-sm" id="slotRemoveBtn" onclick="removeSlot()">🗑 Xoá bữa này</button>
+                <button class="btn btn-secondary" onclick="closeModal('slotModal')">Huỷ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="../../assets/js/auth.js"></script>
+    <script>
+        /* ════════════════════════════════════════════════
+           AUTH & SETUP
+        ════════════════════════════════════════════════ */
+        const user = requireAuth(['admin']);
+        if (user) {
+            document.getElementById('sidebarAvatar').textContent = user.avatar;
+            document.getElementById('sidebarName').textContent = user.name;
+        }
+
+        /* ════════════════════════════════════════════════
+           DỮ LIỆU & TRẠNG THÁI
+        ════════════════════════════════════════════════ */
+
+        /**
+         * weekOffset: số tuần tính từ tuần hiện tại (0 = tuần này, -1 = tuần trước, +1 = tuần sau)
+         */
+        let weekOffset = 0;
+
+        /**
+         * Bộ lọc loại bữa đang hiển thị: 'all' | 'Sáng' | 'Trưa' | 'Tối' | 'Snack'
+         */
+        let mealFilter = 'all';
+
+        /**
+         * Lưu thực đơn theo key: "YYYY-MM-DD|MealType" → { productId, productName, ... }
+         * Ví dụ: { "2024-01-15|Trưa": { id:1, name:'Gà nướng Keto', ... } }
+         */
+        let menuPlan = {};
+
+        /**
+         * Slot đang được chọn để thêm/sửa
+         */
+        let activeSlot = null; // { date, mealType }
+
+        /* Các loại bữa theo thứ tự hiển thị */
+        const MEAL_TYPES = ['Sáng', 'Trưa', 'Tối', 'Snack'];
+
+        /* Màu sắc cho từng loại bữa */
+        const MEAL_COLORS = {
+            'Sáng': '#f59e0b',
+            'Trưa': 'var(--green-500)',
+            'Tối': '#4285f4',
+            'Snack': '#8b1552',
+        };
+
+        /* Tên tiếng Việt cho các ngày trong tuần */
+        const DAY_NAMES = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
+
+        /* ════════════════════════════════════════════════
+           TÍNH TOÁN NGÀY THÁNG
+        ════════════════════════════════════════════════ */
+
+        /**
+         * Lấy ngày đầu tuần (Thứ 2) của một ngày cụ thể
+         * @param {Date} date
+         * @returns {Date} ngày Thứ 2 đầu tuần
+         */
+        function getMonday(date) {
+            const d = new Date(date);
+            const day = d.getDay(); // 0=CN, 1=T2...
+            const diff = (day === 0) ? -6 : 1 - day;
+            d.setDate(d.getDate() + diff);
+            d.setHours(0, 0, 0, 0);
+            return d;
+        }
+
+        /**
+         * Lấy mảng 7 ngày của tuần hiện tại (theo weekOffset)
+         * @returns {Date[]} mảng 7 đối tượng Date từ T2 → CN
+         */
+        function getWeekDays() {
+            const today = new Date();
+            const monday = getMonday(today);
+            monday.setDate(monday.getDate() + weekOffset * 7);
+            return Array.from({ length: 7 }, (_, i) => {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                return d;
+            });
+        }
+
+        /**
+         * Format ngày thành chuỗi YYYY-MM-DD để dùng làm key
+         * @param {Date} date
+         * @returns {string} ví dụ: "2024-01-15"
+         */
+        function dateKey(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        /**
+         * Format ngày hiển thị: "15/01"
+         * @param {Date} date
+         * @returns {string}
+         */
+        function dateLabel(date) {
+            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        /* ════════════════════════════════════════════════
+           RENDER LƯỚI THỰC ĐƠN
+        ════════════════════════════════════════════════ */
+
+        /**
+         * Render toàn bộ lưới lịch thực đơn 7 ngày
+         */
+        function renderWeekGrid() {
+            const days = getWeekDays();
+            const todayKey = dateKey(new Date());
+            const grid = document.getElementById('weekGrid');
+
+            // Cập nhật label tuần trên topbar
+            const firstDay = days[0];
+            const lastDay = days[6];
+            document.getElementById('weekLabel').textContent =
+                `Tuần: ${dateLabel(firstDay)} – ${dateLabel(lastDay)}/${lastDay.getFullYear()}`;
+
+            // Lọc danh sách bữa hiển thị
+            const visibleMeals = mealFilter === 'all' ? MEAL_TYPES : [mealFilter];
+
+            // Tạo HTML cho từng cột ngày
+            grid.innerHTML = days.map((date, dayIdx) => {
+                const dk = dateKey(date);
+                const isToday = dk === todayKey;
+                const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
+
+                return `
+        <div class="day-col">
+            <!-- Header ngày -->
+            <div class="day-header ${isToday ? 'today' : ''}">
+                <div class="day-header-inner">
+                    <div style="font-size:.68rem;opacity:.7">${DAY_NAMES[dayIdx]}</div>
+                    <div style="font-size:.95rem">${dateLabel(date)}</div>
+                </div>
+            </div>
+
+            <!-- Các slot bữa ăn -->
+            ${visibleMeals.map(meal => {
+                    const slotKey = `${dk}|${meal}`;
+                    const filled = menuPlan[slotKey];
+                    return `
+                <div>
+                    <div class="meal-type-label">${meal}</div>
+                    <div class="meal-slot ${filled ? 'filled' : ''} ${isPast ? 'past' : ''}"
+                         onclick="openSlot('${dk}','${meal}')"
+                         title="${filled ? filled.name : 'Click để thêm món'}">
+                        ${filled ? `
+                            <span class="slot-emoji">${filled.emoji}</span>
+                            <span class="slot-name">${filled.name}</span>
+                            <span class="slot-cal">${filled.calories} kcal</span>
+                        ` : `
+                            <span style="font-size:1.5rem;opacity:.3">+</span>
+                            <span style="font-size:.72rem">Thêm món</span>
+                        `}
+                    </div>
+                </div>`;
+                }).join('')}
+        </div>`;
+            }).join('');
+
+            // Cập nhật thống kê nguyên liệu và dinh dưỡng
+            renderIngredientTable();
+            renderNutritionSummary();
+            updateIngredientAlert();
+        }
+
+        /* ════════════════════════════════════════════════
+           ĐIỀU HƯỚNG TUẦN
+        ════════════════════════════════════════════════ */
+
+        /**
+         * Chuyển sang tuần trước / sau
+         * @param {number} dir - -1 (trước) hoặc +1 (sau)
+         */
+        function changeWeek(dir) {
+            weekOffset += dir;
+            renderWeekGrid();
+        }
+
+        /* ════════════════════════════════════════════════
+           BỘ LỌC LOẠI BỮA
+        ════════════════════════════════════════════════ */
+
+        /**
+         * Lọc chỉ hiển thị loại bữa được chọn
+         * @param {string} type - 'all' | 'Sáng' | 'Trưa' | 'Tối' | 'Snack'
+         * @param {HTMLElement} el - nút đang được click
+         */
+        function setMealFilter(type, el) {
+            mealFilter = type;
+            document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            renderWeekGrid();
+        }
+
+        /* ════════════════════════════════════════════════
+           MODAL CHỌN MÓN CHO SLOT
+        ════════════════════════════════════════════════ */
+
+        /**
+         * Mở modal chọn món cho một slot ngày+bữa cụ thể
+         * @param {string} dk       - date key "YYYY-MM-DD"
+         * @param {string} mealType - 'Sáng' | 'Trưa' | 'Tối' | 'Snack'
+         */
+        function openSlot(dk, mealType) {
+            activeSlot = { date: dk, mealType };
+
+            // Tiêu đề modal
+            const [year, month, day] = dk.split('-');
+            document.getElementById('slotModalTitle').textContent =
+                `🍽 Chọn món cho ${mealType} — ${day}/${month}/${year}`;
+
+            // Hiển thị / ẩn nút xoá
+            const slotKey = `${dk}|${mealType}`;
+            document.getElementById('slotRemoveBtn').style.display =
+                menuPlan[slotKey] ? 'inline-flex' : 'none';
+
+            // Reset tìm kiếm
+            document.getElementById('slotSearch').value = '';
+
+            // Render bộ lọc danh mục trong modal
+            renderSlotCatFilters();
+
+            // Render danh sách sản phẩm
+            renderSlotProducts('all');
+
+            openModal('slotModal');
+        }
+
+        /**
+         * Render bộ lọc danh mục trong modal chọn món
+         */
+        function renderSlotCatFilters() {
+            const cats = ['all', 'EatClean', 'Keto', 'LowCarb', 'GiamCan', 'TangCo', 'HighPro'];
+            const labels = {
+                all: 'Tất cả', EatClean: 'Eat Clean', Keto: 'Keto',
+                LowCarb: 'Low-carb', GiamCan: 'Giảm cân', TangCo: 'Tăng cơ', HighPro: 'High Protein'
+            };
+
+            document.getElementById('slotCatFilters').innerHTML = cats.map((c, i) => `
+        <button class="filter-tag ${i === 0 ? 'active' : ''}"
+                onclick="filterSlotByCat('${c}', this)">${labels[c]}</button>
+    `).join('');
+        }
+
+        /** Danh mục đang lọc trong modal */
+        let slotActiveCat = 'all';
+
+        /**
+         * Lọc sản phẩm theo danh mục trong modal
+         * @param {string} cat - mã danh mục
+         * @param {HTMLElement} el - nút được click
+         */
+        function filterSlotByCat(cat, el) {
+            slotActiveCat = cat;
+            document.querySelectorAll('#slotCatFilters .filter-tag').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            renderSlotProducts(cat);
+        }
+
+        /**
+         * Lọc sản phẩm theo từ khoá tìm kiếm trong modal
+         */
+        function filterSlotProducts() {
+            renderSlotProducts(slotActiveCat);
+        }
+
+        /**
+         * Render danh sách sản phẩm trong modal (theo danh mục + từ khoá)
+         * @param {string} cat - 'all' hoặc mã danh mục
+         */
+        function renderSlotProducts(cat) {
+            const q = document.getElementById('slotSearch').value.toLowerCase();
+            const filtered = MOCK_PRODUCTS.filter(p => {
+                const matchCat = cat === 'all' || p.category === cat;
+                const matchQ = !q || p.name.toLowerCase().includes(q);
+                return matchCat && matchQ && p.available;
+            });
+
+            document.getElementById('slotProductList').innerHTML = filtered.map(p => `
+        <div onclick="selectProduct(${p.id})"
+             style="cursor:pointer;background:var(--green-50);border-radius:var(--radius-md);
+                    padding:.75rem;border:2px solid transparent;text-align:center;
+                    transition:var(--transition)"
+             onmouseenter="this.style.borderColor='var(--green-400)'"
+             onmouseleave="this.style.borderColor='transparent'">
+            <div style="font-size:2rem;margin-bottom:.35rem">${p.emoji}</div>
+            <div style="font-size:.78rem;font-weight:600;margin-bottom:.2rem;line-height:1.3">${p.name}</div>
+            <div style="font-size:.68rem;color:var(--gray-400)">🔥 ${p.calories} kcal</div>
+            <div style="font-size:.68rem;color:var(--green-700);font-weight:700;margin-top:.2rem">${formatCurrency(p.price)}</div>
+        </div>
+    `).join('') || '<div style="text-align:center;padding:2rem;color:var(--gray-400)">Không có món phù hợp</div>';
+        }
+
+        /**
+         * Gán món ăn vào slot đang mở
+         * @param {number} productId - ID sản phẩm
+         */
+        function selectProduct(productId) {
+            if (!activeSlot) return;
+            const p = MOCK_PRODUCTS.find(x => x.id === productId);
+            if (!p) return;
+            const slotKey = `${activeSlot.date}|${activeSlot.mealType}`;
+            menuPlan[slotKey] = {
+                id: p.id, name: p.name, emoji: p.emoji,
+                calories: p.calories, price: p.price
+            };
+            closeModal('slotModal');
+            renderWeekGrid();
+            showToast(`Đã thêm ${p.emoji} ${p.name} vào ${activeSlot.mealType} 🗓`);
+        }
+
+        /**
+         * Xoá món khỏi slot đang mở
+         */
+        function removeSlot() {
+            if (!activeSlot) return;
+            const slotKey = `${activeSlot.date}|${activeSlot.mealType}`;
+            delete menuPlan[slotKey];
+            closeModal('slotModal');
+            renderWeekGrid();
+            showToast('Đã xoá món khỏi bữa này', 'info');
+        }
+
+        /* ════════════════════════════════════════════════
+           THAO TÁC NHANH
+        ════════════════════════════════════════════════ */
+
+        /**
+         * Tự động điền thực đơn ngẫu nhiên cho cả tuần
+         * (Mô phỏng tính năng gợi ý thực đơn thông minh)
+         */
+        function autoFillMenu() {
+            const days = getWeekDays();
+            const avail = MOCK_PRODUCTS.filter(p => p.available);
+
+            days.forEach(date => {
+                const dk = dateKey(date);
+                MEAL_TYPES.forEach(meal => {
+                    const slotKey = `${dk}|${meal}`;
+                    if (!menuPlan[slotKey]) {
+                        // Lọc sản phẩm phù hợp theo bữa
+                        const suitable = avail.filter(p => {
+                            if (meal === 'Sáng') return p.calories < 400;
+                            if (meal === 'Snack') return p.calories < 300;
+                            return true;
+                        });
+                        if (suitable.length) {
+                            const p = suitable[Math.floor(Math.random() * suitable.length)];
+                            menuPlan[slotKey] = {
+                                id: p.id, name: p.name, emoji: p.emoji,
+                                calories: p.calories, price: p.price
+                            };
+                        }
+                    }
+                });
+            });
+
+            renderWeekGrid();
+            showToast('✨ Đã tự động điền thực đơn cho tuần này!');
+        }
+
+        /**
+         * Xoá toàn bộ thực đơn tuần hiện tại
+         */
+        function clearWeekMenu() {
+            confirmAction('Xoá toàn bộ thực đơn tuần này?', () => {
+                const days = getWeekDays();
+                days.forEach(date => {
+                    const dk = dateKey(date);
+                    MEAL_TYPES.forEach(meal => { delete menuPlan[`${dk}|${meal}`]; });
+                });
+                renderWeekGrid();
+                showToast('Đã xoá thực đơn tuần này', 'info');
+            });
+        }
+
+        /**
+         * Xuất bản thực đơn tuần
+         */
+        function publishMenu() {
+            const slots = Object.keys(menuPlan).length;
+            if (slots === 0) { showToast('Chưa có món nào trong thực đơn!', 'warning'); return; }
+            showToast(`📢 Đã xuất bản thực đơn (${slots} bữa). Khách hàng đã có thể xem!`);
+        }
+
+        /* ════════════════════════════════════════════════
+           BẢNG NGUYÊN LIỆU CẦN ĐẶT MUA
+        ════════════════════════════════════════════════ */
+
+        /**
+         * Render bảng tổng hợp nguyên liệu cần mua cho tuần
+         * Tính dựa trên MOCK_INVENTORY (tồn kho hiện tại) vs nhu cầu
+         */
+        function renderIngredientTable() {
+            const days = getWeekDays();
+            const mealCount = {}; // { productId: số lần xuất hiện trong thực đơn }
+
+            // Đếm số lần mỗi sản phẩm xuất hiện trong tuần
+            days.forEach(date => {
+                const dk = dateKey(date);
+                MEAL_TYPES.forEach(meal => {
+                    const slot = menuPlan[`${dk}|${meal}`];
+                    if (slot) mealCount[slot.id] = (mealCount[slot.id] || 0) + 1;
+                });
+            });
+
+            // Giả lập nguyên liệu cần dùng (mỗi suất dùng ~0.3kg nguyên liệu chính)
+            const needed = MOCK_INVENTORY.slice(0, 6).map(inv => {
+                const qty = Object.values(mealCount).reduce((s, c) => s + c * 0.3, 0);
+                const toOrder = Math.max(0, qty - inv.qty + inv.minQty);
+                return { ...inv, needed: qty.toFixed(1), toOrder: toOrder.toFixed(1) };
+            });
+
+            document.getElementById('ingredientTable').innerHTML = needed.map(inv => {
+                const lowStock = parseFloat(inv.toOrder) > 0;
+                return `
+        <tr>
+            <td style="font-weight:600">${inv.name}</td>
+            <td><span class="badge badge-green">${inv.category}</span></td>
+            <td>${inv.needed} ${inv.unit}</td>
+            <td class="${inv.qty < inv.minQty ? 'expiry-bad' : 'expiry-ok'}">${inv.qty} ${inv.unit}</td>
+            <td>${lowStock
+                        ? `<span class="badge badge-red">+${inv.toOrder} ${inv.unit}</span>`
+                        : '<span class="badge badge-green">Đủ</span>'}</td>
+        </tr>`;
+            }).join('');
+        }
+
+        /* ════════════════════════════════════════════════
+           TỔNG KẾT DINH DƯỠNG TUẦN
+        ════════════════════════════════════════════════ */
+
+        /**
+         * Render bảng tổng kết calo và dinh dưỡng cho tuần
+         */
+        function renderNutritionSummary() {
+            const days = getWeekDays();
+            let totalCal = 0;
+            let totalSlots = 0;
+
+            days.forEach(date => {
+                const dk = dateKey(date);
+                MEAL_TYPES.forEach(meal => {
+                    const slot = menuPlan[`${dk}|${meal}`];
+                    if (slot) { totalCal += slot.calories; totalSlots++; }
+                });
+            });
+
+            const avgCal = totalSlots ? Math.round(totalCal / days.length) : 0;
+            const coverage = Math.round(totalSlots / (days.length * MEAL_TYPES.length) * 100);
+
+            document.getElementById('nutritionSummary').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem">
+            <div class="bi-kpi">
+                <div class="kpi-val" style="color:var(--accent-orange)">${totalCal.toLocaleString('vi-VN')}</div>
+                <div class="kpi-lbl">Tổng calo tuần (kcal)</div>
+            </div>
+            <div class="bi-kpi">
+                <div class="kpi-val">${avgCal.toLocaleString('vi-VN')}</div>
+                <div class="kpi-lbl">TB calo / ngày (kcal)</div>
+            </div>
+            <div class="bi-kpi blue">
+                <div class="kpi-val">${totalSlots}/${days.length * MEAL_TYPES.length}</div>
+                <div class="kpi-lbl">Bữa đã lên lịch</div>
+            </div>
+            <div class="bi-kpi ${coverage < 50 ? 'red' : coverage < 80 ? 'orange' : ''}">
+                <div class="kpi-val">${coverage}%</div>
+                <div class="kpi-lbl">Mức độ hoàn chỉnh</div>
+            </div>
+        </div>
+        <!-- Thanh progress độ hoàn chỉnh -->
+        <div style="font-size:.82rem;margin-bottom:.4rem;font-weight:600">Mức độ hoàn thiện thực đơn</div>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill"
+                 style="width:${coverage}%;background:${coverage >= 80 ? 'var(--green-500)' : coverage >= 50 ? 'var(--accent-orange)' : 'var(--accent-red)'}">
+            </div>
+        </div>
+        <div style="font-size:.75rem;color:var(--gray-400);margin-top:.4rem">
+            ${coverage >= 80 ? '✅ Thực đơn gần hoàn thiện' : coverage >= 50 ? '⚠️ Còn nhiều bữa chưa lên lịch' : '❌ Thực đơn chưa đầy đủ'}
+        </div>`;
+        }
+
+        /**
+         * Cập nhật banner thông báo nguyên liệu cần chuẩn bị
+         */
+        function updateIngredientAlert() {
+            const days = getWeekDays();
+            let filledCount = 0;
+            let totalCal = 0;
+
+            days.forEach(date => {
+                const dk = dateKey(date);
+                MEAL_TYPES.forEach(meal => {
+                    const slot = menuPlan[`${dk}|${meal}`];
+                    if (slot) { filledCount++; totalCal += slot.calories; }
+                });
+            });
+
+            const lowIngredients = MOCK_INVENTORY.filter(i => i.qty < i.minQty).length;
+            const msg = filledCount === 0
+                ? '📋 Chưa có thực đơn — hãy thêm món hoặc dùng "Tự động điền".'
+                : `📊 Tuần này: <strong>${filledCount} bữa</strong> đã lên lịch · Tổng <strong>${totalCal.toLocaleString('vi-VN')} kcal</strong>
+           ${lowIngredients > 0 ? `· <span style="color:var(--accent-red);font-weight:700">⚠️ ${lowIngredients} nguyên liệu thiếu hàng</span>` : '· ✅ Kho nguyên liệu đầy đủ'}`;
+
+            document.getElementById('ingredientSummary').innerHTML = msg;
+        }
+
+        /**
+         * Xuất danh sách nguyên liệu (giả lập xuất file)
+         */
+        function exportIngredientList() {
+            showToast('📥 Đang xuất danh sách nguyên liệu...', 'info', 1500);
+            setTimeout(() => showToast('✅ Đã xuất file danh sách nguyên liệu (mock)'), 1600);
+        }
+
+        /* ════════════════════════════════════════════════
+           KHỞI TẠO
+        ════════════════════════════════════════════════ */
+        slotActiveCat = 'all';
+        renderWeekGrid();
+    </script>
+</body>
+
+</html>

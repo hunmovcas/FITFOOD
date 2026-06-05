@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenBite — In tem dinh dưỡng</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/kitchen.css">
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #printArea,
+            #printArea * {
+                visibility: visible;
+            }
+
+            #printArea {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4mm;
+                padding: 4mm;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .label-batch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .label-selected {
+            border: 2px solid var(--green-500) !important;
+            box-shadow: var(--shadow-green) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon">🌿</div>
+                <div>
+                    <div class="brand-name">GreenBite</div>
+                    <div class="brand-tagline">Bếp & Kho</div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Bếp</div>
+                <a class="nav-item" href="kds.html"> <span class="nav-icon">📺</span>Màn hình bếp</a>
+                <a class="nav-item" href="pos.html"> <span class="nav-icon">🧾</span>Thu ngân (POS)</a>
+                <a class="nav-item" href="inventory.html"> <span class="nav-icon">📦</span>Kho nguyên liệu</a>
+                <a class="nav-item active" href="label-print.html"><span class="nav-icon">🏷️</span>In tem dinh
+                    dưỡng</a>
+            </nav>
+            <div class="sidebar-user">
+                <div class="avatar" id="sidebarAvatar">TB</div>
+                <div class="user-info">
+                    <div class="name" id="sidebarName">Nhân viên</div>
+                    <div class="role">Bếp / In tem</div>
+                </div>
+                <button class="logout-btn" onclick="logout()">🚪</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="topbar no-print">
+                <span class="topbar-title">🏷️ In Tem Nhãn Dinh Dưỡng</span>
+                <div class="topbar-actions">
+                    <span id="selectedCount" class="badge badge-green">0 tem đã chọn</span>
+                    <button class="btn btn-secondary" onclick="selectAll()">Chọn tất cả</button>
+                    <button class="btn btn-primary" onclick="printLabels()">🖨️ In tem đã chọn</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="grid-2" style="gap:2rem;align-items:start">
+
+                    <!-- Left: select products -->
+                    <div class="no-print">
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                <span class="section-title">🍽 Chọn món cần in</span>
+                            </div>
+                            <div class="card-body" style="padding:1rem">
+                                <div class="form-group">
+                                    <label>Tìm kiếm món</label>
+                                    <input class="form-control" id="searchLabel" placeholder="Tên món..."
+                                        oninput="renderProductPicker()">
+                                </div>
+                                <div id="productPickerList"
+                                    style="display:flex;flex-direction:column;gap:.4rem;max-height:360px;overflow-y:auto">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Batch / order options -->
+                        <div class="card mb-2">
+                            <div class="card-header"><span class="section-title">⚙️ Tuỳ chọn in</span></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Ngày sản xuất</label>
+                                    <input class="form-control" id="mfgDate" type="date">
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày hết hạn</label>
+                                    <input class="form-control" id="expDate" type="date">
+                                </div>
+                                <div class="form-group">
+                                    <label>Số lượng mỗi tem</label>
+                                    <input class="form-control" id="labelQty" type="number" min="1" max="100" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Số đơn hàng (tuỳ chọn)</label>
+                                    <input class="form-control" id="labelOrderId" placeholder="#2401">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- From order -->
+                        <div class="card">
+                            <div class="card-header"><span class="section-title">📋 In từ đơn hàng</span></div>
+                            <div class="card-body">
+                                <select class="form-control mb-2" id="orderSelect" onchange="loadFromOrder()">
+                                    <option value="">-- Chọn đơn hàng --</option>
+                                </select>
+                                <div id="orderItemsPreview"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: preview + print area -->
+                    <div>
+                        <div class="section-header no-print">
+                            <span class="section-title">👁 Xem trước tem</span>
+                            <button class="btn btn-secondary btn-sm" onclick="clearSelected()">✕ Xoá tất cả</button>
+                        </div>
+                        <div id="printArea">
+                            <div class="label-batch-grid" id="labelGrid">
+                                <div style="text-align:center;padding:3rem;color:var(--gray-400);grid-column:1/-1">
+                                    <div style="font-size:3rem;margin-bottom:.75rem">🏷️</div>
+                                    <p>Chọn món bên trái để xem trước tem</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/api.js"></script>
+    <script>
+        const user = requireAuth(['kitchen', 'cashier', 'admin']);
+        if (user) {
+            document.getElementById('sidebarAvatar').textContent = user.avatar;
+            document.getElementById('sidebarName').textContent = user.name;
+        }
+
+        // Default dates
+        const today = new Date();
+        const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('mfgDate').valueAsDate = today;
+        document.getElementById('expDate').valueAsDate = tomorrow;
+
+        // Fill orders dropdown
+        MOCK_ORDERS.forEach(o => {
+            const opt = document.createElement('option');
+            opt.value = o.id; opt.textContent = `${o.id} — ${o.customer}`;
+            document.getElementById('orderSelect').appendChild(opt);
+        });
+
+        let selected = new Set(); // product IDs
+
+        // ── Product picker ─────────────────────────────────────────────────────────
+        function renderProductPicker() {
+            const q = document.getElementById('searchLabel').value.toLowerCase();
+            const items = MOCK_PRODUCTS.filter(p => !q || p.name.toLowerCase().includes(q));
+            const container = document.getElementById('productPickerList');
+            container.innerHTML = items.map(p => `
+      <label style="display:flex;align-items:center;gap:.75rem;padding:.6rem;border-radius:var(--radius-md);
+                    cursor:pointer;border:1.5px solid ${selected.has(p.id) ? 'var(--green-400)' : '#e2e8f0'};
+                    background:${selected.has(p.id) ? 'var(--green-50)' : '#fff'};transition:var(--transition)">
+        <input type="checkbox" ${selected.has(p.id) ? 'checked' : ''} onchange="toggleProduct(${p.id})"
+               style="accent-color:var(--green-600);width:16px;height:16px">
+        <span style="font-size:1.5rem">${p.emoji}</span>
+        <div style="flex:1">
+          <div style="font-size:.88rem;font-weight:600">${p.name}</div>
+          <div style="font-size:.72rem;color:var(--gray-600)">🔥 ${p.calories} kcal · ${formatCurrency(p.price)}</div>
+        </div>
+      </label>
+    `).join('');
+        }
+
+        function toggleProduct(id) {
+            if (selected.has(id)) selected.delete(id);
+            else selected.add(id);
+            updateSelectedCount();
+            renderLabels();
+            renderProductPicker();
+        }
+
+        function selectAll() {
+            MOCK_PRODUCTS.forEach(p => selected.add(p.id));
+            updateSelectedCount(); renderLabels(); renderProductPicker();
+        }
+
+        function clearSelected() {
+            selected.clear();
+            updateSelectedCount(); renderLabels(); renderProductPicker();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = `${selected.size} tem đã chọn`;
+        }
+
+        // ── Load from order ─────────────────────────────────────────────────────────
+        function loadFromOrder() {
+            const orderId = document.getElementById('orderSelect').value;
+            if (!orderId) return;
+            const order = MOCK_ORDERS.find(o => o.id === orderId);
+            if (!order) return;
+            const preview = document.getElementById('orderItemsPreview');
+            preview.innerHTML = `<div style="font-size:.82rem;color:var(--gray-600);margin-bottom:.5rem">Khách: <strong>${order.customer}</strong> — ${order.items.length} món</div>`;
+            // Select those products
+            selected.clear();
+            order.items.forEach(itemName => {
+                const p = MOCK_PRODUCTS.find(x => x.name === itemName);
+                if (p) selected.add(p.id);
+            });
+            document.getElementById('labelOrderId').value = orderId;
+            updateSelectedCount(); renderLabels(); renderProductPicker();
+            showToast(`Đã tải ${selected.size} món từ đơn ${orderId}`);
+        }
+
+        // ── Render nutrition label ──────────────────────────────────────────────────
+        function buildLabel(product, mfg, exp, orderId, qty = 1) {
+            const dv_cal = Math.round((product.calories / 2000) * 100);
+            const dv_pro = Math.round((product.protein / 50) * 100);
+            const dv_fat = Math.round((product.fat / 65) * 100);
+            const dv_carb = Math.round((product.carb / 300) * 100);
+            const qtyBadge = qty > 1 ? `<div style="background:#ff5722;color:#fff;padding:.15rem .5rem;border-radius:3px;font-size:.7rem;font-weight:700;display:inline-block;margin-top:.2rem">×${qty}</div>` : '';
+
+            return `
+      <div class="nutrition-label" style="font-family:Arial,sans-serif;width:280px">
+        <div class="nl-header" style="background:#1a4a2e;color:#fff;padding:.75rem 1rem">
+          <div style="font-size:1.1rem;font-weight:900">🌿 GreenBite</div>
+          <div style="font-size:1rem;font-weight:700;margin-top:.2rem">${product.name}</div>
+          ${qtyBadge}
+        </div>
+        <div class="nl-divider" style="height:4px;background:#1a4a2e"></div>
+        <div style="padding:.6rem 1rem">
+          <div style="font-size:.7rem;color:#666;margin-bottom:.3rem">Thông tin dinh dưỡng (1 khẩu phần)</div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:4px solid #000;padding-bottom:.3rem;margin-bottom:.3rem">
+            <span style="font-size:.85rem;font-weight:700">Năng lượng</span>
+            <span style="font-size:1.6rem;font-weight:900">${product.calories} kcal</span>
+          </div>
+          ${[
+                    ['Protein', product.protein + 'g', dv_pro + '%'],
+                    ['Carbohydrate', product.carb + 'g', dv_carb + '%'],
+                    ['Chất béo', product.fat + 'g', dv_fat + '%'],
+                    ['Chất xơ', '3g', '12%'],
+                    ['Natri', '420mg', '18%'],
+                ].map(([l, v, dv]) => `
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;padding:.2rem 0;border-bottom:1px solid #eee">
+              <span>${l}</span>
+              <span><strong>${v}</strong> <span style="color:#888">${dv} DV</span></span>
+            </div>
+          `).join('')}
+        </div>
+        <div style="padding:.4rem 1rem;background:#f9f9f7;border-top:2px solid #1a4a2e">
+          <div style="display:flex;justify-content:space-between;font-size:.7rem;color:#555">
+            <span>📅 NSX: ${mfg}</span>
+            <span>⏳ HSD: ${exp}</span>
+          </div>
+          ${orderId ? `<div style="font-size:.68rem;color:#888;margin-top:.2rem;text-align:center">Đơn hàng: ${orderId}</div>` : ''}
+        </div>
+        <div style="padding:.35rem 1rem;background:#1a4a2e;color:#d4f5e2;font-size:.65rem;text-align:center">
+          Bảo quản 2–8°C · ĐT: 1900-XXXX · greenbite.vn
+        </div>
+      </div>
+    `;
+        }
+
+        // ── Render all selected labels ──────────────────────────────────────────────
+        function renderLabels() {
+            const grid = document.getElementById('labelGrid');
+            const mfg = document.getElementById('mfgDate').value;
+            const exp = document.getElementById('expDate').value;
+            const orderId = document.getElementById('labelOrderId').value;
+            const qty = parseInt(document.getElementById('labelQty').value) || 1;
+
+            if (!selected.size) {
+                grid.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--gray-400);grid-column:1/-1">
+        <div style="font-size:3rem;margin-bottom:.75rem">🏷️</div><p>Chọn món bên trái để xem trước tem</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = [...selected].map(id => {
+                const p = MOCK_PRODUCTS.find(x => x.id === id);
+                if (!p) return '';
+                return `
+        <div class="card label-selected" style="padding:1rem;cursor:pointer" onclick="toggleProduct(${p.id})">
+          ${buildLabel(p, mfg || '--', exp || '--', orderId, qty)}
+        </div>
+      `;
+            }).join('');
+        }
+
+        function printLabels() {
+            if (!selected.size) { showToast('Chọn ít nhất 1 tem để in', 'warning'); return; }
+            renderLabels(); // ensure latest options applied
+            showToast('Đang mở hộp thoại in... 🖨️');
+            setTimeout(() => window.print(), 400);
+        }
+
+        // Re-render when options change
+        ['mfgDate', 'expDate', 'labelQty', 'labelOrderId'].forEach(id => {
+            document.getElementById(id)?.addEventListener('change', renderLabels);
+        });
+
+        renderProductPicker();
+        renderLabels();
+    </script>
+</body>
+
+</html>
