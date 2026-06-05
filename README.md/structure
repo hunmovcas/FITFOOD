@@ -1,65 +1,77 @@
-healthy-food-platform/
+fitfood/
 │
-├── index.html                  ← Entry point DUY NHẤT (login/landing page)
-├── README.md
+├── index.html                        # Trang landing page / điều hướng chọn portal (Customer / Kitchen / Admin)
+├── README.md                         # Tài liệu mô tả dự án, hướng dẫn cài đặt & chạy hệ thống
 │
 ├── src/
 │   ├── customer/
-│   │   ├── home.html           ← Trang chủ sau login
-│   │   ├── menu.html
-│   │   ├── cart.html
-│   │   ├── checkout.html
-│   │   ├── orders.html         ← Lịch sử đơn hàng + tracking
-│   │   ├── subscription.html   ← Gói ăn định kỳ
-│   │   └── profile.html
+│   │   ├── home.html                 # Trang chủ: banner, món nổi bật, gói ăn đề xuất, bộ lọc mục tiêu sức khỏe
+│   │   ├── menu.html                 # Thực đơn: danh sách món + bộ lọc (Keto, Low-carb, Eat Clean…) + hiển thị calo
+│   │   ├── cart.html                 # Giỏ hàng: xem lại món, chỉnh số lượng, nhập ghi chú nguyên liệu cá nhân hóa
+│   │   ├── checkout.html             # Thanh toán: chọn địa chỉ, khung giờ giao, áp voucher, xác nhận đơn
+│   │   ├── orders.html               # Lịch sử đơn hàng + theo dõi trạng thái giao hàng realtime (shipper tracking)
+│   │   ├── subscription.html         # Đăng ký / quản lý Gói ăn định kỳ (tuần/tháng), tùy chỉnh lịch giao
+│   │   ├── nutrition-tracker.html    # Theo dõi calo tích lũy theo ngày/tuần, biểu đồ dinh dưỡng cá nhân
+│   │   └── profile.html             # Hồ sơ cá nhân: thông tin tài khoản, ví điểm thưởng, đổi mật khẩu
 │   │
 │   ├── kitchen/
-│   │   ├── pos.html            ← Point of Sale (thu ngân)
-│   │   ├── kds.html            ← Kitchen Display System
-│   │   ├── inventory.html      ← Quản lý kho nguyên liệu
-│   │   └── label-print.html    ← In tem dinh dưỡng
+│   │   ├── pos.html                  # Màn hình thu ngân: tạo đơn tại quầy, tính tiền, in hóa đơn cho khách mua trực tiếp
+│   │   ├── kds.html                  # Kitchen Display System: hiển thị đơn realtime cho bếp, ghi chú cá nhân hóa, đánh dấu hoàn thành
+│   │   ├── inventory.html            # Quản lý kho nguyên liệu: tồn kho, hạn sử dụng, cảnh báo sắp hết / hết hàng
+│   │   ├── receiving.html            # Nhập kho: ghi nhận hàng từ nhà cung cấp giao đến, cập nhật số lượng & hạn sử dụng
+│   │   └── label-print.html          # In tem nhãn dinh dưỡng (tên món + calo) tự động dán lên hộp khi hoàn thành chế biến
 │   │
 │   └── admin/
-│       ├── dashboard.html      ← Business Intelligence / tổng quan
-│       ├── menu-plan.html      ← Lên lịch thực đơn
-│       ├── suppliers.html      ← Nhà cung cấp
-│       ├── marketing.html      ← Voucher / campaigns
-│       ├── staff.html          ← Nhân sự
-│       └── reports.html        ← Báo cáo chi tiết
+│       ├── dashboard.html            # Tổng quan KPI: doanh thu hôm nay, đơn hàng, tỷ lệ hao hụt, retention rate
+│       ├── menu-plan.html            # Lên lịch thực đơn theo ngày/tuần, tự tính định lượng nguyên liệu cần nhập theo subscription
+│       ├── suppliers.html            # Quản lý nhà cung cấp thực phẩm sạch: danh mục, lịch nhập hàng, theo dõi hạn sử dụng
+│       ├── marketing.html            # Tạo & quản lý chương trình khuyến mãi, phân phối voucher theo hành vi tiêu dùng
+│       ├── staff.html                # Quản lý nhân sự: tài khoản nhân viên, phân quyền (bếp / thu ngân / vận hành)
+│       ├── analytics.html            # Dự báo xu hướng nhu cầu dinh dưỡng, phân tích hành vi tiêu dùng chuyên sâu
+│       └── reports.html             # Báo cáo BI: món ăn phổ biến, food waste, retention rate, thống kê doanh thu
 │
 ├── assets/
 │   ├── css/
-│   │   ├── main.css
-│   │   ├── customer.css
-│   │   ├── kitchen.css
-│   │   └── admin.css
+│   │   ├── main.css                  # Style dùng chung toàn hệ thống: typography, màu sắc, component base
+│   │   ├── customer.css              # Style riêng portal khách hàng: giao diện "sống xanh", responsive mobile
+│   │   ├── kitchen.css               # Style riêng KDS/POS: font lớn, tương phản cao, tối ưu đọc nhanh trong bếp
+│   │   └── admin.css                 # Style riêng dashboard admin: layout bảng, biểu đồ, sidebar điều hướng
 │   ├── js/
-│   │   ├── auth.js             ← Logic xác thực & routing theo role
-│   │   ├── api.js              ← Wrapper gọi API chung
-│   │   ├── customer.js
-│   │   ├── kitchen.js
-│   │   └── admin.js
-│   └── images/
+│   │   ├── auth.js                   # Xử lý đăng nhập / đăng xuất, lưu JWT token, kiểm tra phiên đăng nhập
+│   │   ├── api.js                    # Module gọi API trung tâm: wrapper fetch/axios, xử lý lỗi, đính kèm auth header
+│   │   ├── socket.js                 # Client WebSocket: kết nối realtime cho KDS nhận đơn & shipper tracking
+│   │   ├── customer.js               # Logic frontend khách hàng: bộ lọc món, cập nhật giỏ hàng, theo dõi đơn realtime
+│   │   ├── kitchen.js                # Logic frontend bếp: nhận đơn realtime (WebSocket/polling), cập nhật trạng thái KDS
+│   │   └── admin.js                  # Logic frontend admin: render biểu đồ BI, xử lý form cấu hình, xuất báo cáo
+│   └── images/                       # Ảnh tĩnh: logo, ảnh món ăn mặc định, icon danh mục
 │
 ├── sql/
-│   ├── 01_schema.sql
-│   ├── 02_sample_data.sql
-│   ├── 03_stored_procedures.sql
-│   └── 04_views_triggers.sql
+│   ├── 01_schema.sql                 # Định nghĩa toàn bộ cấu trúc CSDL: bảng users, products, orders, inventory, subscriptions…
+│   ├── 02_sample_data.sql            # Dữ liệu mẫu để test: món ăn, khách hàng giả lập, đơn hàng demo
+│   ├── 03_stored_procedures.sql      # Stored procedures: tính calo tổng đơn, tự động trừ kho, tính định lượng nhập hàng
+│   ├── 04_views_triggers.sql         # Views tổng hợp báo cáo + Triggers: tự động khấu trừ kho khi đơn được xác nhận
+│   └── 05_indexes.sql                # Index tối ưu hiệu năng truy vấn cho các bảng orders, inventory, users
 │
 └── server/
-    ├── package.json
-    ├── server.js
-    ├── db.js
+    ├── package.json                  # Khai báo dependencies Node.js (Express, JWT, mysql2, bcrypt, socket.io…) & scripts
+    ├── server.js                     # Entry point: khởi tạo Express app, mount routes, cấu hình CORS, lắng nghe port
+    ├── db.js                         # Kết nối & quản lý connection pool đến MySQL / PostgreSQL
+    ├── socket.js                     # WebSocket server (Socket.io): xử lý realtime cho KDS & shipper tracking
     ├── middleware/
-    │   └── jwtAuth.js
+    │   ├── jwtAuth.js                # Xác thực JWT: kiểm tra token hợp lệ, giải mã thông tin người dùng
+    │   ├── roleGuard.js              # Phân quyền theo role: chặn truy cập sai cấp (customer / kitchen / admin)
+    │   └── rateLimiter.js            # Giới hạn số request: chống spam API tại checkout & voucher
     └── routes/
-        ├── authRoutes.js
-        ├── products.js
-        ├── orders.js
-        ├── inventory.js
-        ├── users.js
-        └── suppliers.js
+        ├── authRoutes.js             # API đăng nhập, đăng ký, refresh token, đổi mật khẩu
+        ├── products.js               # API CRUD thực đơn: lấy danh sách món, lọc theo mục tiêu dinh dưỡng, cập nhật calo
+        ├── orders.js                 # API tạo đơn, cập nhật trạng thái, lấy lịch sử đơn hàng
+        ├── subscriptions.js          # API quản lý gói ăn định kỳ: đăng ký, gia hạn, tạm dừng, hủy gói
+        ├── inventory.js              # API quản lý kho: cập nhật tồn kho, cảnh báo hạn sử dụng, lịch sử nhập/xuất
+        ├── users.js                  # API quản lý người dùng: hồ sơ, điểm thưởng, lịch sử calo, phân quyền nhân viên
+        ├── suppliers.js              # API quản lý nhà cung cấp: danh mục, lịch nhập hàng, liên kết với inventory
+        ├── marketing.js              # API voucher & campaign: tạo, phân phối, kiểm tra điều kiện áp dụng mã giảm giá
+        ├── tracking.js               # API vị trí shipper realtime: cập nhật & lấy tọa độ giao hàng theo đơn
+        └── notifications.js          # API thông báo: cảnh báo kho sắp hết, hạn sử dụng, đơn mới cho bếp
 
 server/ → Render.com
 
@@ -67,5 +79,7 @@ Database → Railway
 
 frontend/ → GitHub Pages
 
-Tôi có một bài tập lớn môn Cơ sở dữ liệu được mô tả như sau, cần sử dụng SQL Serve. Tôi sẽ tạo web host trên Github. 
+Bài tập lớn môn Cơ sở dữ liệu, cần sử dụng SQL Serve
+
+Tạo web host trên Github
 
