@@ -4,263 +4,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitFood — Nền tảng Quản lý Đồ ăn Healthy</title>
+    <title>FitFood — Ăn sạch, Sống khỏe</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <style>
-        /* Trang landing điều hướng chọn portal */
+        /* Split-screen Layout */
         body {
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #f0f9ff 100%);
             display: flex;
-            flex-direction: column;
-        }
-
-        .landing-hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-12) var(--space-6);
-            text-align: center;
-        }
-
-        .landing-logo {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-            margin-bottom: var(--space-8);
-        }
-
-        .landing-logo-icon {
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(135deg, var(--green-500), var(--green-700));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            box-shadow: 0 8px 32px rgba(34, 197, 94, .35);
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-
-        .landing-logo-text {
-            font-family: var(--font-display);
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--neutral-900);
-        }
-
-        .landing-logo-text span {
-            color: var(--green-600);
-        }
-
-        .landing-tagline {
-            font-size: 1.2rem;
-            color: var(--neutral-500);
-            max-width: 560px;
-            margin-bottom: var(--space-12);
-        }
-
-        /* Cards chọn portal */
-        .portal-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-6);
-            max-width: 900px;
-            width: 100%;
-        }
-
-        .portal-card {
-            background: white;
-            border-radius: var(--radius-xl);
-            padding: var(--space-8);
-            border: 2px solid var(--neutral-100);
-            cursor: pointer;
-            transition: all var(--duration-normal) var(--ease-out);
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-4);
-            position: relative;
+            font-family: var(--font-body);
             overflow: hidden;
         }
 
-        .portal-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--card-accent, var(--green-500));
-        }
-
-        .portal-card:hover {
-            border-color: var(--card-accent, var(--green-500));
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .12);
-            transform: translateY(-6px);
-        }
-
-        .portal-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: var(--radius-lg);
-            background: var(--card-bg, var(--green-50));
+        /* Nửa bên trái: Dành cho khách hàng xem trước */
+        .split-left {
+            flex: 6;
+            position: relative;
+            background: linear-gradient(rgba(20, 83, 45, 0.8), rgba(22, 163, 74, 0.6)), url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            font-size: 2.2rem;
-        }
-
-        .portal-name {
-            font-family: var(--font-display);
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--neutral-900);
-            text-align: center;
-        }
-
-        .portal-desc {
-            font-size: .875rem;
-            color: var(--neutral-500);
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        .portal-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            background: var(--card-accent, var(--green-600));
+            padding: var(--space-16);
             color: white;
-            padding: var(--space-2) var(--space-5);
-            border-radius: var(--radius-full);
-            font-size: .8125rem;
-            font-weight: 700;
-            margin-top: auto;
         }
 
-        .tech-stack {
-            display: flex;
-            gap: var(--space-3);
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: var(--space-12);
-        }
-
-        .tech-badge {
+        .brand-logo {
+            position: absolute;
+            top: var(--space-8);
+            left: var(--space-10);
             display: flex;
             align-items: center;
-            gap: var(--space-2);
-            background: white;
-            border: 1px solid var(--neutral-200);
-            padding: var(--space-2) var(--space-4);
-            border-radius: var(--radius-full);
-            font-size: .8125rem;
-            color: var(--neutral-600);
-            font-weight: 500;
+            gap: var(--space-3);
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
         }
 
-        .landing-footer {
-            text-align: center;
-            padding: var(--space-6);
-            font-size: .8125rem;
+        .brand-logo span {
+            color: var(--green-400);
+        }
+
+        .hero-text h1 {
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            color: white;
+            line-height: 1.1;
+            margin-bottom: var(--space-4);
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin-bottom: var(--space-8);
+        }
+
+        /* Nửa bên phải: Khu vực Đăng nhập nền tối */
+        .split-right {
+            flex: 4;
+            background: var(--neutral-900);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--space-12);
+            color: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .login-box {
+            max-width: 420px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .login-box h2 {
+            color: white;
+            margin-bottom: var(--space-2);
+        }
+
+        .login-box p {
             color: var(--neutral-400);
-            border-top: 1px solid var(--neutral-100);
+            margin-bottom: var(--space-8);
+            font-size: 0.9375rem;
         }
 
-        @media (max-width: 768px) {
-            .portal-grid {
-                grid-template-columns: 1fr;
-                max-width: 400px;
+        /* Role Selector (Chips) */
+        .role-selector {
+            display: flex;
+            gap: var(--space-2);
+            margin-bottom: var(--space-6);
+            flex-wrap: wrap;
+        }
+
+        .role-chip {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--neutral-700);
+            color: var(--neutral-400);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--duration-fast);
+            background: transparent;
+        }
+
+        .role-chip.active {
+            background: var(--green-600);
+            border-color: var(--green-600);
+            color: white;
+        }
+
+        /* Dark form inputs */
+        .dark-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .dark-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--green-500);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+
+        .dark-input::placeholder {
+            color: var(--neutral-500);
+        }
+
+        .dark-label {
+            color: var(--neutral-300);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
             }
 
-            .landing-logo-text {
-                font-size: 2rem;
+            .split-left,
+            .split-right {
+                flex: none;
+                min-height: 50vh;
+            }
+
+            .brand-logo {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: var(--space-6);
             }
         }
     </style>
 </head>
 
 <body>
-    <main class="landing-hero">
-        <!-- Logo & tagline -->
-        <div class="landing-logo">
-            <div class="landing-logo-icon">🥗</div>
-            <div>
-                <div class="landing-logo-text">Fit<span>Food</span></div>
-                <div
-                    style="font-size:.8125rem;color:var(--neutral-400);margin-top:2px;letter-spacing:.08em;text-transform:uppercase">
-                    Healthy Food Platform
+
+    <div class="split-left">
+        <div class="brand-logo">
+            <div
+                style="width:40px;height:40px;background:var(--green-500);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            </div>
+            Fit<span style="font-weight: 500;">Food</span>
+        </div>
+
+        <div class="hero-text">
+            <h1>Sức khỏe bắt đầu từ <br><span style="color:var(--green-400)">bữa ăn hàng ngày</span></h1>
+            <p>Thực đơn đa dạng, cân bằng dinh dưỡng. Chế biến từ nguyên liệu hữu cơ, giao hàng tận nơi nhanh chóng.
+                Không cần đăng nhập để bắt đầu khám phá!</p>
+
+            <a href="src/customer/home.html" class="btn btn-primary btn-lg"
+                style="font-size:1.1rem; padding: 16px 32px">
+                Khám phá thực đơn ngay →
+            </a>
+        </div>
+    </div>
+
+    <div class="split-right">
+        <div class="login-box">
+            <h2>Đăng nhập Hệ thống</h2>
+            <p>Chọn vai trò của bạn để truy cập đúng bảng điều khiển.</p>
+
+            <form id="login-form">
+                <div class="role-selector" id="role-tabs">
+                    <button type="button" class="role-chip active" data-email="user@fitfood.vn">Khách hàng</button>
+                    <button type="button" class="role-chip" data-email="admin@fitfood.vn">Quản lý</button>
+                    <button type="button" class="role-chip" data-email="kitchen@fitfood.vn">Bếp trưởng</button>
+                    <button type="button" class="role-chip" data-email="cashier@fitfood.vn">Thu ngân</button>
                 </div>
+
+                <div class="form-group" style="margin-bottom:var(--space-4)">
+                    <label class="form-label dark-label">Email</label>
+                    <input type="email" name="email" id="login-email" class="form-input dark-input"
+                        placeholder="nhap.email@domain.com" required value="user@fitfood.vn">
+                </div>
+
+                <div class="form-group" style="margin-bottom:var(--space-6)">
+                    <label class="form-label dark-label">Mật khẩu</label>
+                    <input type="password" name="password" id="login-password" class="form-input dark-input"
+                        placeholder="••••••••" required value="User@123">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full btn-lg">
+                    Truy cập hệ thống
+                </button>
+            </form>
+
+            <div style="margin-top:var(--space-6); text-align:center; font-size:0.875rem; color:var(--neutral-500)">
+                Chưa có tài khoản? <a href="#" style="color:var(--green-400)">Đăng ký ngay</a>
             </div>
         </div>
+    </div>
 
-        <p class="landing-tagline">
-            Hệ thống quản lý đồ ăn healthy tích hợp — Kết nối khách hàng, bếp và vận hành trên một nền tảng duy nhất
-        </p>
+    <div id="toast-container"></div>
 
-        <!-- Chọn Portal -->
-        <div class="portal-grid">
-            <!-- Customer Portal -->
-            <a href="src/customer/home.html" class="portal-card" style="--card-accent:#22c55e;--card-bg:#f0fdf4">
-                <div class="portal-icon">🛒</div>
-                <div class="portal-name">Cổng Khách Hàng</div>
-                <p class="portal-desc">
-                    Đặt món, gói ăn định kỳ, theo dõi dinh dưỡng và trạng thái giao hàng
-                </p>
-                <span class="portal-cta">Vào cổng →</span>
-            </a>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+        // Xử lý UI chuyển tab Role (Tự động điền email test để dễ check)
+        const roleChips = document.querySelectorAll('.role-chip');
+        const emailInput = document.getElementById('login-email');
+        const passInput = document.getElementById('login-password');
 
-            <!-- Kitchen / POS -->
-            <a href="src/kitchen/kds.html" class="portal-card" style="--card-accent:#3b82f6;--card-bg:#eff6ff">
-                <div class="portal-icon">👨‍🍳</div>
-                <div class="portal-name">Bếp & Thu Ngân</div>
-                <p class="portal-desc">
-                    KDS nhận đơn realtime, POS tại quầy, quản lý kho nguyên liệu
-                </p>
-                <span class="portal-cta" style="background:#3b82f6">Vào bếp →</span>
-            </a>
+        roleChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                // Xóa active
+                roleChips.forEach(c => c.classList.remove('active'));
+                // Thêm active cho nút được bấm
+                chip.classList.add('active');
 
-            <!-- Admin Dashboard -->
-            <a href="src/admin/dashboard.html" class="portal-card" style="--card-accent:#8b5cf6;--card-bg:#f5f3ff">
-                <div class="portal-icon">📊</div>
-                <div class="portal-name">Quản Trị Trung Tâm</div>
-                <p class="portal-desc">
-                    Báo cáo BI, lên lịch thực đơn, quản lý nhà cung cấp và nhân sự
-                </p>
-                <span class="portal-cta" style="background:#8b5cf6">Vào admin →</span>
-            </a>
-        </div>
+                // Demo: Tự động đổi email và pass theo role để tiện test
+                const roleEmail = chip.dataset.email;
+                emailInput.value = roleEmail;
 
-        <!-- Tech stack badges -->
-        <div class="tech-stack">
-            <span class="tech-badge">🗄 SQL Server</span>
-            <span class="tech-badge">⚡ Node.js + Express</span>
-            <span class="tech-badge">🔄 Socket.io Realtime</span>
-            <span class="tech-badge">🔐 JWT Auth</span>
-            <span class="tech-badge">☁️ GitHub Pages</span>
-        </div>
-    </main>
-
-    <footer class="landing-footer">
-        © 2025 FitFood Platform — Bài tập lớn môn Cơ sở dữ liệu
-    </footer>
+                if (roleEmail.includes('admin')) passInput.value = 'Admin@123';
+                else if (roleEmail.includes('kitchen')) passInput.value = 'Kitchen@123';
+                else if (roleEmail.includes('cashier')) passInput.value = 'Cashier@123'; // Note: Có thể cần chỉnh DB mock ở backend
+                else passInput.value = 'User@123';
+            });
+        });
+    </script>
 </body>
 
 </html>

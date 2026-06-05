@@ -10,12 +10,11 @@
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="customer-nav">
+    <nav class="customer-nav glass-panel">
         <div class="container nav-inner">
             <a href="home.html" class="nav-logo">
-                <div class="nav-logo-icon">🥗</div>
-                <span class="nav-logo-text">Fit<span>Food</span></span>
+                <div class="nav-logo-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></div>
+                <span class="nav-logo-text">Fit<span style="font-weight: 500;">Food</span></span>
             </a>
 
             <ul class="nav-links">
@@ -40,7 +39,6 @@
         </div>
     </nav>
 
-    <!-- Mobile menu -->
     <div id="mobile-menu" class="mobile-menu">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-6)">
             <span class="nav-logo-text">Fit<span>Food</span></span>
@@ -57,65 +55,63 @@
             Giỏ hàng</a>
     </div>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="container hero-inner">
             <div class="hero-content">
                 <div class="hero-badge">
-                    🌿 Thực phẩm hữu cơ · Không chất bảo quản
+                    🌿 Thực phẩm hữu cơ · Đạt chuẩn dinh dưỡng
                 </div>
                 <h1 class="hero-title">
                     Ăn đúng để<br>
-                    <span class="highlight">sống khoẻ</span><br>
+                    <span class="text-gradient">sống khoẻ</span><br>
                     mỗi ngày
                 </h1>
                 <p class="hero-subtitle">
                     Thực đơn cá nhân hoá theo mục tiêu sức khoẻ — Eat Clean, Keto, Low-carb.
-                    Giao tận nơi trong 45 phút.
+                    Chuẩn bị tươi mới và giao tận nơi theo yêu cầu của bạn.
                 </p>
                 <div style="display:flex;gap:var(--space-4);flex-wrap:wrap">
                     <a href="menu.html" class="btn btn-primary btn-lg">Xem thực đơn hôm nay →</a>
-                    <a href="subscription.html" class="btn btn-secondary btn-lg">Đăng ký gói ăn</a>
+                    <a href="subscription.html" class="btn btn-secondary btn-lg">Đăng ký gói định kỳ</a>
                 </div>
                 <div class="hero-stats">
                     <div>
                         <div class="hero-stat-value">50+</div>
-                        <div class="hero-stat-label">Món ăn healthy</div>
+                        <div class="hero-stat-label">Món ăn Premium</div>
                     </div>
                     <div>
-                        <div class="hero-stat-value">2000+</div>
-                        <div class="hero-stat-label">Khách hàng</div>
+                        <div class="hero-stat-value">15.000+</div>
+                        <div class="hero-stat-label">Bữa ăn đã giao</div>
                     </div>
                     <div>
-                        <div class="hero-stat-value">98%</div>
-                        <div class="hero-stat-label">Hài lòng</div>
+                        <div class="hero-stat-value">4.9/5</div>
+                        <div class="hero-stat-label">Chất lượng dịch vụ</div>
                     </div>
                 </div>
             </div>
 
             <div class="hero-visual">
                 <div class="hero-card-float">
-                    <div class="hero-food-img">🥗</div>
+                    <div class="hero-food-img" style="background: linear-gradient(135deg, #a7f3d0, #4ade80);">🥗</div>
                     <div
-                        style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:var(--space-1)">
-                        Salad Keto Bơ Trứng
+                        style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:var(--space-1)">
+                        Salad Cá Hồi Áp Chảo
                     </div>
                     <div style="font-size:.875rem;color:var(--neutral-500);margin-bottom:var(--space-3)">
-                        380 kcal · 18g protein · 8g carbs
+                        420 kcal · 32g protein · 12g carbs
                     </div>
                     <div style="display:flex;justify-content:space-between;align-items:center">
-                        <span class="food-price">75.000₫</span>
-                        <span class="badge badge-green">Keto</span>
+                        <span class="food-price text-gradient" style="font-size:1.3rem">95.000₫</span>
+                        <span class="badge badge-green">Low-carb</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Bộ lọc mục tiêu sức khoẻ -->
     <section style="padding:var(--space-8) 0 0">
         <div class="container">
-            <div class="filter-bar">
+            <div class="filter-bar glass-panel">
                 <span style="font-size:.875rem;font-weight:600;color:var(--neutral-500);white-space:nowrap">Mục
                     tiêu:</span>
                 <button class="filter-chip active" data-filter="all">🍽 Tất cả</button>
@@ -126,76 +122,57 @@
                 <button class="filter-chip" data-filter="giamcan">⚖️ Giảm cân</button>
                 <div style="margin-left:auto">
                     <input type="text" id="search-input" class="form-input"
-                        style="max-width:200px;padding:var(--space-2) var(--space-4)" placeholder="🔍 Tìm món...">
+                        style="max-width:240px;padding:var(--space-2) var(--space-4)"
+                        placeholder="🔍 Tìm kiếm món ăn...">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Danh sách món ăn nổi bật -->
     <section style="padding:var(--space-10) 0">
         <div class="container">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-8)">
                 <div>
-                    <h2>Món ăn hôm nay 🌿</h2>
-                    <p class="text-muted">Chế biến từ nguyên liệu tươi, nhập hàng mỗi sáng</p>
+                    <h2 style="font-size:2rem">Hôm nay ăn gì? 🌿</h2>
+                    <p class="text-muted">Đầu bếp chế biến từ nguyên liệu tươi nhập trong ngày</p>
                 </div>
-                <a href="menu.html" class="btn btn-secondary">Xem tất cả →</a>
+                <a href="menu.html" class="btn btn-secondary">Xem toàn bộ Menu →</a>
             </div>
 
-            <!-- Grid sản phẩm (được inject bởi JS) -->
-            <div id="products-grid" class="grid grid-3" style="gap:var(--space-5)">
-                <!-- Render bởi customer.js -->
+            <div id="products-grid" class="grid grid-3" style="gap:var(--space-6)">
                 <div class="empty-state" style="grid-column:1/-1">
-                    <div class="spinner" style="width:32px;height:32px;border-width:3px"></div>
+                    <div class="spinner"></div>
                     <p>Đang tải thực đơn...</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Gói ăn định kỳ teaser -->
-    <section style="background:linear-gradient(135deg,var(--green-800),var(--green-600));
-    padding:var(--space-16) 0;margin-top:var(--space-10)">
+    <section style="background:linear-gradient(135deg, var(--neutral-900), var(--green-900));
+    padding:var(--space-16) 0; margin-top:var(--space-10); border-radius: 40px 40px 0 0;">
         <div class="container" style="text-align:center">
-            <span class="badge" style="background:rgba(255,255,255,.2);color:white;margin-bottom:var(--space-4)">
-                ⭐ TIẾT KIỆM 20%
+            <span class="badge"
+                style="background:rgba(74, 222, 128, 0.2);color:var(--green-400);margin-bottom:var(--space-4)">
+                ⭐ TIẾT KIỆM TỚI 25% CHI PHÍ
             </span>
-            <h2 style="color:white;margin-bottom:var(--space-4)">Đăng ký Gói ăn định kỳ</h2>
-            <p style="color:rgba(255,255,255,.8);max-width:480px;margin:0 auto var(--space-8)">
-                Giao tận nhà mỗi ngày, tuỳ chỉnh khung giờ, ưu đãi hấp dẫn khi đăng ký theo tuần và tháng
+            <h2 style="color:white;margin-bottom:var(--space-4);font-size:2.5rem">Giải Pháp Bữa Ăn Xuyên Suốt</h2>
+            <p style="color:rgba(255,255,255,.7);max-width:560px;margin:0 auto var(--space-8);font-size:1.1rem">
+                Đăng ký một lần, nhận bữa ăn chuẩn macro tận cửa mỗi ngày. Quên đi câu hỏi "Trưa nay ăn gì?".
             </p>
-            <a href="subscription.html" class="btn btn-lg" style="background:white;color:var(--green-700)">
-                Khám phá gói ăn →
+            <a href="subscription.html" class="btn btn-primary btn-lg"
+                style="box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4)">
+                Khám phá các Gói Ăn →
             </a>
         </div>
     </section>
 
-    <!-- Đặc điểm nổi bật -->
-    <section style="padding:var(--space-16) 0">
+    <footer
+        style="background:var(--neutral-900); padding: var(--space-8) 0; text-align:center; color: var(--neutral-500); font-size: 0.875rem">
         <div class="container">
-            <h2 class="text-center" style="margin-bottom:var(--space-10)">Tại sao chọn FitFood?</h2>
-            <div class="grid grid-3" style="gap:var(--space-6)">
-                <div class="card text-center" style="padding:var(--space-8)">
-                    <div style="font-size:2.5rem;margin-bottom:var(--space-4)">🔬</div>
-                    <h4 style="margin-bottom:var(--space-3)">Minh bạch dinh dưỡng</h4>
-                    <p>Hiển thị đầy đủ Calories, Protein, Carbs, Fat trên từng món ăn</p>
-                </div>
-                <div class="card text-center" style="padding:var(--space-8)">
-                    <div style="font-size:2.5rem;margin-bottom:var(--space-4)">🏍</div>
-                    <h4 style="margin-bottom:var(--space-3)">Giao hàng trong 45 phút</h4>
-                    <p>Theo dõi shipper realtime, cập nhật trạng thái từng bước</p>
-                </div>
-                <div class="card text-center" style="padding:var(--space-8)">
-                    <div style="font-size:2.5rem;margin-bottom:var(--space-4)">🌿</div>
-                    <h4 style="margin-bottom:var(--space-3)">Nguyên liệu tươi hàng ngày</h4>
-                    <p>Nhập hàng từ nông trại hữu cơ, kiểm soát nghiêm ngặt hạn sử dụng</p>
-                </div>
-            </div>
+            © 2025 FitFood Vietnam. Cam kết chất lượng và dinh dưỡng minh bạch.
         </div>
-    </section>
+    </footer>
 
-    <!-- Toast container -->
     <div id="toast-container"></div>
 
     <script src="../../assets/js/api.js"></script>

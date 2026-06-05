@@ -1,15 +1,13 @@
 /* ============================================================
    AUTH.JS - Xử lý xác thực người dùng
-   Đăng nhập / Đăng xuất / Kiểm tra JWT token
+   Đăng nhập / Đăng xuất / Phân quyền điều hướng
    ============================================================ */
 
 const Auth = (() => {
-    /* --- Hằng số --- */
     const TOKEN_KEY = 'ff_token';
     const USER_KEY = 'ff_user';
     const EXPIRY_KEY = 'ff_token_exp';
 
-    /* --- Lưu thông tin đăng nhập --- */
     function saveSession(token, user, expiresIn = 86400) {
         const expiry = Date.now() + expiresIn * 1000;
         localStorage.setItem(TOKEN_KEY, token);
@@ -17,7 +15,6 @@ const Auth = (() => {
         localStorage.setItem(EXPIRY_KEY, expiry.toString());
     }
 
-    /* --- Lấy JWT token hiện tại --- */
     function getToken() {
         if (isExpired()) {
             logout();
@@ -26,7 +23,6 @@ const Auth = (() => {
         return localStorage.getItem(TOKEN_KEY);
     }
 
-    /* --- Lấy thông tin user đang đăng nhập --- */
     function getUser() {
         try {
             const raw = localStorage.getItem(USER_KEY);
@@ -36,28 +32,23 @@ const Auth = (() => {
         }
     }
 
-    /* --- Kiểm tra token đã hết hạn chưa --- */
     function isExpired() {
         const expiry = localStorage.getItem(EXPIRY_KEY);
         if (!expiry) return true;
         return Date.now() > parseInt(expiry);
     }
 
-    /* --- Kiểm tra đã đăng nhập chưa --- */
     function isLoggedIn() {
         return !!getToken() && !!getUser();
     }
 
-    /* --- Đăng xuất --- */
     function logout() {
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(USER_KEY);
         localStorage.removeItem(EXPIRY_KEY);
-        // Xóa giỏ hàng khi đăng xuất
         localStorage.removeItem('ff_cart');
     }
 
-    /* --- Đăng nhập qua API --- */
     async function login(email, password) {
         try {
             const res = await API.post('/api/auth/login', { email, password });
@@ -71,21 +62,6 @@ const Auth = (() => {
         }
     }
 
-    /* --- Đăng ký tài khoản --- */
-    async function register(data) {
-        try {
-            const res = await API.post('/api/auth/register', data);
-            if (res.token && res.user) {
-                saveSession(res.token, res.user, res.expiresIn);
-                return { success: true, user: res.user };
-            }
-            return { success: false, message: res.message };
-        } catch (err) {
-            return { success: false, message: err.message };
-        }
-    }
-
-    /* --- Kiểm tra phân quyền --- */
     function hasRole(role) {
         const user = getUser();
         if (!user) return false;
@@ -93,7 +69,7 @@ const Auth = (() => {
         return user.role === role;
     }
 
-    /* --- Bảo vệ trang: redirect nếu chưa đăng nhập --- */
+    // Bảo vệ các trang nội bộ
     function requireAuth(redirectTo = '/index.html') {
         if (!isLoggedIn()) {
             window.location.href = redirectTo;
@@ -102,7 +78,6 @@ const Auth = (() => {
         return true;
     }
 
-    /* --- Bảo vệ trang: redirect nếu sai role --- */
     function requireRole(role, redirectTo = '/index.html') {
         if (!requireAuth(redirectTo)) return false;
         if (!hasRole(role)) {
@@ -112,24 +87,14 @@ const Auth = (() => {
         return true;
     }
 
-    /* --- Hiển thị thông tin user trên UI --- */
-    function renderUserInfo(selector) {
-        const user = getUser();
-        const el = document.querySelector(selector);
-        if (!el || !user) return;
-        el.textContent = user.full_name || user.email;
-    }
-
     return {
-        login, register, logout,
-        getToken, getUser,
+        login, logout, getToken, getUser,
         isLoggedIn, isExpired, hasRole,
-        requireAuth, requireRole,
-        renderUserInfo
+        requireAuth, requireRole
     };
 })();
 
-/* --- Xử lý form đăng nhập (nếu có trên trang) --- */
+/* --- Xử lý sự kiện Submit Form Đăng nhập tại index.html --- */
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     if (!loginForm) return;
@@ -141,24 +106,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = loginForm.querySelector('[type="submit"]');
 
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner" style="width:18px;height:18px;border-width:2px"></span>';
+        btn.innerHTML = '<span class="spinner" style="width:20px;height:20px;border-width:2px;border-top-color:white;border-color:rgba(255,255,255,0.3)"></span>';
 
         const result = await Auth.login(email, password);
 
         if (result.success) {
-            Toast.show('Đăng nhập thành công! 🎉', 'success');
-            // Redirect theo role
+            // Lấy Toast object nếu có, nếu không thì dùng alert (đề phòng DOM index.html chưa init toast)
+            if (typeof Toast !== 'undefined') Toast.show('Đăng nhập thành công! Đang chuyển hướng...', 'success');
+
             setTimeout(() => {
                 const role = result.user.role;
-                if (role === 'admin') window.location.href = '/src/admin/dashboard.html';
-                else if (role === 'kitchen' || role === 'cashier')
-                    window.location.href = '/src/kitchen/kds.html';
-                else window.location.href = '/src/customer/home.html';
+                // TÁCH BIỆT LUỒNG CHÍNH XÁC NHƯ YÊU CẦU
+                if (role === 'admin') {
+                    window.location.href = 'src/admin/dashboard.html';
+                } else if (role === 'kitchen') {
+                    window.location.href = 'src/kitchen/kds.html';
+                } else if (role === 'cashier') {
+                    window.location.href = 'src/kitchen/pos.html';
+                } else {
+                    // Mặc định là customer
+                    window.location.href = 'src/customer/home.html';
+                }
             }, 800);
         } else {
-            Toast.show(result.message || 'Email hoặc mật khẩu không đúng', 'error');
+            if (typeof Toast !== 'undefined') {
+                Toast.show(result.message || 'Email hoặc mật khẩu không đúng', 'error');
+            } else {
+                alert(result.message || 'Đăng nhập thất bại');
+            }
             btn.disabled = false;
-            btn.textContent = 'Đăng nhập';
+            btn.textContent = 'Truy cập hệ thống';
         }
     });
 });

@@ -85,10 +85,23 @@ const API = (() => {
         }
         // Đăng nhập
         if (endpoint.includes('/api/auth/login')) {
+            const email = body?.email || '';
+            let assignedRole = 'customer'; // Mặc định là khách hàng
+            
+            // Phân loại role dựa trên email nhập vào
+            if (email.includes('admin')) assignedRole = 'admin';
+            else if (email.includes('kitchen')) assignedRole = 'kitchen';
+            else if (email.includes('cashier')) assignedRole = 'cashier';
+
             return {
                 success: true,
                 token: 'mock-jwt-token',
-                user: { id: 1, full_name: 'Demo User', email: body?.email, role: 'admin' },
+                user: { 
+                    id: Date.now(), 
+                    full_name: 'Người dùng Demo', 
+                    email: email, 
+                    role: assignedRole 
+                },
                 expiresIn: 86400
             };
         }
