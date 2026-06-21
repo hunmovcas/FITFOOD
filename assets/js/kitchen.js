@@ -81,7 +81,7 @@ const KDS = (() => {
           <div>
             <div class="ticket-order-id">${order.id}</div>
             <div style="font-size:.75rem;color:var(--kitchen-muted);margin-top:2px">
-              ${order.type === 'online' ? '🌐 Online' : '🏪 Tại quầy'} • ${order.customer || 'Khách lẻ'}
+              🌐 Online • ${order.customer || 'Khách hàng'}
             </div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
@@ -198,117 +198,7 @@ function statusLabel(status) {
     return map[status] || status;
 }
 
-/* ======================== POS ======================== */
-const POS = (() => {
-    let posCart = [];
-
-    function init() {
-        loadMenu();
-    }
-
-    async function loadMenu() {
-        try {
-            const res = await API.get('/api/products?available=true');
-            renderMenuGrid(res.data || MOCK.products);
-        } catch {
-            renderMenuGrid(MOCK.products);
-        }
-    }
-
-    function renderMenuGrid(products) {
-        const grid = document.getElementById('pos-menu-grid');
-        if (!grid) return;
-
-        grid.innerHTML = products.map(p => `
-      <div class="card card-hover" style="cursor:pointer;background:var(--kitchen-surface);
-        border-color:var(--kitchen-border);color:var(--kitchen-text);padding:var(--space-4)"
-        onclick="POS.addToCart(${JSON.stringify(p).replace(/"/g, "'")})">
-        <div style="font-size:2rem;text-align:center;margin-bottom:var(--space-2)">${p.image || '🍱'}</div>
-        <div style="font-weight:600;font-size:.9rem;margin-bottom:4px">${p.name}</div>
-        <div style="color:var(--green-400);font-weight:700">${formatPrice(p.price)}</div>
-        <div style="font-size:.75rem;color:var(--kitchen-muted);margin-top:2px">${p.calories} kcal</div>
-      </div>`).join('');
-    }
-
-    function addToCart(product) {
-        const existing = posCart.find(i => i.id === product.id);
-        if (existing) { existing.qty++; }
-        else { posCart.push({ ...product, qty: 1 }); }
-        renderCart();
-    }
-
-    function changeQty(id, delta) {
-        const item = posCart.find(i => i.id === id);
-        if (!item) return;
-        item.qty += delta;
-        if (item.qty <= 0) posCart = posCart.filter(i => i.id !== id);
-        renderCart();
-    }
-
-    function renderCart() {
-        const container = document.getElementById('pos-cart-items');
-        const totalEl = document.getElementById('pos-grand-total');
-        if (!container) return;
-
-        if (posCart.length === 0) {
-            container.innerHTML = `
-        <div class="empty-state" style="padding:var(--space-10) var(--space-4)">
-          <div style="font-size:2rem;opacity:.3">🛒</div>
-          <p style="color:var(--kitchen-muted);font-size:.875rem">Chưa có món nào</p>
-        </div>`;
-        } else {
-            container.innerHTML = posCart.map(item => `
-        <div class="pos-cart-item">
-          <span style="font-size:1.3rem">${item.image || '🍱'}</span>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:.875rem;font-weight:600;color:var(--kitchen-text);
-              white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</div>
-            <div style="font-size:.8rem;color:var(--green-400)">${formatPrice(item.price)}</div>
-          </div>
-          <div class="pos-qty-control">
-            <button class="pos-qty-btn" onclick="POS.changeQty(${item.id}, -1)">-</button>
-            <span style="font-weight:700;min-width:20px;text-align:center;color:var(--kitchen-text)">${item.qty}</span>
-            <button class="pos-qty-btn" onclick="POS.changeQty(${item.id}, 1)">+</button>
-          </div>
-        </div>`).join('');
-        }
-
-        const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
-        if (totalEl) totalEl.textContent = formatPrice(total);
-    }
-
-    async function checkout(paymentMethod = 'cash') {
-        if (posCart.length === 0) { Toast.show('Giỏ hàng trống!', 'warning'); return; }
-
-        const btn = document.getElementById('pos-checkout-btn');
-        if (btn) { btn.disabled = true; btn.textContent = 'Đang xử lý...'; }
-
-        try {
-            const orderData = {
-                items: posCart.map(i => ({ product_id: i.id, qty: i.qty, price: i.price })),
-                total: posCart.reduce((s, i) => s + i.price * i.qty, 0),
-                payment_method: paymentMethod,
-                type: 'walkin',
-                status: 'pending'
-            };
-
-            const res = await API.post('/api/orders', orderData);
-            Toast.show(`✅ Đơn hàng ${res.data?.id || '#NEW'} đã tạo thành công`, 'success');
-            posCart = [];
-            renderCart();
-        } catch (err) {
-            Toast.show('Lỗi tạo đơn hàng', 'error');
-        } finally {
-            if (btn) { btn.disabled = false; btn.textContent = '💳 Thanh toán'; }
-        }
-    }
-
-    return { init, addToCart, changeQty, renderCart, checkout };
-})();
-
 document.addEventListener('DOMContentLoaded', () => {
     // Khởi tạo KDS nếu đang ở trang KDS
     if (document.getElementById('kds-grid')) KDS.init();
-    // Khởi tạo POS nếu đang ở trang POS
-    if (document.getElementById('pos-menu-grid')) POS.init();
 });

@@ -7,7 +7,7 @@ Hệ thống nền tảng quản lý đồ ăn healthy tích hợp — Bài tậ
 | Portal | URL | Mô tả |
 |--------|-----|-------|
 | 🛒 Khách hàng | `/src/customer/home.html` | Đặt món, gói ăn, tracking |
-| 👨‍🍳 Bếp / POS | `/src/kitchen/kds.html` | KDS realtime, thu ngân, kho |
+| 👨‍🍳 Bếp | `/src/kitchen/kds.html` | KDS realtime, kho, in nhãn |
 | 📊 Admin | `/src/admin/dashboard.html` | BI, quản trị toàn hệ thống |
 
 ## 🚀 Cài đặt & Chạy

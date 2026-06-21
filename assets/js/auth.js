@@ -121,8 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = 'src/admin/dashboard.html';
                 } else if (role === 'kitchen') {
                     window.location.href = 'src/kitchen/kds.html';
-                } else if (role === 'cashier') {
-                    window.location.href = 'src/kitchen/pos.html';
                 } else {
                     // Mặc định là customer
                     window.location.href = 'src/customer/home.html';

@@ -23,7 +23,7 @@ function requireRole(...allowedRoles) {
 
 /* --- Shortcut middlewares hay dùng --- */
 const adminOnly = requireRole('admin');
-const kitchenOnly = requireRole('kitchen', 'cashier', 'admin');
-const staffOnly = requireRole('kitchen', 'cashier', 'admin');
+const kitchenOnly = requireRole('kitchen', 'admin');
+const staffOnly = requireRole('kitchen', 'admin');
 
 module.exports = { requireRole, adminOnly, kitchenOnly, staffOnly };

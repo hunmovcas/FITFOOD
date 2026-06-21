@@ -117,6 +117,30 @@ h6 {
     letter-spacing: -0.02em;
 }
 
+/* --- Chuẩn hóa hiển thị số liệu (KPI, giá, calo, đồng hồ...) ---
+   Dùng font-body thay vì font-display cho mọi con số thống kê
+   để tránh lệch baseline/x-height, và bật tabular-nums để các
+   chữ số luôn canh đều độ rộng/chiều cao khi đặt cạnh nhau. */
+.kpi-value,
+.food-price,
+.plan-price,
+.hero-stat-value,
+.calorie-ring-value,
+.nutrition-value,
+.label-calo,
+.ticket-order-id,
+.ticket-timer,
+.kitchen-clock,
+.step-icon,
+.bar-label,
+.legend-item,
+.donut-wrapper text {
+    font-family: var(--font-body);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    line-height: 1;
+}
+
 h1 {
     font-size: clamp(2.5rem, 5vw, 4rem);
 }

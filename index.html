@@ -89,30 +89,43 @@
             font-size: 0.9375rem;
         }
 
-        /* Role Selector (Chips) */
+        /* Role Selector (Cards) */
         .role-selector {
-            display: flex;
-            gap: var(--space-2);
-            margin-bottom: var(--space-6);
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-3);
+            margin-bottom: var(--space-8);
         }
 
         .role-chip {
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--neutral-700);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 16px 8px;
+            border-radius: var(--radius-md);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
             color: var(--neutral-400);
-            font-size: 0.875rem;
-            font-weight: 500;
+            font-size: 0.8125rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all var(--duration-fast);
-            background: transparent;
+            transition: all var(--duration-fast) var(--ease-out);
+            text-align: center;
+        }
+
+        .role-chip:hover {
+            border-color: rgba(34, 197, 94, 0.4);
+            background: rgba(34, 197, 94, 0.06);
+            color: var(--neutral-200);
         }
 
         .role-chip.active {
-            background: var(--green-600);
-            border-color: var(--green-600);
+            background: rgba(34, 197, 94, 0.12);
+            border-color: var(--green-500);
             color: white;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
         }
 
         /* Dark form inputs */
@@ -192,7 +205,6 @@
                     <button type="button" class="role-chip active" data-email="user@fitfood.vn">Khách hàng</button>
                     <button type="button" class="role-chip" data-email="admin@fitfood.vn">Quản lý</button>
                     <button type="button" class="role-chip" data-email="kitchen@fitfood.vn">Bếp trưởng</button>
-                    <button type="button" class="role-chip" data-email="cashier@fitfood.vn">Thu ngân</button>
                 </div>
 
                 <div class="form-group" style="margin-bottom:var(--space-4)">
@@ -241,7 +253,6 @@
 
                 if (roleEmail.includes('admin')) passInput.value = 'Admin@123';
                 else if (roleEmail.includes('kitchen')) passInput.value = 'Kitchen@123';
-                else if (roleEmail.includes('cashier')) passInput.value = 'Cashier@123'; // Note: Có thể cần chỉnh DB mock ở backend
                 else passInput.value = 'User@123';
             });
         });

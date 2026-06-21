@@ -21,7 +21,7 @@ CREATE TABLE Users (
     full_name       NVARCHAR(100) NOT NULL,
     phone           NVARCHAR(20),
     role            NVARCHAR(20) NOT NULL DEFAULT 'customer'
-                    CHECK (role IN ('customer', 'kitchen', 'cashier', 'admin')),
+                    CHECK (role IN ('customer', 'kitchen', 'admin')),
     loyalty_points  INT NOT NULL DEFAULT 0,
     is_active       BIT NOT NULL DEFAULT 1,
     created_at      DATETIME NOT NULL DEFAULT GETDATE(),
@@ -126,7 +126,7 @@ CREATE TABLE Orders (
     user_id         INT REFERENCES Users(user_id),  -- NULL nếu khách vãng lai
     subscription_id INT REFERENCES Subscriptions(subscription_id),
     order_type      NVARCHAR(10) NOT NULL DEFAULT 'online'
-                    CHECK (order_type IN ('online', 'walkin')),
+                    CHECK (order_type IN ('online')),
     status          NVARCHAR(20) NOT NULL DEFAULT 'pending'
                     CHECK (status IN ('pending','confirmed','preparing','ready','delivering','done','cancelled')),
     -- Thông tin giao hàng

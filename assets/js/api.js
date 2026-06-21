@@ -91,7 +91,6 @@ const API = (() => {
             // Phân loại role dựa trên email nhập vào
             if (email.includes('admin')) assignedRole = 'admin';
             else if (email.includes('kitchen')) assignedRole = 'kitchen';
-            else if (email.includes('cashier')) assignedRole = 'cashier';
 
             return {
                 success: true,
@@ -176,7 +175,7 @@ const MOCK = {
     orders: [
         { id: '#FF-2401', customer: 'Nguyễn Thị Lan', items: 3, total: 255000, status: 'preparing', time: '14:32', type: 'online' },
         { id: '#FF-2402', customer: 'Trần Văn Minh', items: 1, total: 85000, status: 'ready', time: '14:28', type: 'online' },
-        { id: '#FF-2403', customer: 'Lê Hoàng Nam', items: 2, total: 167000, status: 'pending', time: '14:35', type: 'walkin' },
+        { id: '#FF-2403', customer: 'Lê Hoàng Nam', items: 2, total: 167000, status: 'pending', time: '14:35', type: 'online' },
     ],
 
     kpi: {

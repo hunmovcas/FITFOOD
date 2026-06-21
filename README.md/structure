@@ -15,7 +15,6 @@ fitfood/
 │   │   └── profile.html             # Hồ sơ cá nhân: thông tin tài khoản, ví điểm thưởng, đổi mật khẩu
 │   │
 │   ├── kitchen/
-│   │   ├── pos.html                  # Màn hình thu ngân: tạo đơn tại quầy, tính tiền, in hóa đơn cho khách mua trực tiếp
 │   │   ├── kds.html                  # Kitchen Display System: hiển thị đơn realtime cho bếp, ghi chú cá nhân hóa, đánh dấu hoàn thành
 │   │   ├── inventory.html            # Quản lý kho nguyên liệu: tồn kho, hạn sử dụng, cảnh báo sắp hết / hết hàng
 │   │   ├── receiving.html            # Nhập kho: ghi nhận hàng từ nhà cung cấp giao đến, cập nhật số lượng & hạn sử dụng

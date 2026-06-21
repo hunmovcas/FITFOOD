@@ -39,6 +39,8 @@ router.post('/login', async (req, res) => {
             if (user) user.is_active = 1;
         }
 
+        // Mật khẩu mock theo từng email: Admin@123 / Kitchen@123 / User@123
+
         if (!user) {
             return res.status(401).json({ success: false, message: 'Email không tồn tại' });
         }

@@ -13,7 +13,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const { status, limit = 50, offset = 0, type } = req.query;
-        const isAdmin = ['admin', 'kitchen', 'cashier'].includes(req.user.role);
+        const isAdmin = ['admin', 'kitchen'].includes(req.user.role);
 
         let data;
 
@@ -128,7 +128,7 @@ router.post('/', rateLimiter({ windowMs: 60000, max: 10, message: 'Đặt hàng 
 });
 
 /* --- PATCH /api/orders/:id/status - Cập nhật trạng thái --- */
-router.patch('/:id/status', requireRole('kitchen', 'cashier', 'admin'), async (req, res) => {
+router.patch('/:id/status', requireRole('kitchen', 'admin'), async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 

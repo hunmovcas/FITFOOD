@@ -18,7 +18,6 @@ INSERT INTO Categories (name, slug, icon) VALUES
 INSERT INTO Users (email, password_hash, full_name, phone, role) VALUES
 ('admin@fitfood.vn',   '$2b$10$example_hash_admin',    N'FitFood Admin',     '0901000001', 'admin'),
 ('kitchen@fitfood.vn', '$2b$10$example_hash_kitchen',  N'Bếp trưởng Tuấn',   '0901000002', 'kitchen'),
-('cashier@fitfood.vn', '$2b$10$example_hash_cashier',  N'Thu ngân Linh',     '0901000003', 'cashier'),
 ('lan@example.com',    '$2b$10$example_hash_user1',    N'Nguyễn Thị Lan',    '0912345678', 'customer'),
 ('minh@example.com',   '$2b$10$example_hash_user2',    N'Trần Văn Minh',     '0987654321', 'customer');
 
@@ -91,8 +90,8 @@ VALUES
  N'123 Nguyễn Văn Cừ, Q.5', 255000, 255000, 'cod', 'pending'),
 ('FF-2402', 5, 'online', 'ready',     N'Trần Văn Minh', '0987654321',
  N'45 Lê Văn Sỹ, Q.3',      85000,  85000,  'momo', 'paid'),
-('FF-2403', NULL, 'walkin', 'pending', N'Khách lẻ', NULL,
- NULL, 167000, 167000, 'cash', 'pending');
+('FF-2403', 4, 'online', 'pending', N'Nguyễn Thị Lan', '0912345678',
+ N'123 Nguyễn Văn Cừ, Q.5', 167000, 167000, 'cash', 'pending');
 
 PRINT N'✅ Dữ liệu mẫu đã được chèn thành công';
 GO
