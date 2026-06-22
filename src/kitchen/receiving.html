@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Nhập kho</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/kitchen.css">
+</head>
+
+<body>
+    <div class="kitchen-layout">
+        <div class="kitchen-header">
+            <div class="kitchen-logo">
+                <div class="kitchen-logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                    </svg></div>
+                FitFood Nhập kho
+            </div>
+            <div class="kitchen-nav-tabs">
+                <a href="kds.html" class="kitchen-tab">📋 KDS</a>
+                <a href="inventory.html" class="kitchen-tab">📦 Kho</a>
+                <a href="receiving.html" class="kitchen-tab active">🚚 Nhập kho</a>
+                <a href="label-print.html" class="kitchen-tab">🏷 In nhãn</a>
+            </div>
+            <div class="kitchen-clock" id="clock">--:--</div>
+        </div>
+
+        <div style="padding:var(--space-6);flex:1;overflow-y:auto">
+            <div class="grid grid-2" style="gap:var(--space-6);align-items:start">
+
+                <!-- Form nhập kho -->
+                <div class="inventory-table-wrapper" style="padding:var(--space-6)">
+                    <h3 style="color:var(--kitchen-text);margin-bottom:var(--space-5)">➕ Ghi nhận hàng nhập</h3>
+
+                    <div class="form-group" style="margin-bottom:var(--space-4)">
+                        <label class="form-label" style="color:var(--kitchen-muted)">Nhà cung cấp *</label>
+                        <select class="form-select" id="r-supplier"
+                            style="background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)">
+                            <option value="">-- Chọn nhà cung cấp --</option>
+                            <option>Nông trại Organic Đà Lạt</option>
+                            <option>Thịt sạch Farm Bình Dương</option>
+                            <option>Hải sản tươi Vũng Tàu</option>
+                            <option>Gạo lứt Hữu Nghị</option>
+                            <option>Cá hồi Na Uy Import</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-2" style="gap:var(--space-4);margin-bottom:var(--space-4)">
+                        <div class="form-group">
+                            <label class="form-label" style="color:var(--kitchen-muted)">Danh mục *</label>
+                            <select class="form-select" id="r-category"
+                                style="background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)">
+                                <option>Rau củ</option>
+                                <option>Thịt</option>
+                                <option>Hải sản</option>
+                                <option>Ngũ cốc</option>
+                                <option>Gia vị</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="color:var(--kitchen-muted)">Tên nguyên liệu *</label>
+                            <input type="text" class="form-input" id="r-name" placeholder="VD: Ức gà"
+                                style="background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2" style="gap:var(--space-4);margin-bottom:var(--space-4)">
+                        <div class="form-group">
+                            <label class="form-label" style="color:var(--kitchen-muted)">Số lượng *</label>
+                            <div style="display:flex;gap:var(--space-2)">
+                                <input type="number" class="form-input" id="r-qty" placeholder="0" min="0" step="0.1"
+                                    style="background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)">
+                                <select class="form-select" id="r-unit"
+                                    style="max-width:90px;
+                                    background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)">
+                                    <option>kg</option>
+                                    <option>g</option>
+                                    <option>lít</option>
+                                    <option>thùng</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="color:var(--kitchen-muted)">Đơn giá (₫/đơn vị)</label>
+                            <input type="number" class="form-input" id="r-cost" placeholder="0" min="0"
+                                style="background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2" style="gap:var(--space-4);margin-bottom:var(--space-4)">
+                        <div class="form-group">
+                            <label class="form-label" style="color:var(--kitchen-muted)">Ngày nhập</label>
+                            <input type="date" class="form-input" id="r-import-date"
+                                style="background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="color:var(--kitchen-muted)">Hạn sử dụng *</label>
+                            <input type="date" class="form-input" id="r-expiry-date"
+                                style="background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:var(--space-5)">
+                        <label class="form-label" style="color:var(--kitchen-muted)">Ghi chú</label>
+                        <textarea class="form-textarea" id="r-notes" placeholder="Số lô, tình trạng hàng..."
+                            style="background:var(--kitchen-bg);border-color:var(--kitchen-border);color:var(--kitchen-text)"></textarea>
+                    </div>
+
+                    <button class="btn-complete" style="width:100%;padding:var(--space-4)" onclick="submitReceiving()">
+                        ✅ Ghi nhận nhập kho
+                    </button>
+                </div>
+
+                <!-- Lịch sử nhập gần đây -->
+                <div>
+                    <div class="inventory-table-wrapper" style="margin-bottom:var(--space-5)">
+                        <div style="padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--kitchen-border);
+                            display:flex;justify-content:space-between;align-items:center">
+                            <h4 style="color:var(--kitchen-text);margin:0">📋 Lịch sử nhập hôm nay</h4>
+                            <span class="badge badge-green" id="receiving-count">0 lượt</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Nguyên liệu</th>
+                                    <th>Số lượng</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th>Hạn dùng</th>
+                                </tr>
+                            </thead>
+                            <tbody id="receiving-history-tbody">
+                                <tr>
+                                    <td colspan="5"
+                                        style="text-align:center;padding:var(--space-6);color:var(--kitchen-muted)">
+                                        Chưa có lượt nhập kho nào hôm nay
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Gợi ý cần nhập (dựa trên cảnh báo kho thấp) -->
+                    <div class="inventory-table-wrapper">
+                        <div
+                            style="padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--kitchen-border)">
+                            <h4 style="color:var(--kitchen-text);margin:0">⚠️ Gợi ý cần nhập sớm</h4>
+                        </div>
+                        <div style="padding:var(--space-4) var(--space-5);display:flex;flex-direction:column;gap:var(--space-3)"
+                            id="restock-suggestions">
+                            <!-- render bởi JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/kitchen.js"></script>
+    <script>
+        const receivingHistory = [];
+
+        /* --- Gửi ghi nhận nhập kho --- */
+        async function submitReceiving() {
+            const supplier = document.getElementById('r-supplier').value;
+            const category = document.getElementById('r-category').value;
+            const name = document.getElementById('r-name').value.trim();
+            const qty = document.getElementById('r-qty').value;
+            const unit = document.getElementById('r-unit').value;
+            const cost = document.getElementById('r-cost').value;
+            const importDate = document.getElementById('r-import-date').value;
+            const expiryDate = document.getElementById('r-expiry-date').value;
+            const notes = document.getElementById('r-notes').value.trim();
+
+            if (!supplier || !name || !qty || !expiryDate) {
+                Toast.show('Vui lòng nhập đầy đủ: nhà cung cấp, tên nguyên liệu, số lượng, hạn sử dụng', 'warning');
+                return;
+            }
+
+            try {
+                await API.post('/api/inventory', {
+                    supplier_id: supplier, name, category, unit,
+                    quantity: parseFloat(qty), unit_cost: parseFloat(cost) || null,
+                    import_date: importDate, expiry_date: expiryDate, notes
+                });
+            } catch { /* fallback mock khi không có backend */ }
+
+            const entry = {
+                time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+                name, qty: `${qty} ${unit}`, supplier,
+                expiry: new Date(expiryDate).toLocaleDateString('vi-VN'),
+            };
+            receivingHistory.unshift(entry);
+            renderHistory();
+
+            Toast.show(`✅ Đã ghi nhận nhập kho: ${name} (${qty}${unit})`, 'success');
+
+            // Reset form (giữ lại nhà cung cấp + danh mục để nhập nhanh liên tiếp)
+            document.getElementById('r-name').value = '';
+            document.getElementById('r-qty').value = '';
+            document.getElementById('r-cost').value = '';
+            document.getElementById('r-expiry-date').value = '';
+            document.getElementById('r-notes').value = '';
+        }
+
+        function renderHistory() {
+            const tbody = document.getElementById('receiving-history-tbody');
+            document.getElementById('receiving-count').textContent = `${receivingHistory.length} lượt`;
+
+            if (receivingHistory.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:var(--space-6);
+                    color:var(--kitchen-muted)">Chưa có lượt nhập kho nào hôm nay</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = receivingHistory.map(e => `
+                <tr>
+                    <td style="color:var(--kitchen-muted)">${e.time}</td>
+                    <td style="font-weight:600;color:var(--kitchen-text)">${e.name}</td>
+                    <td>${e.qty}</td>
+                    <td style="color:var(--kitchen-muted)">${e.supplier}</td>
+                    <td>${e.expiry}</td>
+                </tr>`).join('');
+        }
+
+        /* --- Gợi ý cần nhập từ kho hiện tại (status critical/warning) --- */
+        async function loadRestockSuggestions() {
+            let items = [];
+            try {
+                const res = await API.get('/api/inventory');
+                items = res.data || MOCK.inventory;
+            } catch {
+                items = MOCK.inventory;
+            }
+
+            const needed = items.filter(i => i.status !== 'ok');
+            const el = document.getElementById('restock-suggestions');
+
+            if (needed.length === 0) {
+                el.innerHTML = `<div style="color:var(--kitchen-muted);font-size:.875rem">
+                    ✅ Tất cả nguyên liệu đang ở mức tồn kho ổn định</div>`;
+                return;
+            }
+
+            el.innerHTML = needed.map(i => `
+                <div style="display:flex;align-items:center;justify-content:space-between;
+                    padding:var(--space-3);border-radius:var(--radius-md);
+                    background:${i.status === 'critical' ? 'rgba(239,68,68,.1)' : 'rgba(251,191,36,.1)'}">
+                    <div>
+                        <div style="font-weight:600;color:var(--kitchen-text)">${i.name}</div>
+                        <div style="font-size:.75rem;color:var(--kitchen-muted)">Còn ${i.qty}${i.unit} · Hết hạn ${i.expiry}</div>
+                    </div>
+                    <button class="btn-recall" style="font-size:.75rem;color:${i.status === 'critical' ? 'var(--red-400)' : 'var(--amber-400)'}"
+                        onclick="prefillForm('${i.name}', '${i.category}', '${i.unit}')">
+                        Nhập ngay
+                    </button>
+                </div>`).join('');
+        }
+
+        function prefillForm(name, category, unit) {
+            document.getElementById('r-name').value = name;
+            document.getElementById('r-category').value = category;
+            document.getElementById('r-unit').value = unit;
+            document.getElementById('r-name').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        setInterval(() => {
+            document.getElementById('clock').textContent =
+                new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+        }, 1000);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('r-import-date').value = new Date().toISOString().slice(0, 10);
+            loadRestockSuggestions();
+        });
+    </script>
+</body>
+
+</html>

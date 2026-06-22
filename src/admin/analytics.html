@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Phân tích & Dự báo</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                    </svg></div>
+                <div>
+                    <div class="sidebar-logo-text">FitFood</div><span class="sidebar-logo-badge">Admin</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-title">Tổng quan</div>
+                <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+                <a href="analytics.html" class="sidebar-link active"><span class="icon">📈</span> Phân tích</a>
+                <a href="reports.html" class="sidebar-link"><span class="icon">📋</span> Báo cáo</a>
+                <div class="sidebar-section-title">Vận hành</div>
+                <a href="menu-plan.html" class="sidebar-link"><span class="icon">🗓</span> Lịch thực đơn</a>
+                <a href="suppliers.html" class="sidebar-link"><span class="icon">🚚</span> Nhà cung cấp</a>
+                <div class="sidebar-section-title">Marketing</div>
+                <a href="marketing.html" class="sidebar-link"><span class="icon">🎁</span> Khuyến mãi</a>
+                <div class="sidebar-section-title">Hệ thống</div>
+                <a href="../../src/customer/home.html" class="sidebar-link"><span class="icon">🛒</span> Cổng KH</a>
+                <a href="../../src/kitchen/kds.html" class="sidebar-link"><span class="icon">👨‍🍳</span> Bếp</a>
+                <a href="../../index.html" class="sidebar-link"><span class="icon">🏠</span> Trang chủ</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar">A</div>
+                    <div>
+                        <div class="sidebar-user-name">Admin</div>
+                        <div class="sidebar-user-role">Quản trị viên</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <div class="admin-page-title">📈 Phân tích & Dự báo xu hướng</div>
+                <div class="admin-topbar-actions">
+                    <select class="form-select" id="analytics-period" style="max-width:160px"
+                        onchange="reloadAnalytics()">
+                        <option value="7days">7 ngày qua</option>
+                        <option value="30days" selected>30 ngày qua</option>
+                        <option value="90days">3 tháng qua</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin-content">
+
+                <!-- Chỉ số hành vi tiêu dùng -->
+                <div class="grid grid-4" style="gap:var(--space-5);margin-bottom:var(--space-6)">
+                    <div class="kpi-card" style="--kpi-color:var(--green-500);--kpi-bg:var(--green-50)">
+                        <div class="kpi-icon-wrapper">🥗</div>
+                        <div class="kpi-value">Eat Clean</div>
+                        <div class="kpi-label">Mục tiêu phổ biến nhất</div>
+                        <div class="kpi-change up">↑ 38% lượt chọn</div>
+                    </div>
+                    <div class="kpi-card" style="--kpi-color:var(--blue-500);--kpi-bg:#eff6ff">
+                        <div class="kpi-icon-wrapper">⏰</div>
+                        <div class="kpi-value">11:00–13:00</div>
+                        <div class="kpi-label">Khung giờ đặt nhiều nhất</div>
+                        <div class="kpi-change up">↑ 12% so với kỳ trước</div>
+                    </div>
+                    <div class="kpi-card" style="--kpi-color:#8b5cf6;--kpi-bg:#f5f3ff">
+                        <div class="kpi-icon-wrapper">🔁</div>
+                        <div class="kpi-value">3.4 đơn</div>
+                        <div class="kpi-label">Tần suất đặt TB/khách/tháng</div>
+                        <div class="kpi-change up">↑ 0.6 so với kỳ trước</div>
+                    </div>
+                    <div class="kpi-card" style="--kpi-color:var(--amber-500);--kpi-bg:#fef9c3">
+                        <div class="kpi-icon-wrapper">📈</div>
+                        <div class="kpi-value">+22%</div>
+                        <div class="kpi-label">Dự báo nhu cầu tuần tới</div>
+                        <div class="kpi-change up">So với tuần hiện tại</div>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ xu hướng theo mục tiêu dinh dưỡng -->
+                <div class="grid grid-2" style="gap:var(--space-6);margin-bottom:var(--space-6)">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div>
+                                <div class="chart-title">Xu hướng theo mục tiêu sức khoẻ</div>
+                                <div class="chart-subtitle">% lượt đặt theo từng nhóm dinh dưỡng</div>
+                            </div>
+                        </div>
+                        <div class="donut-wrapper">
+                            <div id="goal-donut" style="width:160px;height:160px"></div>
+                            <div class="donut-legend" id="goal-legend"></div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div>
+                                <div class="chart-title">Dự báo nhu cầu 7 ngày tới</div>
+                                <div class="chart-subtitle">Số phần ăn ước tính cần chuẩn bị</div>
+                            </div>
+                        </div>
+                        <div class="bar-chart" id="forecast-chart" style="height:160px"></div>
+                    </div>
+                </div>
+
+                <!-- Phân tích hành vi theo khung giờ -->
+                <div class="chart-card" style="margin-bottom:var(--space-6)">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title">Hành vi đặt hàng theo giờ trong ngày</div>
+                            <div class="chart-subtitle">Số đơn hàng trung bình theo từng khung giờ</div>
+                        </div>
+                    </div>
+                    <div class="bar-chart" id="hourly-chart" style="height:160px"></div>
+                </div>
+
+                <!-- Bảng dự báo nguyên liệu theo xu hướng -->
+                <div class="admin-table-card">
+                    <div class="admin-table-header">
+                        <h4>🔮 Dự báo nhu cầu nguyên liệu theo xu hướng tiêu dùng</h4>
+                        <span class="text-sm text-muted">Dựa trên tốc độ tăng trưởng đơn hàng & gói ăn 30 ngày
+                            qua</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nguyên liệu</th>
+                                <th>Nhu cầu hiện tại/tuần</th>
+                                <th>Tăng trưởng dự báo</th>
+                                <th>Nhu cầu dự kiến tuần tới</th>
+                                <th>Khuyến nghị</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forecast-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/admin.js"></script>
+    <script>
+        const GOAL_BREAKDOWN = [
+            { label: 'Eat Clean', value: 38, color: 'var(--green-500)' },
+            { label: 'Giảm cân', value: 24, color: 'var(--blue-500)' },
+            { label: 'Keto', value: 18, color: 'var(--amber-500)' },
+            { label: 'Tăng cơ', value: 12, color: '#8b5cf6' },
+            { label: 'Low-carb', value: 8, color: 'var(--red-400)' },
+        ];
+
+        const FORECAST_INGREDIENTS = [
+            { name: 'Ức gà', current: 42, growth: 18, supplier: 'Thịt sạch Farm BD' },
+            { name: 'Cá hồi fillet', current: 18, growth: 32, supplier: 'Cá hồi Na Uy Import' },
+            { name: 'Bơ Hass', current: 12, growth: 9, supplier: 'Nông trại Organic ĐL' },
+            { name: 'Quinoa', current: 8, growth: 25, supplier: 'Nông trại Organic ĐL' },
+            { name: 'Bò thăn', current: 20, growth: 14, supplier: 'Thịt sạch Farm BD' },
+        ];
+
+        /* --- Donut chart mục tiêu --- */
+        function renderGoalDonut() {
+            AdminDashboard.renderDonutChart(
+                GOAL_BREAKDOWN.map(g => g.value),
+                GOAL_BREAKDOWN.map(g => g.color),
+                'goal-donut'
+            );
+            document.getElementById('goal-legend').innerHTML = GOAL_BREAKDOWN.map(g => `
+                <div class="legend-item">
+                    <span class="legend-dot" style="background:${g.color}"></span>
+                    <span>${g.label} — <strong>${g.value}%</strong></span>
+                </div>`).join('');
+        }
+
+        /* --- Biểu đồ dự báo theo ngày --- */
+        function renderForecastChart() {
+            const labels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+            const data = [58, 64, 60, 72, 80, 95, 70];
+            const max = Math.max(...data);
+            document.getElementById('forecast-chart').innerHTML = data.map((v, i) => `
+                <div class="bar-item">
+                    <div class="bar-fill" style="height:${(v / max) * 100}%" title="${labels[i]}: ${v} phần"></div>
+                    <span class="bar-label">${labels[i]}</span>
+                </div>`).join('');
+        }
+
+        /* --- Biểu đồ theo giờ --- */
+        function renderHourlyChart() {
+            const labels = ['7h', '9h', '11h', '13h', '15h', '17h', '19h', '21h'];
+            const data = [12, 18, 65, 88, 22, 35, 70, 28];
+            const max = Math.max(...data);
+            document.getElementById('hourly-chart').innerHTML = data.map((v, i) => `
+                <div class="bar-item">
+                    <div class="bar-fill" style="height:${(v / max) * 100}%" title="${labels[i]}: ${v} đơn"></div>
+                    <span class="bar-label">${labels[i]}</span>
+                </div>`).join('');
+        }
+
+        /* --- Bảng dự báo nguyên liệu --- */
+        function renderForecastTable() {
+            const tbody = document.getElementById('forecast-tbody');
+            tbody.innerHTML = FORECAST_INGREDIENTS.map(ing => {
+                const nextWeek = Math.round(ing.current * (1 + ing.growth / 100));
+                const urgent = ing.growth >= 25;
+                return `<tr>
+                    <td class="font-semibold">${ing.name}</td>
+                    <td>${ing.current} kg</td>
+                    <td><span class="text-green font-semibold">↑ ${ing.growth}%</span></td>
+                    <td class="font-bold">${nextWeek} kg</td>
+                    <td>
+                        <span class="badge ${urgent ? 'badge-red' : 'badge-green'}" style="font-size:.7rem">
+                            ${urgent ? 'Cần đặt thêm sớm' : 'Theo lịch nhập thường'}
+                        </span>
+                        <div class="text-xs text-muted" style="margin-top:2px">${ing.supplier}</div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function reloadAnalytics() {
+            const period = document.getElementById('analytics-period').value;
+            Toast.show(`Đã cập nhật phân tích theo: ${period}`, 'info');
+            renderForecastChart();
+            renderHourlyChart();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGoalDonut();
+            renderForecastChart();
+            renderHourlyChart();
+            renderForecastTable();
+        });
+    </script>
+</body>
+
+</html>

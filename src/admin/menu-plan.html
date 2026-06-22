@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Lịch thực đơn</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                    </svg></div>
+                <div>
+                    <div class="sidebar-logo-text">FitFood</div><span class="sidebar-logo-badge">Admin</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-title">Tổng quan</div>
+                <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+                <a href="analytics.html" class="sidebar-link"><span class="icon">📈</span> Phân tích</a>
+                <a href="reports.html" class="sidebar-link"><span class="icon">📋</span> Báo cáo</a>
+                <div class="sidebar-section-title">Vận hành</div>
+                <a href="menu-plan.html" class="sidebar-link active"><span class="icon">🗓</span> Lịch thực đơn</a>
+                <a href="suppliers.html" class="sidebar-link"><span class="icon">🚚</span> Nhà cung cấp</a>
+                <div class="sidebar-section-title">Marketing</div>
+                <a href="marketing.html" class="sidebar-link"><span class="icon">🎁</span> Khuyến mãi</a>
+                <div class="sidebar-section-title">Hệ thống</div>
+                <a href="../../src/customer/home.html" class="sidebar-link"><span class="icon">🛒</span> Cổng KH</a>
+                <a href="../../src/kitchen/kds.html" class="sidebar-link"><span class="icon">👨‍🍳</span> Bếp</a>
+                <a href="../../index.html" class="sidebar-link"><span class="icon">🏠</span> Trang chủ</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar">A</div>
+                    <div>
+                        <div class="sidebar-user-name">Admin</div>
+                        <div class="sidebar-user-role">Quản trị viên</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <div>
+                    <div class="admin-page-title">🗓 Lịch thực đơn</div>
+                    <div style="font-size:.8125rem;color:var(--neutral-400)" id="week-label"></div>
+                </div>
+                <div class="admin-topbar-actions">
+                    <button class="btn btn-ghost btn-sm" onclick="changeWeek(-1)">← Tuần trước</button>
+                    <button class="btn btn-secondary btn-sm" onclick="changeWeek(0)">Tuần này</button>
+                    <button class="btn btn-ghost btn-sm" onclick="changeWeek(1)">Tuần sau →</button>
+                    <button class="btn btn-primary btn-sm" onclick="calcIngredients()">🧮 Tính định lượng NL</button>
+                </div>
+            </div>
+
+            <div class="admin-content">
+
+                <!-- Thống kê tuần -->
+                <div class="grid grid-4" style="gap:var(--space-5);margin-bottom:var(--space-6)">
+                    <div class="card text-center">
+                        <div style="font-size:1.4rem;margin-bottom:var(--space-2)">🍱</div>
+                        <div style="font-size:1.5rem;font-weight:700" id="stat-dishes">42</div>
+                        <div class="text-sm text-muted">Tổng lượt phục vụ</div>
+                    </div>
+                    <div class="card text-center">
+                        <div style="font-size:1.4rem;margin-bottom:var(--space-2)">📅</div>
+                        <div style="font-size:1.5rem;font-weight:700" id="stat-subs">150</div>
+                        <div class="text-sm text-muted">Gói ăn đang hoạt động</div>
+                    </div>
+                    <div class="card text-center">
+                        <div style="font-size:1.4rem;margin-bottom:var(--space-2)">🥩</div>
+                        <div style="font-size:1.5rem;font-weight:700" id="stat-ingredients">24</div>
+                        <div class="text-sm text-muted">Nguyên liệu cần nhập (kg)</div>
+                    </div>
+                    <div class="card text-center">
+                        <div style="font-size:1.4rem;margin-bottom:var(--space-2)">💰</div>
+                        <div style="font-size:1.5rem;font-weight:700" id="stat-revenue">58.5M₫</div>
+                        <div class="text-sm text-muted">Doanh thu dự kiến</div>
+                    </div>
+                </div>
+
+                <!-- Lịch tuần -->
+                <div class="admin-table-card" style="margin-bottom:var(--space-6)">
+                    <div class="admin-table-header">
+                        <h4>Thực đơn theo ngày</h4>
+                        <button class="btn btn-secondary btn-sm" onclick="openAddMenu()">+ Thêm món vào lịch</button>
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table id="menu-calendar" style="min-width:900px">
+                            <thead>
+                                <tr id="calendar-header">
+                                    <th style="width:130px">Bữa</th>
+                                    <!-- Ngày được render bởi JS -->
+                                </tr>
+                            </thead>
+                            <tbody id="calendar-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Định lượng nguyên liệu -->
+                <div class="admin-table-card" id="ingredient-section" style="display:none">
+                    <div class="admin-table-header">
+                        <h4>🧮 Định lượng nguyên liệu cần nhập</h4>
+                        <div style="display:flex;gap:var(--space-3)">
+                            <span class="text-sm text-muted" id="ingredient-subtitle">Dựa trên 150 gói ăn đang hoạt động
+                                + đơn lẻ dự báo</span>
+                            <button class="btn btn-secondary btn-sm" onclick="exportIngredients()">📥 Xuất danh
+                                sách</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nguyên liệu</th>
+                                <th>Đơn vị</th>
+                                <th>Cần dùng/tuần</th>
+                                <th>Tồn kho hiện tại</th>
+                                <th>Cần nhập thêm</th>
+                                <th>Nhà cung cấp</th>
+                                <th>Ước tính chi phí</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ingredient-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal thêm món vào lịch -->
+    <div id="add-menu-modal" class="modal-overlay" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Thêm món vào lịch tuần</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('add-menu-modal').style.display='none'">✕</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+                <div class="grid grid-2" style="gap:var(--space-4)">
+                    <div class="form-group">
+                        <label class="form-label">Ngày *</label>
+                        <select class="form-select" id="m-day">
+                            <option>Thứ 2</option>
+                            <option>Thứ 3</option>
+                            <option>Thứ 4</option>
+                            <option>Thứ 5</option>
+                            <option>Thứ 6</option>
+                            <option>Thứ 7</option>
+                            <option>Chủ nhật</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Bữa *</label>
+                        <select class="form-select" id="m-meal">
+                            <option value="breakfast">Bữa sáng</option>
+                            <option value="lunch">Bữa trưa</option>
+                            <option value="dinner">Bữa tối</option>
+                            <option value="snack">Bữa phụ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Chọn món ăn *</label>
+                    <select class="form-select" id="m-product">
+                        <option value="1">Cơm gà nướng Eat Clean (420 kcal)</option>
+                        <option value="2">Salad Keto Bơ Trứng (380 kcal)</option>
+                        <option value="3">Bowl Quinoa Low-Carb (350 kcal)</option>
+                        <option value="4">Cháo yến mạch Detox (280 kcal)</option>
+                        <option value="5">Bò áp chảo Protein Bowl (520 kcal)</option>
+                        <option value="6">Cuốn diếp cá hồi (310 kcal)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Số lượng tối đa (phần)</label>
+                    <input type="number" class="form-input" id="m-max-qty" value="100" min="1">
+                </div>
+                <button class="btn btn-primary w-full" onclick="addToMenu()">✅ Thêm vào lịch</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/admin.js"></script>
+    <script>
+        const DAYS = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
+        const MEALS = ['Bữa sáng', 'Bữa trưa', 'Bữa tối', 'Bữa phụ'];
+        let currentWeekOffset = 0;
+
+        const MENU_DATA = {
+            'Thứ 2': { 'Bữa sáng': ['🥣 Cháo yến mạch Detox'], 'Bữa trưa': ['🍱 Cơm gà nướng Eat Clean', '🥗 Salad Keto Bơ Trứng'], 'Bữa tối': ['🥙 Bowl Quinoa Low-Carb'], 'Bữa phụ': [] },
+            'Thứ 3': { 'Bữa sáng': ['🥣 Cháo yến mạch Detox'], 'Bữa trưa': ['🥩 Bò áp chảo Protein Bowl'], 'Bữa tối': ['🫔 Cuốn diếp cá hồi'], 'Bữa phụ': ['🥗 Salad Keto nhỏ'] },
+            'Thứ 4': { 'Bữa sáng': [], 'Bữa trưa': ['🍱 Cơm gà nướng Eat Clean'], 'Bữa tối': ['🥙 Bowl Quinoa Low-Carb'], 'Bữa phụ': [] },
+            'Thứ 5': { 'Bữa sáng': ['🥣 Cháo yến mạch Detox'], 'Bữa trưa': ['🥩 Bò áp chảo Protein Bowl', '🥗 Salad Keto Bơ Trứng'], 'Bữa tối': ['🍱 Cơm gà nướng Eat Clean'], 'Bữa phụ': [] },
+            'Thứ 6': { 'Bữa sáng': [], 'Bữa trưa': ['🫔 Cuốn diếp cá hồi'], 'Bữa tối': ['🥙 Bowl Quinoa Low-Carb'], 'Bữa phụ': ['Snack hạt mixed'] },
+            'Thứ 7': { 'Bữa sáng': ['🥣 Smoothie bowl'], 'Bữa trưa': ['🥩 Bò áp chảo Protein Bowl'], 'Bữa tối': ['🫔 Cuốn diếp cá hồi'], 'Bữa phụ': [] },
+            'CN': { 'Bữa sáng': [], 'Bữa trưa': ['🍱 Cơm gà nướng Eat Clean'], 'Bữa tối': ['🥗 Salad Keto Bơ Trứng'], 'Bữa phụ': [] },
+        };
+
+        const INGREDIENTS = [
+            { name: 'Ức gà', unit: 'kg', need: 42, stock: 12, supplier: 'Thịt sạch Farm BD', price_per_kg: 85000 },
+            { name: 'Cá hồi fillet', unit: 'kg', need: 18, stock: 3, supplier: 'Cá hồi Na Uy Import', price_per_kg: 320000 },
+            { name: 'Bơ Hass', unit: 'kg', need: 12, stock: 2, supplier: 'Nông trại Organic ĐL', price_per_kg: 95000 },
+            { name: 'Gạo lứt', unit: 'kg', need: 25, stock: 20, supplier: 'Gạo lứt Hữu Nghị', price_per_kg: 28000 },
+            { name: 'Quinoa', unit: 'kg', need: 8, stock: 1, supplier: 'Nông trại Organic ĐL', price_per_kg: 180000 },
+            { name: 'Xà lách butter', unit: 'kg', need: 10, stock: 2, supplier: 'Nông trại Organic ĐL', price_per_kg: 45000 },
+            { name: 'Bông cải xanh', unit: 'kg', need: 15, stock: 8, supplier: 'Nông trại Organic ĐL', price_per_kg: 35000 },
+            { name: 'Bò thăn', unit: 'kg', need: 20, stock: 0, supplier: 'Thịt sạch Farm BD', price_per_kg: 260000 },
+        ];
+
+        function getWeekDates(offset = 0) {
+            const now = new Date();
+            const day = now.getDay();
+            const mon = new Date(now);
+            mon.setDate(now.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+            return Array.from({ length: 7 }, (_, i) => {
+                const d = new Date(mon);
+                d.setDate(mon.getDate() + i);
+                return d;
+            });
+        }
+
+        function renderCalendar() {
+            const dates = getWeekDates(currentWeekOffset);
+            const start = dates[0].toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+            const end = dates[6].toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('week-label').textContent = `${start} — ${end}`;
+
+            const header = document.getElementById('calendar-header');
+            header.innerHTML = '<th style="width:130px">Bữa</th>' +
+                DAYS.map((d, i) => {
+                    const date = dates[i];
+                    const isToday = date.toDateString() === new Date().toDateString();
+                    return `<th style="${isToday ? 'background:var(--green-50);color:var(--green-700)' : ''}">
+        <div>${d}</div>
+        <div style="font-size:.75rem;font-weight:400;color:var(--neutral-400)">${date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })}</div>
+      </th>`;
+                }).join('');
+
+            const tbody = document.getElementById('calendar-body');
+            tbody.innerHTML = MEALS.map(meal => `
+    <tr>
+      <td style="background:var(--neutral-50);font-weight:600;font-size:.875rem;white-space:nowrap">${meal}</td>
+      ${DAYS.map(day => {
+                const dishes = MENU_DATA[day]?.[meal] || [];
+                return `<td style="vertical-align:top;min-height:60px;padding:var(--space-2)">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            ${dishes.map(d => `<div style="font-size:.8125rem;padding:3px 6px;background:var(--green-50);
+              border-radius:4px;border-left:3px solid var(--green-400)">${d}</div>`).join('')}
+          </div>
+        </td>`;
+            }).join('')}
+    </tr>`).join('');
+        }
+
+        function changeWeek(dir) {
+            if (dir === 0) currentWeekOffset = 0;
+            else currentWeekOffset += dir;
+            renderCalendar();
+        }
+
+        function calcIngredients() {
+            const section = document.getElementById('ingredient-section');
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+
+            const tbody = document.getElementById('ingredient-tbody');
+            tbody.innerHTML = INGREDIENTS.map(ing => {
+                const need_more = Math.max(0, ing.need - ing.stock);
+                const cost = need_more * ing.price_per_kg;
+                return `<tr>
+      <td class="font-semibold">${ing.name}</td>
+      <td>${ing.unit}</td>
+      <td>${ing.need} ${ing.unit}</td>
+      <td>
+        <span class="${ing.stock < ing.need * 0.3 ? 'text-red font-semibold' : ing.stock < ing.need * 0.7 ? 'text-muted' : 'text-green'}">
+          ${ing.stock} ${ing.unit}
+        </span>
+      </td>
+      <td>
+        ${need_more > 0
+                        ? `<span class="badge badge-red" style="font-size:.75rem">Thiếu ${need_more} ${ing.unit}</span>`
+                        : `<span class="badge badge-green" style="font-size:.75rem">Đủ</span>`}
+      </td>
+      <td class="text-sm text-muted">${ing.supplier}</td>
+      <td class="font-semibold ${need_more > 0 ? 'text-red' : 'text-green'}">
+        ${need_more > 0 ? formatPrice(cost) : '—'}
+      </td>
+    </tr>`;
+            }).join('');
+
+            const totalCost = INGREDIENTS.reduce((s, ing) => s + Math.max(0, ing.need - ing.stock) * ing.price_per_kg, 0);
+            tbody.innerHTML += `<tr style="background:var(--neutral-50);font-weight:700">
+    <td colspan="6" style="text-align:right">Tổng chi phí nhập nguyên liệu dự kiến:</td>
+    <td class="text-green">${formatPrice(totalCost)}</td>
+  </tr>`;
+
+            Toast.show('✅ Đã tính định lượng nguyên liệu dựa trên lịch thực đơn và 150 gói ăn đang hoạt động', 'success');
+        }
+
+        function exportIngredients() {
+            const data = INGREDIENTS.map(ing => ({
+                'Nguyên liệu': ing.name,
+                'Đơn vị': ing.unit,
+                'Cần/tuần': ing.need,
+                'Tồn kho': ing.stock,
+                'Cần nhập': Math.max(0, ing.need - ing.stock),
+                'Nhà cung cấp': ing.supplier,
+                'Đơn giá': ing.price_per_kg,
+            }));
+            AdminDashboard.exportCSV(data, 'ingredient-plan');
+        }
+
+        function openAddMenu() {
+            document.getElementById('add-menu-modal').style.display = 'flex';
+        }
+
+        function addToMenu() {
+            const day = document.getElementById('m-day').value;
+            const meal = document.getElementById('m-meal');
+            const mealLabel = meal.options[meal.selectedIndex].text;
+            const product = document.getElementById('m-product');
+            const productLabel = product.options[product.selectedIndex].text;
+            if (!MENU_DATA[day]) MENU_DATA[day] = {};
+            if (!MENU_DATA[day][mealLabel]) MENU_DATA[day][mealLabel] = [];
+            MENU_DATA[day][mealLabel].push('🍱 ' + productLabel.split(' (')[0]);
+            document.getElementById('add-menu-modal').style.display = 'none';
+            renderCalendar();
+            Toast.show('✅ Đã thêm món vào lịch thực đơn', 'success');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderCalendar);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Nhà cung cấp</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                    </svg></div>
+                <div>
+                    <div class="sidebar-logo-text">FitFood</div><span class="sidebar-logo-badge">Admin</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-title">Tổng quan</div>
+                <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+                <a href="analytics.html" class="sidebar-link"><span class="icon">📈</span> Phân tích</a>
+                <a href="reports.html" class="sidebar-link"><span class="icon">📋</span> Báo cáo</a>
+                <div class="sidebar-section-title">Vận hành</div>
+                <a href="menu-plan.html" class="sidebar-link"><span class="icon">🗓</span> Lịch thực đơn</a>
+                <a href="suppliers.html" class="sidebar-link active"><span class="icon">🚚</span> Nhà cung cấp</a>
+                <div class="sidebar-section-title">Marketing</div>
+                <a href="marketing.html" class="sidebar-link"><span class="icon">🎁</span> Khuyến mãi</a>
+                <div class="sidebar-section-title">Hệ thống</div>
+                <a href="../../src/customer/home.html" class="sidebar-link"><span class="icon">🛒</span> Cổng KH</a>
+                <a href="../../src/kitchen/kds.html" class="sidebar-link"><span class="icon">👨‍🍳</span> Bếp</a>
+                <a href="../../index.html" class="sidebar-link"><span class="icon">🏠</span> Trang chủ</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar">A</div>
+                    <div>
+                        <div class="sidebar-user-name">Admin</div>
+                        <div class="sidebar-user-role">Quản trị viên</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <div class="admin-page-title">🚚 Quản lý Nhà cung cấp</div>
+                <div class="admin-topbar-actions">
+                    <button class="btn btn-primary btn-sm" onclick="openAddSupplier()">+ Thêm nhà cung cấp</button>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <!-- Thống kê -->
+                <div class="grid grid-3" style="gap:var(--space-5);margin-bottom:var(--space-8)">
+                    <div class="card">
+                        <div style="font-size:1.5rem;margin-bottom:var(--space-2)">🏭</div>
+                        <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700"
+                            id="total-suppliers">0</div>
+                        <div class="text-sm text-muted">Tổng nhà cung cấp</div>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:1.5rem;margin-bottom:var(--space-2)">📦</div>
+                        <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700"
+                            id="delivery-today">3</div>
+                        <div class="text-sm text-muted">Giao hàng hôm nay</div>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:1.5rem;margin-bottom:var(--space-2)">⚠️</div>
+                        <div style="font-family:var(--font-display);font-size:1.75rem;font-weight:700 text-red"
+                            id="expiry-alerts">4</div>
+                        <div class="text-sm text-muted">Nguyên liệu sắp hết hạn</div>
+                    </div>
+                </div>
+
+                <!-- Lịch giao hàng hôm nay -->
+                <div class="card" style="margin-bottom:var(--space-6)">
+                    <h4 style="margin-bottom:var(--space-4)">📅 Lịch nhập hàng hôm nay</h4>
+                    <div style="display:flex;flex-direction:column;gap:var(--space-3)" id="schedule-today">
+                        <!-- Render bởi JS -->
+                    </div>
+                </div>
+
+                <!-- Bảng nhà cung cấp -->
+                <div class="admin-table-card">
+                    <div class="admin-table-header">
+                        <h4>Danh sách Nhà cung cấp</h4>
+                        <div style="display:flex;gap:var(--space-3)">
+                            <input type="text" class="form-input" id="search-supplier"
+                                placeholder="🔍 Tìm nhà cung cấp..." style="max-width:220px"
+                                oninput="filterSuppliers(this.value)">
+                            <select class="form-select" id="filter-cat" style="max-width:160px"
+                                onchange="filterSuppliers()">
+                                <option value="">Tất cả danh mục</option>
+                                <option value="Rau củ hữu cơ">Rau củ hữu cơ</option>
+                                <option value="Thịt tươi">Thịt tươi</option>
+                                <option value="Hải sản">Hải sản</option>
+                                <option value="Ngũ cốc">Ngũ cốc</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nhà cung cấp</th>
+                                <th>Danh mục</th>
+                                <th>Liên hệ</th>
+                                <th>Lịch giao</th>
+                                <th>Hạn sử dụng TB</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplier-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal thêm nhà cung cấp -->
+    <div id="supplier-modal" class="modal-overlay" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">Thêm Nhà cung cấp</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('supplier-modal').style.display='none'">✕</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+                <div class="grid grid-2" style="gap:var(--space-4)">
+                    <div class="form-group">
+                        <label class="form-label">Tên nhà cung cấp *</label>
+                        <input type="text" class="form-input" id="s-name" placeholder="Nông trại ABC">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Danh mục *</label>
+                        <select class="form-select" id="s-category">
+                            <option value="Rau củ hữu cơ">Rau củ hữu cơ</option>
+                            <option value="Thịt tươi">Thịt tươi</option>
+                            <option value="Hải sản">Hải sản</option>
+                            <option value="Ngũ cốc">Ngũ cốc</option>
+                            <option value="Gia vị">Gia vị</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-2" style="gap:var(--space-4)">
+                    <div class="form-group">
+                        <label class="form-label">Người liên hệ</label>
+                        <input type="text" class="form-input" id="s-contact" placeholder="Nguyễn Văn A">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="tel" class="form-input" id="s-phone" placeholder="0901234567">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="s-email" placeholder="ncc@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-input" id="s-address" placeholder="Số nhà, tên đường, quận/huyện...">
+                </div>
+                <div class="grid grid-2" style="gap:var(--space-4)">
+                    <div class="form-group">
+                        <label class="form-label">Lịch giao hàng</label>
+                        <input type="text" class="form-input" id="s-schedule" placeholder="VD: T2, T4, T6 — 5:00 sáng">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hạn thanh toán (ngày)</label>
+                        <input type="number" class="form-input" id="s-payment-days" placeholder="7" min="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ghi chú</label>
+                    <textarea class="form-textarea" id="s-notes"
+                        placeholder="Ghi chú về chất lượng, điều kiện giao hàng..."></textarea>
+                </div>
+                <button class="btn btn-primary w-full" onclick="saveSupplier()">✅ Lưu nhà cung cấp</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/admin.js"></script>
+    <script>
+        const SUPPLIERS = [
+            { id: 1, name: 'Nông trại Organic Đà Lạt', category: 'Rau củ hữu cơ', contact: 'Nguyễn Hoà', phone: '0263123456', email: 'ntt@dalat.farm', address: 'Đà Lạt, Lâm Đồng', schedule: 'Hàng ngày — 05:00', notes: 'Rau hữu cơ, giao sáng sớm', status: 'active', avg_expiry: 4 },
+            { id: 2, name: 'Thịt sạch Farm Bình Dương', category: 'Thịt tươi', contact: 'Trần Minh Đức', phone: '0274987654', email: 'bd.farm@meat.vn', address: 'Bình Dương', schedule: 'T2, T4, T6 — 06:00', notes: 'Cam kết nguồn gốc, ATVSTP', status: 'active', avg_expiry: 3 },
+            { id: 3, name: 'Hải sản tươi Vũng Tàu', category: 'Hải sản', contact: 'Lê Văn Hải', phone: '0254345678', email: 'haisanvt@gmail.com', address: 'Vũng Tàu, BRVT', schedule: 'T3, T5, T7 — 07:00', notes: 'Đặt trước 1 ngày, tươi sống', status: 'active', avg_expiry: 2 },
+            { id: 4, name: 'Gạo lứt Hữu Nghị', category: 'Ngũ cốc', contact: 'Phạm Thị Lan', phone: '0271223344', email: 'huunghi.rice@vn', address: 'An Giang', schedule: 'T2 hàng tuần', notes: 'Gạo lứt hữu cơ, bảo quản tốt', status: 'active', avg_expiry: 60 },
+            { id: 5, name: 'Cá hồi Na Uy Import', category: 'Hải sản', contact: 'Nguyễn Bảo', phone: '0901234567', email: 'salmon.import@vn', address: 'TP. Hồ Chí Minh', schedule: 'T2, T5 — 08:00', notes: 'Nhập khẩu chính ngạch, cần đặt 2 ngày trước', status: 'inactive', avg_expiry: 5 },
+        ];
+
+        const SCHEDULE_TODAY = [
+            { supplier: 'Nông trại Organic Đà Lạt', category: 'Rau củ hữu cơ', time: '05:00', items: ['Xà lách butter 5kg', 'Bông cải xanh 8kg', 'Cà chua bi 3kg'], status: 'delivered' },
+            { supplier: 'Thịt sạch Farm Bình Dương', category: 'Thịt tươi', time: '06:30', items: ['Ức gà 15kg', 'Bò thăn 8kg'], status: 'pending' },
+            { supplier: 'Hải sản tươi Vũng Tàu', category: 'Hải sản', time: '07:00', items: ['Cá hồi fillet 5kg', 'Tôm sú 3kg'], status: 'on-the-way' },
+        ];
+
+        let suppliersData = [...SUPPLIERS];
+
+        function renderSchedule() {
+            const el = document.getElementById('schedule-today');
+            el.innerHTML = SCHEDULE_TODAY.map(s => `
+    <div style="display:flex;align-items:center;justify-content:space-between;
+      padding:var(--space-4);border-radius:var(--radius-md);
+      background:${s.status === 'delivered' ? 'var(--green-50)' : s.status === 'on-the-way' ? '#eff6ff' : 'var(--neutral-50)'}">
+      <div style="display:flex;align-items:center;gap:var(--space-4)">
+        <div style="font-size:1.5rem">${s.status === 'delivered' ? '✅' : s.status === 'on-the-way' ? '🚚' : '⏳'}</div>
+        <div>
+          <div class="font-semibold">${s.supplier}</div>
+          <div class="text-sm text-muted">${s.category} · ${s.time} · ${s.items.join(', ')}</div>
+        </div>
+      </div>
+      <span class="badge ${s.status === 'delivered' ? 'badge-green' : s.status === 'on-the-way' ? 'badge-blue' : 'badge-amber'}">
+        ${s.status === 'delivered' ? 'Đã nhận' : s.status === 'on-the-way' ? 'Đang giao' : 'Chờ giao'}
+      </span>
+    </div>`).join('');
+        }
+
+        function renderSuppliers(data) {
+            document.getElementById('total-suppliers').textContent = data.length;
+            const tbody = document.getElementById('supplier-tbody');
+            tbody.innerHTML = data.map(s => `
+    <tr>
+      <td>
+        <div class="font-semibold">${s.name}</div>
+        <div class="text-xs text-muted">${s.email}</div>
+      </td>
+      <td><span class="badge badge-green" style="font-size:.7rem">${s.category}</span></td>
+      <td>
+        <div class="text-sm">${s.contact}</div>
+        <div class="text-xs text-muted">${s.phone}</div>
+      </td>
+      <td class="text-sm text-muted">${s.schedule}</td>
+      <td>
+        <span class="${s.avg_expiry <= 3 ? 'text-red font-semibold' : s.avg_expiry <= 7 ? 'text-muted' : 'text-green'}">
+          ${s.avg_expiry} ngày
+        </span>
+      </td>
+      <td>
+        <span class="badge ${s.status === 'active' ? 'badge-green' : 'badge-gray'}">
+          ${s.status === 'active' ? '● Hoạt động' : '○ Ngừng'}
+        </span>
+      </td>
+      <td>
+        <div style="display:flex;gap:var(--space-2)">
+          <button class="btn btn-secondary btn-sm" onclick="editSupplier(${s.id})">Sửa</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleSupplier(${s.id})">
+            ${s.status === 'active' ? 'Tắt' : 'Bật'}
+          </button>
+        </div>
+      </td>
+    </tr>`).join('');
+        }
+
+        function filterSuppliers(query) {
+            const q = (query || document.getElementById('search-supplier').value).toLowerCase();
+            const cat = document.getElementById('filter-cat').value;
+            const filtered = SUPPLIERS.filter(s =>
+                (!q || s.name.toLowerCase().includes(q) || s.contact.toLowerCase().includes(q)) &&
+                (!cat || s.category === cat)
+            );
+            renderSuppliers(filtered);
+        }
+
+        function openAddSupplier() {
+            document.getElementById('modal-title').textContent = 'Thêm Nhà cung cấp';
+            ['s-name', 's-contact', 's-phone', 's-email', 's-address', 's-schedule', 's-payment-days', 's-notes'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('supplier-modal').style.display = 'flex';
+        }
+
+        function editSupplier(id) {
+            const s = SUPPLIERS.find(x => x.id === id);
+            if (!s) return;
+            document.getElementById('modal-title').textContent = 'Sửa Nhà cung cấp';
+            document.getElementById('s-name').value = s.name;
+            document.getElementById('s-category').value = s.category;
+            document.getElementById('s-contact').value = s.contact;
+            document.getElementById('s-phone').value = s.phone;
+            document.getElementById('s-email').value = s.email;
+            document.getElementById('s-address').value = s.address;
+            document.getElementById('s-schedule').value = s.schedule;
+            document.getElementById('s-notes').value = s.notes;
+            document.getElementById('supplier-modal').style.display = 'flex';
+        }
+
+        async function saveSupplier() {
+            const name = document.getElementById('s-name').value.trim();
+            if (!name) { Toast.show('Vui lòng nhập tên nhà cung cấp', 'warning'); return; }
+            try {
+                await API.post('/api/suppliers', {
+                    name, category: document.getElementById('s-category').value,
+                    contact_name: document.getElementById('s-contact').value,
+                    phone: document.getElementById('s-phone').value,
+                    email: document.getElementById('s-email').value,
+                    address: document.getElementById('s-address').value,
+                    notes: document.getElementById('s-notes').value,
+                });
+            } catch { }
+            document.getElementById('supplier-modal').style.display = 'none';
+            Toast.show(`✅ Đã lưu nhà cung cấp: ${name}`, 'success');
+        }
+
+        function toggleSupplier(id) {
+            const s = SUPPLIERS.find(x => x.id === id);
+            if (!s) return;
+            s.status = s.status === 'active' ? 'inactive' : 'active';
+            renderSuppliers(SUPPLIERS);
+            Toast.show(`Đã ${s.status === 'active' ? 'bật' : 'tắt'} nhà cung cấp ${s.name}`, 'info');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSchedule();
+            renderSuppliers(SUPPLIERS);
+        });
+    </script>
+</body>
+
+</html>

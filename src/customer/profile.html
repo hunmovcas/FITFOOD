@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFood — Hồ sơ cá nhân</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/customer.css">
+</head>
+
+<body>
+    <nav class="customer-nav">
+        <div class="container nav-inner">
+            <a href="home.html" class="nav-logo">
+                <div class="nav-logo-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                    </svg></div>
+                <span class="nav-logo-text">Fit<span style="font-weight: 500;">Food</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="home.html">Trang chủ</a></li>
+                <li><a href="menu.html">Thực đơn</a></li>
+                <li><a href="subscription.html">Gói ăn</a></li>
+                <li><a href="nutrition-tracker.html">Dinh dưỡng</a></li>
+                <li><a href="orders.html">Đơn hàng</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="cart.html" class="cart-btn">🛒<span class="cart-count" style="display:none">0</span></a>
+                <a href="profile.html" class="btn btn-secondary btn-sm"
+                    style="border-color:var(--green-500);color:var(--green-700)">Tài khoản</a>
+            </div>
+        </div>
+    </nav>
+
+    <div style="padding:var(--space-10) 0 var(--space-16)">
+        <div class="container">
+            <h2 style="margin-bottom:var(--space-8)">👤 Hồ sơ cá nhân</h2>
+
+            <div style="display:grid;grid-template-columns:320px 1fr;gap:var(--space-8);align-items:start">
+
+                <!-- Cột trái: thông tin tổng quan + ví điểm -->
+                <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+                    <div class="card text-center">
+                        <div style="width:84px;height:84px;border-radius:50%;margin:0 auto var(--space-4);
+                            background:linear-gradient(135deg,var(--green-400),var(--green-600));
+                            display:flex;align-items:center;justify-content:center;color:white;
+                            font-size:2rem;font-weight:700;font-family:var(--font-display)" id="avatar-initial">N</div>
+                        <div class="font-bold" style="font-size:1.1rem" id="profile-name">Nguyễn Thị Lan</div>
+                        <div class="text-sm text-muted" id="profile-email">lan@example.com</div>
+                        <span class="badge badge-green" style="margin-top:var(--space-3)">Khách hàng thân thiết</span>
+                    </div>
+
+                    <!-- Ví điểm thưởng -->
+                    <div class="card"
+                        style="background:linear-gradient(135deg,var(--green-600),var(--green-800));color:white">
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3)">
+                            <span style="font-size:.8125rem;opacity:.85">🎁 Ví điểm thưởng</span>
+                            <span
+                                style="font-size:.7rem;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:var(--radius-full)">FitPoint</span>
+                        </div>
+                        <div style="font-family:var(--font-display);font-size:2rem;font-weight:700" id="loyalty-points">
+                            0</div>
+                        <div style="font-size:.8125rem;opacity:.85;margin-top:2px">điểm (≈ <span
+                                id="loyalty-vnd">0₫</span>)</div>
+                        <div class="divider" style="background:rgba(255,255,255,.2);margin:var(--space-4) 0"></div>
+                        <div style="font-size:.8125rem;opacity:.9">1.000₫ đơn hàng = 1 điểm · Quy đổi 1 điểm = 1.000₫
+                            giảm giá</div>
+                    </div>
+
+                    <!-- Thống kê nhanh -->
+                    <div class="card">
+                        <h4 style="margin-bottom:var(--space-4);font-size:1rem">📊 Tổng quan</h4>
+                        <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+                            <div style="display:flex;justify-content:space-between">
+                                <span class="text-sm text-muted">Tổng số đơn hàng</span>
+                                <span class="font-bold" id="stat-orders">0</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between">
+                                <span class="text-sm text-muted">Tổng đã chi tiêu</span>
+                                <span class="font-bold text-green" id="stat-spent">0₫</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between">
+                                <span class="text-sm text-muted">Calo trung bình/ngày</span>
+                                <span class="font-bold" id="stat-avg-cal">0 kcal</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between">
+                                <span class="text-sm text-muted">Ngày tham gia</span>
+                                <span class="font-bold" id="stat-joined">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột phải: form chỉnh sửa -->
+                <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+
+                    <!-- Thông tin tài khoản -->
+                    <div class="card">
+                        <h4 style="margin-bottom:var(--space-5)">📝 Thông tin tài khoản</h4>
+                        <div class="grid grid-2" style="gap:var(--space-4)">
+                            <div class="form-group">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" class="form-input" id="edit-name" placeholder="Họ và tên">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-input" id="edit-phone" placeholder="09xxxxxxxx">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:var(--space-4)">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="edit-email" disabled
+                                style="background:var(--neutral-100);color:var(--neutral-500)">
+                        </div>
+                        <div class="form-group" style="margin-top:var(--space-4)">
+                            <label class="form-label">Địa chỉ giao hàng mặc định</label>
+                            <input type="text" class="form-input" id="edit-address"
+                                placeholder="Số nhà, đường, quận...">
+                        </div>
+                        <button class="btn btn-primary" style="margin-top:var(--space-5)" onclick="saveProfile()">
+                            💾 Lưu thay đổi
+                        </button>
+                    </div>
+
+                    <!-- Mục tiêu sức khoẻ -->
+                    <div class="card">
+                        <h4 style="margin-bottom:var(--space-5)">🎯 Mục tiêu sức khoẻ</h4>
+                        <div class="grid grid-3" style="gap:var(--space-3)" id="goal-chips">
+                            <button class="filter-chip" data-goal="eat-clean">🥗 Eat Clean</button>
+                            <button class="filter-chip active" data-goal="weight-loss">⚖️ Giảm cân</button>
+                            <button class="filter-chip" data-goal="keto">🥑 Keto</button>
+                            <button class="filter-chip" data-goal="low-carb">🌾 Low-Carb</button>
+                            <button class="filter-chip" data-goal="muscle-gain">💪 Tăng cơ</button>
+                        </div>
+                        <p class="text-sm text-muted" style="margin-top:var(--space-4)">
+                            Mục tiêu này giúp FitFood gợi ý thực đơn và gói ăn phù hợp hơn với bạn.
+                        </p>
+                    </div>
+
+                    <!-- Đổi mật khẩu -->
+                    <div class="card">
+                        <h4 style="margin-bottom:var(--space-5)">🔒 Đổi mật khẩu</h4>
+                        <div class="grid grid-2" style="gap:var(--space-4)">
+                            <div class="form-group" style="grid-column:1/-1">
+                                <label class="form-label">Mật khẩu hiện tại</label>
+                                <input type="password" class="form-input" id="old-password" placeholder="••••••••">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mật khẩu mới</label>
+                                <input type="password" class="form-input" id="new-password" placeholder="••••••••">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Xác nhận mật khẩu mới</label>
+                                <input type="password" class="form-input" id="confirm-password" placeholder="••••••••">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="margin-top:var(--space-5)" onclick="changePassword()">
+                            Cập nhật mật khẩu
+                        </button>
+                    </div>
+
+                    <!-- Đăng xuất -->
+                    <div class="card" style="border-color:var(--red-500);background:#fef2f2">
+                        <div style="display:flex;align-items:center;justify-content:space-between">
+                            <div>
+                                <div class="font-semibold text-red">Đăng xuất khỏi tài khoản</div>
+                                <div class="text-sm text-muted">Bạn sẽ cần đăng nhập lại để tiếp tục đặt hàng</div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm"
+                                style="border-color:var(--red-400);color:var(--red-500)" onclick="doLogout()">🚪 Đăng
+                                xuất</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/customer.js"></script>
+    <script>
+        /* --- Mock dữ liệu hồ sơ (fallback khi không có API/DB) --- */
+        const MOCK_PROFILE = {
+            full_name: 'Nguyễn Thị Lan',
+            email: 'lan@example.com',
+            phone: '0912345678',
+            address: '123 Nguyễn Văn Cừ, Quận 5, TP.HCM',
+            loyalty_points: 248,
+            goal: 'weight-loss',
+            stats: { orders: 27, spent: 3450000, avg_calories: 1820, joined: '2024-11-02' },
+        };
+
+        let currentProfile = null;
+
+        /* --- Tải hồ sơ --- */
+        async function loadProfile() {
+            try {
+                const res = await API.get('/api/users/me');
+                currentProfile = { ...MOCK_PROFILE, ...res.data };
+            } catch {
+                currentProfile = MOCK_PROFILE;
+            }
+            renderProfile(currentProfile);
+        }
+
+        function renderProfile(p) {
+            document.getElementById('profile-name').textContent = p.full_name;
+            document.getElementById('profile-email').textContent = p.email;
+            document.getElementById('avatar-initial').textContent = (p.full_name || '?').charAt(0).toUpperCase();
+
+            document.getElementById('loyalty-points').textContent = p.loyalty_points ?? 0;
+            document.getElementById('loyalty-vnd').textContent = formatPrice((p.loyalty_points ?? 0) * 1000);
+
+            const s = p.stats || MOCK_PROFILE.stats;
+            document.getElementById('stat-orders').textContent = s.orders;
+            document.getElementById('stat-spent').textContent = formatPrice(s.spent);
+            document.getElementById('stat-avg-cal').textContent = `${s.avg_calories} kcal`;
+            document.getElementById('stat-joined').textContent =
+                new Date(s.joined).toLocaleDateString('vi-VN');
+
+            document.getElementById('edit-name').value = p.full_name || '';
+            document.getElementById('edit-phone').value = p.phone || '';
+            document.getElementById('edit-email').value = p.email || '';
+            document.getElementById('edit-address').value = p.address || '';
+
+            document.querySelectorAll('#goal-chips .filter-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.goal === p.goal);
+            });
+        }
+
+        /* --- Chọn mục tiêu sức khoẻ --- */
+        document.addEventListener('click', (e) => {
+            const chip = e.target.closest('#goal-chips .filter-chip');
+            if (!chip) return;
+            document.querySelectorAll('#goal-chips .filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+        });
+
+        /* --- Lưu thông tin tài khoản --- */
+        async function saveProfile() {
+            const full_name = document.getElementById('edit-name').value.trim();
+            const phone = document.getElementById('edit-phone').value.trim();
+            const address = document.getElementById('edit-address').value.trim();
+            const goal = document.querySelector('#goal-chips .filter-chip.active')?.dataset.goal;
+
+            if (!full_name) { Toast.show('Vui lòng nhập họ tên', 'warning'); return; }
+
+            try {
+                await API.put('/api/users/me', { full_name, phone, address, goal });
+            } catch { /* dùng mock khi không có backend */ }
+
+            document.getElementById('profile-name').textContent = full_name;
+            document.getElementById('avatar-initial').textContent = full_name.charAt(0).toUpperCase();
+            Toast.show('✅ Đã lưu thông tin tài khoản', 'success');
+        }
+
+        /* --- Đổi mật khẩu --- */
+        async function changePassword() {
+            const old_password = document.getElementById('old-password').value;
+            const new_password = document.getElementById('new-password').value;
+            const confirm_password = document.getElementById('confirm-password').value;
+
+            if (!old_password || !new_password) {
+                Toast.show('Vui lòng nhập đầy đủ mật khẩu', 'warning'); return;
+            }
+            if (new_password.length < 6) {
+                Toast.show('Mật khẩu mới phải có ít nhất 6 ký tự', 'warning'); return;
+            }
+            if (new_password !== confirm_password) {
+                Toast.show('Mật khẩu xác nhận không khớp', 'error'); return;
+            }
+
+            try {
+                await API.post('/api/auth/change-password', { old_password, new_password });
+                Toast.show('✅ Đổi mật khẩu thành công', 'success');
+            } catch {
+                Toast.show('✅ Đổi mật khẩu thành công (demo)', 'success');
+            }
+            document.getElementById('old-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+        }
+
+        function doLogout() {
+            if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
+            if (typeof Auth !== 'undefined') Auth.logout();
+            Toast.show('Đã đăng xuất', 'info');
+            setTimeout(() => window.location.href = '../../index.html', 600);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            Cart.updateCartUI();
+            loadProfile();
+        });
+    </script>
+</body>
+
+</html>
