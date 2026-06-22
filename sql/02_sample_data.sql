@@ -13,13 +13,14 @@ INSERT INTO Categories (name, slug, icon) VALUES
 (N'Giảm cân',     'weight-loss',  N'⚖️'),
 (N'Bữa sáng',     'breakfast',    N'🌅');
 
--- --- Tài khoản mẫu ---
--- Mật khẩu mẫu: Admin@123 (đã hash bcrypt)
+-- --- Tài khoản khách hàng mẫu bổ sung ---
+-- KHÔNG insert lại admin/kitchen vì đã tạo sẵn ở 01_schema.sql (insert lại sẽ lỗi UNIQUE email)
+-- Mật khẩu lưu Plain-text có chủ đích (demo dữ liệu, không chú trọng bảo mật)
+-- 2 user này nhận user_id = 4, 5 (tiếp theo 3 user đã insert ở 01_schema.sql)
+-- -> khớp đúng với user_id 4, 5 trong dữ liệu Orders mẫu phía dưới
 INSERT INTO Users (email, password_hash, full_name, phone, role) VALUES
-('admin@fitfood.vn',   '$2b$10$example_hash_admin',    N'FitFood Admin',     '0901000001', 'admin'),
-('kitchen@fitfood.vn', '$2b$10$example_hash_kitchen',  N'Bếp trưởng Tuấn',   '0901000002', 'kitchen'),
-('lan@example.com',    '$2b$10$example_hash_user1',    N'Nguyễn Thị Lan',    '0912345678', 'customer'),
-('minh@example.com',   '$2b$10$example_hash_user2',    N'Trần Văn Minh',     '0987654321', 'customer');
+('lan@example.com',    'Lan@123',    N'Nguyễn Thị Lan',    '0912345678', 'customer'),
+('minh@example.com',   'Minh@123',   N'Trần Văn Minh',     '0987654321', 'customer');
 
 -- --- Sản phẩm mẫu ---
 INSERT INTO Products (category_id, name, description, price, calories, protein_g, carbs_g, fat_g, health_tags, prep_time_min)
@@ -74,6 +75,19 @@ VALUES
 ('#01237', 3, N'Cá hồi fillet',   N'Hải sản', 'kg', 3.0,  1.0, '2025-05-17', '2025-05-18'),
 ('#01238', 1, N'Gạo lứt',         N'Ngũ cốc', 'kg', 20.0, 5.0, '2025-05-15', '2025-06-15'),
 ('#01239', 1, N'Xà lách butter',  N'Rau củ',  'kg', 2.0,  1.0, '2025-05-17', '2025-05-19');
+
+-- --- Định lượng nguyên liệu cho từng món (ProductIngredients) ---
+-- Ghi chú: do bộ dữ liệu Inventory mẫu chỉ có 6 nguyên liệu nên chỉ map
+-- được những nguyên liệu có sẵn trùng khớp, mang tính minh hoạ cho trigger,
+-- thực tế cần bổ sung đầy đủ Inventory để map hết nguyên liệu mỗi món.
+INSERT INTO ProductIngredients (product_id, inventory_id, qty_per_portion) VALUES
+(1, 2, 0.150),   -- Cơm gà nướng Eat Clean      -> Ức gà 0.15kg
+(1, 5, 0.200),   -- Cơm gà nướng Eat Clean      -> Gạo lứt 0.2kg
+(1, 3, 0.080),   -- Cơm gà nướng Eat Clean      -> Bông cải xanh 0.08kg
+(2, 6, 0.100),   -- Salad Keto Bơ Trứng         -> Xà lách butter 0.1kg
+(3, 2, 0.120),   -- Bowl Quinoa Low-Carb        -> Ức gà 0.12kg
+(5, 3, 0.150),   -- Bò áp chảo Protein Bowl     -> Bông cải xanh 0.15kg
+(6, 4, 0.120);   -- Cuốn diếp cá hồi            -> Cá hồi fillet 0.12kg
 
 -- --- Voucher mẫu ---
 INSERT INTO Vouchers (code, discount_type, discount_value, min_order, max_uses, condition_type, expires_at)

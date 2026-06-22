@@ -1,3 +1,12 @@
+/* ============================================================
+   AUTHROUTES.JS - API xác thực người dùng
+   LƯU Ý: Dự án lưu & so sánh mật khẩu dạng Plain-text (KHÔNG băm
+   bcrypt). Đây là LỰA CHỌN CHỦ ĐÍCH phục vụ DEMO tính năng/dữ liệu
+   của bài tập lớn CSDL, không đại diện cho thực hành bảo mật
+   production. 3 tài khoản demo (customer/kitchen/admin) đã được
+   set sẵn email + password tại index.html để tự động điền, giúp
+   test nhanh từng role mà không cần nhập tay.
+   ============================================================ */
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const db = require('../db');

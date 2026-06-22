@@ -89,6 +89,8 @@ GO
 
 -- ============================================================
 -- TRIGGER: Tự động khấu trừ kho khi đơn chuyển sang "preparing"
+-- Dùng bảng ProductIngredients để biết ĐÚNG nguyên liệu + định lượng
+-- thật của từng món, thay vì trừ cố định 1 con số chung cho mọi món
 -- ============================================================
 CREATE OR ALTER TRIGGER tr_OrderPreparing
 ON Orders
@@ -104,46 +106,38 @@ BEGIN
         WHERE i.status = 'preparing' AND d.status != 'preparing'
     ) RETURN;
 
-    /*
-       Ghi log xuất kho cho mỗi đơn chuyển sang preparing
-       (Mapping thực tế giữa OrderItems và Inventory cần
-        bảng ProductIngredients riêng - đây là logic demo)
-    */
+    -- Ghi log xuất kho: tổng hợp định lượng cần xuất cho từng inventory_id
+    -- cụ thể, dựa theo công thức thật của từng món trong ProductIngredients
     INSERT INTO InventoryLogs (inventory_id, order_id, action_type, quantity_change, quantity_after, reason)
     SELECT
-        -- Demo: lấy nguyên liệu đầu tiên trùng tên sản phẩm (cần bảng mapping thực tế)
-        inv.inventory_id,
+        pi.inventory_id,
         i.order_id,
         'export',
-        -(oi.quantity * 0.3),   -- Ước tính 0.3kg/phần (cần dữ liệu thực)
-        inv.quantity - (oi.quantity * 0.3),
-        N'Tự động xuất kho: đơn ' + i.order_code
+        -SUM(oi.quantity * pi.qty_per_portion),
+        MAX(inv.quantity) - SUM(oi.quantity * pi.qty_per_portion),
+        N'Tự động xuất kho theo định lượng món: đơn ' + i.order_code
     FROM inserted i
-    JOIN OrderItems oi ON oi.order_id = i.order_id
-    JOIN Products p ON p.product_id = oi.product_id
-    CROSS APPLY (
-        SELECT TOP 1 inventory_id, quantity FROM Inventory
-        WHERE quantity > 0 AND expiry_date >= CAST(GETDATE() AS DATE)
-        ORDER BY expiry_date ASC   -- FIFO: xuất hàng sắp hết hạn trước
-    ) inv
-    WHERE i.status = 'preparing';
+    JOIN OrderItems oi          ON oi.order_id = i.order_id
+    JOIN ProductIngredients pi  ON pi.product_id = oi.product_id
+    JOIN Inventory inv          ON inv.inventory_id = pi.inventory_id
+    WHERE i.status = 'preparing'
+    GROUP BY pi.inventory_id, i.order_id, i.order_code;
 
-    -- Cập nhật số lượng kho
+    -- Cập nhật số lượng kho thực tế theo đúng nguyên liệu đã dùng
     UPDATE inv
-    SET quantity   = GREATEST(0, inv.quantity - (oi.quantity * 0.3)),
+    SET quantity   = CASE WHEN (inv.quantity - usage.total_used) > 0
+                          THEN (inv.quantity - usage.total_used)
+                          ELSE 0
+                     END,
         updated_at = GETDATE()
     FROM Inventory inv
     JOIN (
-        SELECT inv2.inventory_id, SUM(oi.quantity * 0.3) AS total_used
+        SELECT pi.inventory_id, SUM(oi.quantity * pi.qty_per_portion) AS total_used
         FROM inserted i
-        JOIN OrderItems oi ON oi.order_id = i.order_id
-        CROSS APPLY (
-            SELECT TOP 1 inventory_id FROM Inventory
-            WHERE quantity > 0 AND expiry_date >= CAST(GETDATE() AS DATE)
-            ORDER BY expiry_date ASC
-        ) inv2
+        JOIN OrderItems oi         ON oi.order_id = i.order_id
+        JOIN ProductIngredients pi ON pi.product_id = oi.product_id
         WHERE i.status = 'preparing'
-        GROUP BY inv2.inventory_id
+        GROUP BY pi.inventory_id
     ) usage ON usage.inventory_id = inv.inventory_id;
 END;
 GO

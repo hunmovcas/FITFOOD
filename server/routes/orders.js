@@ -12,23 +12,42 @@ const router = express.Router();
 /* --- GET /api/orders - Lấy danh sách đơn hàng --- */
 router.get('/', async (req, res) => {
     try {
-        const { status, limit = 50, offset = 0, type } = req.query;
+        const { status, limit = 50, type } = req.query;
         const isAdmin = ['admin', 'kitchen'].includes(req.user.role);
 
         let data;
 
         if (db.isConnected) {
-            let whereClause = isAdmin ? '' : `WHERE O.user_id = ${req.user.user_id}`;
-            if (status) {
-                const statuses = status.split(',').map(s => `'${s}'`).join(',');
-                whereClause += whereClause ? ` AND O.status IN (${statuses})` : `WHERE O.status IN (${statuses})`;
-            }
-            if (type) {
-                whereClause += whereClause ? ` AND O.order_type = '${type}'` : `WHERE O.order_type = '${type}'`;
+            const conditions = [];
+            const params = {};
+
+            if (!isAdmin) {
+                conditions.push('O.user_id = @userId');
+                params.userId = { type: db.sql.Int, value: req.user.user_id };
             }
 
+            if (status) {
+                const statusList = status.split(',').map(s => s.trim()).filter(Boolean);
+                const statusParamNames = statusList.map((s, idx) => {
+                    const paramName = `status${idx}`;
+                    params[paramName] = { type: db.sql.NVarChar(20), value: s };
+                    return `@${paramName}`;
+                });
+                if (statusParamNames.length > 0) {
+                    conditions.push(`O.status IN (${statusParamNames.join(',')})`);
+                }
+            }
+
+            if (type) {
+                conditions.push('O.order_type = @orderType');
+                params.orderType = { type: db.sql.NVarChar(10), value: type };
+            }
+
+            const safeLimit = Math.min(Math.max(parseInt(limit) || 50, 1), 200);
+            const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
             const result = await db.query(`
-        SELECT TOP ${parseInt(limit)}
+        SELECT TOP ${safeLimit}
           O.order_id, O.order_code, O.status, O.order_type,
           O.delivery_name, O.delivery_phone, O.delivery_timeslot,
           O.subtotal, O.total, O.payment_method, O.created_at,
@@ -36,11 +55,11 @@ router.get('/', async (req, res) => {
         FROM Orders O
         LEFT JOIN Users U ON U.user_id = O.user_id
         ${whereClause}
-        ORDER BY O.created_at DESC`);
+        ORDER BY O.created_at DESC`, params);
             data = result.recordset;
         } else {
             // Trả dữ liệu mock khi không có DB
-            data = require('../../assets/js/api.js') ? [] : [];
+            data = [];
         }
 
         res.json({ success: true, data, total: data.length });

@@ -11,6 +11,35 @@
 -- GO
 
 -- ============================================================
+-- TẠO BẢNG USERS
+-- ============================================================
+CREATE TABLE Users (
+    user_id INT IDENTITY(1,1) PRIMARY KEY,
+    email NVARCHAR(150) UNIQUE NOT NULL,
+    password_hash NVARCHAR(255) NOT NULL, -- Lưu mật khẩu dạng Plain-text (không băm) - CHỦ ĐÍCH cho mục đích DEMO tính năng/dữ liệu, KHÔNG hướng đến bảo mật thực tế
+    full_name NVARCHAR(100) NOT NULL,
+    phone NVARCHAR(20),
+    role NVARCHAR(20) NOT NULL DEFAULT 'customer' CHECK (role IN ('admin', 'kitchen', 'customer')),
+    is_active BIT NOT NULL DEFAULT 1,
+    loyalty_points INT NOT NULL DEFAULT 0,
+    last_login DATETIME
+);
+GO
+
+-- ============================================================
+-- INSERT 3 NGƯỜI DÙNG MẪU KHỚP 100% VỚI 3 ROLE CHIPS (INDEX.HTML)
+-- Mật khẩu lưu Plain-text có chủ đích: phục vụ demo đăng nhập tự động
+-- (index.html tự điền sẵn email + password theo từng role để test nhanh,
+--  không cần người dùng tự nhớ/nhập tài khoản)
+-- ============================================================
+INSERT INTO Users (email, password_hash, full_name, phone, role, is_active)
+VALUES 
+    ('user@fitfood.vn', 'User@123', N'Khách hàng Demo', '0900000001', 'customer', 1),
+    ('kitchen@fitfood.vn', 'Kitchen@123', N'Bếp trưởng Demo', '0900000002', 'kitchen', 1),
+    ('admin@fitfood.vn', 'Admin@123', N'Quản trị viên Demo', '0900000003', 'admin', 1);
+GO
+
+-- ============================================================
 -- BẢNG DANH MỤC MÓN ĂN
 -- ============================================================
 CREATE TABLE Categories (
@@ -108,7 +137,7 @@ CREATE TABLE Orders (
     user_id         INT REFERENCES Users(user_id),  -- NULL nếu khách vãng lai
     subscription_id INT REFERENCES Subscriptions(subscription_id),
     order_type      NVARCHAR(10) NOT NULL DEFAULT 'online'
-                    CHECK (order_type IN ('online')),
+                    CHECK (order_type IN ('online', 'walkin')),
     status          NVARCHAR(20) NOT NULL DEFAULT 'pending'
                     CHECK (status IN ('pending','confirmed','preparing','ready','delivering','done','cancelled')),
     -- Thông tin giao hàng
@@ -189,6 +218,20 @@ CREATE TABLE Inventory (
     -- Trạng thái tự động tính dựa vào expiry_date
     created_at      DATETIME DEFAULT GETDATE(),
     updated_at      DATETIME DEFAULT GETDATE()
+);
+
+-- ============================================================
+-- BẢNG ĐỊNH LƯỢNG NGUYÊN LIỆU CỦA MÓN ĂN (Bill of Materials)
+-- Ánh xạ nhiều-nhiều giữa Products và Inventory:
+-- 1 món ăn có thể cần nhiều nguyên liệu, 1 nguyên liệu dùng cho nhiều món
+-- Dùng để trigger tr_OrderPreparing khấu trừ kho ĐÚNG theo từng món,
+-- thay vì trừ cố định 1 con số chung cho mọi loại món
+-- ============================================================
+CREATE TABLE ProductIngredients (
+    product_id      INT NOT NULL REFERENCES Products(product_id),
+    inventory_id     INT NOT NULL REFERENCES Inventory(inventory_id),
+    qty_per_portion  DECIMAL(10, 3) NOT NULL,   -- Định lượng nguyên liệu cần cho 1 phần ăn (đơn vị theo Inventory.unit)
+    PRIMARY KEY (product_id, inventory_id)
 );
 
 -- ============================================================
@@ -306,28 +349,4 @@ CREATE TABLE Notifications (
 );
 
 PRINT N'✅ Schema FitFood đã được tạo thành công';
-GO
-
--- ============================================================
--- TẠO BẢNG USERS
--- ============================================================
-CREATE TABLE Users (
-    user_id INT IDENTITY(1,1) PRIMARY KEY,
-    email NVARCHAR(150) UNIQUE NOT NULL,
-    password_hash NVARCHAR(255) NOT NULL, -- Cấm băm, lưu thô Plain-text
-    full_name NVARCHAR(100) NOT NULL,
-    role NVARCHAR(20) NOT NULL DEFAULT 'customer' CHECK (role IN ('admin', 'kitchen', 'customer')),
-    is_active BIT NOT NULL DEFAULT 1,
-    last_login DATETIME
-);
-GO
-
--- ============================================================
--- INSERT 3 NGƯỜI DÙNG MẪU KHỚP 100% VỚI 3 ROLE CHIPS (INDEX.HTML)
--- ============================================================
-INSERT INTO Users (email, password_hash, full_name, role, is_active)
-VALUES 
-    ('customer@fitfood.vn', 'User@123', N'Khách hàng Demo', 'customer', 1),
-    ('kitchen@fitfood.vn', 'Kitchen@123', N'Bếp trưởng Demo', 'kitchen', 1),
-    ('admin@fitfood.vn', 'Admin@123', N'Quản trị viên Demo', 'admin', 1);
 GO

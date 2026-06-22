@@ -202,6 +202,56 @@ const MOCK = {
         },
     ],
 
+    /* Mock riêng cho trang "Đơn hàng của tôi" (khách hàng) -
+       khác cấu trúc với MOCK.orders (dành cho KDS bếp):
+       có price từng món + đủ các trạng thái để demo banner & nút đặt lại */
+    customerOrders: [
+        {
+            id: '#FF-2403', status: 'pending',
+            created_at: new Date(Date.now() - 5 * 60000).toISOString(),
+            total: 167000,
+            items: [
+                { name: 'Cháo yến mạch Detox', qty: 1, price: 55000 },
+                { name: 'Cuốn diếp cá hồi', qty: 1, price: 98000 },
+            ]
+        },
+        {
+            id: '#FF-2402', status: 'preparing',
+            created_at: new Date(Date.now() - 25 * 60000).toISOString(),
+            total: 85000,
+            items: [
+                { name: 'Bò áp chảo Protein Bowl', qty: 1, price: 85000 },
+            ]
+        },
+        {
+            id: '#FF-2401', status: 'delivering',
+            created_at: new Date(Date.now() - 40 * 60000).toISOString(),
+            total: 255000,
+            items: [
+                { name: 'Cơm gà nướng Eat Clean', qty: 1, price: 85000 },
+                { name: 'Salad Keto Bơ Trứng', qty: 1, price: 75000 },
+                { name: 'Bowl Quinoa Low-Carb', qty: 1, price: 92000 },
+            ]
+        },
+        {
+            id: '#FF-2390', status: 'done',
+            created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+            total: 173000,
+            items: [
+                { name: 'Salad Keto Bơ Trứng', qty: 1, price: 75000 },
+                { name: 'Cuốn diếp cá hồi', qty: 1, price: 98000 },
+            ]
+        },
+        {
+            id: '#FF-2375', status: 'done',
+            created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
+            total: 85000,
+            items: [
+                { name: 'Cơm gà nướng Eat Clean', qty: 1, price: 85000 },
+            ]
+        },
+    ],
+
     kpi: {
         revenue_today: 8540000,
         orders_today: 47,

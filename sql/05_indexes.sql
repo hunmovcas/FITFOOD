@@ -70,5 +70,10 @@ CREATE INDEX idx_invlogs_inventory
 ON InventoryLogs (inventory_id, created_at DESC)
 INCLUDE (action_type, quantity_change, order_id);
 
+-- --- ProductIngredients: trigger tr_OrderPreparing JOIN theo product_id ---
+CREATE INDEX idx_productingredients_product
+ON ProductIngredients (product_id)
+INCLUDE (inventory_id, qty_per_portion);
+
 PRINT N'✅ Tất cả indexes đã được tạo';
 GO

@@ -106,9 +106,9 @@
         async function loadOrders() {
             try {
                 const res = await API.get('/api/orders/my');
-                allOrders = res.data || MOCK.orders;
+                allOrders = res.data || MOCK.customerOrders;
             } catch {
-                allOrders = MOCK.orders;
+                allOrders = MOCK.customerOrders;
             }
 
             // Hiển thị banner đơn đang giao

@@ -38,7 +38,7 @@ Indexes — 12 index tối ưu hiệu năng cho Orders, Products, Inventory, Sub
 
 ⚙️ Backend Node.js
 
-Auth — JWT sign/verify, bcrypt hash, login/register/change-password, role middleware
+Auth — JWT sign/verify, lưu mật khẩu Plain-text (chủ đích DEMO, không tập trung bảo mật), login/register/change-password, role middleware
 Rate Limiter — Chống spam API (checkout, voucher validate)
 WebSocket — Socket.io server, phòng (kitchen/customer/shipper), realtime new_order/status/location
 9 Route modules — Products, Orders, Subscriptions, Inventory, Users, Suppliers, Marketing, Tracking, Notifications

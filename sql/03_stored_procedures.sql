@@ -43,8 +43,11 @@ BEGIN
         IF @voucher_code IS NOT NULL BEGIN
             SELECT @voucher_id = voucher_id,
                    @discount = CASE discount_type
-                       WHEN 'percent' THEN LEAST(@subtotal * discount_value / 100,
-                                                 ISNULL(max_discount, 999999999))
+                       WHEN 'percent' THEN
+                           CASE WHEN (@subtotal * discount_value / 100) < ISNULL(max_discount, 999999999)
+                                THEN (@subtotal * discount_value / 100)
+                                ELSE ISNULL(max_discount, 999999999)
+                           END
                        ELSE discount_value
                    END
             FROM Vouchers
