@@ -1,5 +1,5 @@
 ✅ TỔNG KẾT CÁC TÍNH NĂNG ĐÃ XÂY DỰNG
-🛒 Customer Portal (5 trang)
+🛒 Customer Portal (8 trang)
 
 Trang chủ — Hero section, danh sách món nổi bật, stats, teaser gói ăn, bộ lọc chip
 Thực đơn — Grid 4 cột, bộ lọc 6 danh mục (Eat Clean/Keto/Low-Carb/Tăng cơ/Giảm cân), tìm kiếm realtime, sắp xếp
@@ -9,19 +9,23 @@ Checkout — Form địa chỉ, chọn khung giờ giao, 3 phương thức thanh
 Đơn hàng — Tracking realtime 5 bước, lịch sử, expandable detail, filter theo status
 Gói ăn — 3 gói (Starter/Full Day/Premium), toggle tuần/tháng, đăng ký/gia hạn/tạm dừng/huỷ
 Dinh dưỡng Tracker — Ring chart calo, progress bar macro (P/C/F), biểu đồ 7 ngày, lịch sử bữa ăn
+Hồ sơ cá nhân — Thông tin tài khoản, ví điểm thưởng loyalty, đổi mật khẩu, lịch sử giao dịch
 
-👨‍🍳 Kitchen / POS (5 trang)
+👨‍🍳 Kitchen / POS (4 trang)
 
 KDS — Grid ticket realtime, màu priority theo thời gian, timer đếm ngược, cập nhật trạng thái, âm thanh thông báo
 Kho nguyên liệu — Bảng với mã #ID/loại/tên/tồn kho/ngày nhập/hết hạn, color-coded expiry, progress bar tồn kho, lọc danh mục, cảnh báo thống kê
-Nhập kho (receiving.html) — Route cơ bản tích hợp vào inventory
+Nhập kho (receiving.html) — Ghi nhận hàng từ nhà cung cấp, gợi ý nhập lại dựa theo tồn kho thấp, cập nhật số lượng & hạn dùng
 In nhãn — Preview tem nhãn dinh dưỡng (brand/tên/kcal/macro/ngày), hỗ trợ in trình duyệt, tải từ URL params
 
-📊 Admin Dashboard (5 trang)
+📊 Admin Dashboard (6 trang)
 
 Dashboard — 4 KPI cards (doanh thu/đơn hàng/food waste/retention), biểu đồ bar CSS, bảng đơn gần đây, cảnh báo kho
+Lịch thực đơn — Lên lịch món theo ngày/tuần, tự tính định lượng nguyên liệu cần nhập theo subscription
+Nhà cung cấp — CRUD nhà cung cấp thực phẩm sạch, danh mục, lịch nhập hàng, liên kết với inventory
 Báo cáo — Bộ lọc thời gian, metrics BI, bảng top sản phẩm, bảng subscription analytics, xuất CSV
 Marketing — Stats voucher, bảng với progress bar usage, modal tạo voucher (loại/giá trị/điều kiện/hạn), toggle bật/tắt
+Analytics — Dự báo xu hướng nhu cầu dinh dưỡng, phân tích hành vi tiêu dùng chuyên sâu
 
 🗄 SQL Server
 
@@ -38,7 +42,7 @@ Auth — JWT sign/verify, bcrypt hash, login/register/change-password, role midd
 Rate Limiter — Chống spam API (checkout, voucher validate)
 WebSocket — Socket.io server, phòng (kitchen/customer/shipper), realtime new_order/status/location
 9 Route modules — Products, Orders, Subscriptions, Inventory, Users, Suppliers, Marketing, Tracking, Notifications
-DB Connection Pool — mssql pool với graceful shutdown, transaction helper
+DB Connection Pool — mssql pool (SQL Server) với graceful shutdown, transaction helper
 Mock fallback — Tự động dùng mock data khi không có DB, frontend hoạt động độc lập
 
 🎨 UI/UX

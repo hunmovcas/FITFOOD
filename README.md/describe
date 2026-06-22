@@ -6,9 +6,9 @@ Hệ thống nền tảng quản lý đồ ăn healthy tích hợp — Bài tậ
 
 | Portal | URL | Mô tả |
 |--------|-----|-------|
-| 🛒 Khách hàng | `/src/customer/home.html` | Đặt món, gói ăn, tracking |
-| 👨‍🍳 Bếp | `/src/kitchen/kds.html` | KDS realtime, kho, in nhãn |
-| 📊 Admin | `/src/admin/dashboard.html` | BI, quản trị toàn hệ thống |
+| 🛒 Khách hàng | `/src/customer/home.html` | Đặt món, gói ăn, tracking, hồ sơ |
+| 👨‍🍳 Bếp | `/src/kitchen/kds.html` | KDS realtime, kho, nhập kho, in nhãn |
+| 📊 Admin | `/src/admin/dashboard.html` | BI, lịch thực đơn, nhà cung cấp, quản trị toàn hệ thống |
 
 ## 🚀 Cài đặt & Chạy
 
@@ -19,7 +19,6 @@ Chỉ cần mở `index.html` bằng Live Server (VS Code) hoặc deploy lên Gi
 ```bash
 cd server
 npm install
-cp .env.example .env    # Điền thông tin DB
 npm run dev             # Chạy với nodemon
 ```
 
@@ -47,17 +46,17 @@ DB_NAME=FitFoodDB
 DB_USER=sa
 DB_PASSWORD=YourPassword123!
 JWT_SECRET=fitfood-jwt-secret-change-in-production
-FRONTEND_URL=https://yourusername.github.io
+FRONTEND_URL=https://hunmovcas.github.io
 NODE_ENV=development
 ```
 
 ## 🛠 Tech Stack
 
 - **Frontend**: HTML5, CSS3 (thuần), Vanilla JS, Responsive Web
-- **Backend**: Node.js, Express.js, Socket.io
+- **Backend**: Node.js, Express.js, Socket.io, Helmet
 - **Database**: SQL Server (mssql)
 - **Auth**: JWT (jsonwebtoken)
-- **Deploy**: GitHub Pages (frontend) + Render.com (backend) + Railway (database)
+- **Deploy**: GitHub Pages (frontend) + chạy local với `npm run dev`
 
 ## 🎯 Tính năng đã xây dựng
 

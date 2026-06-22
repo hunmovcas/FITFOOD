@@ -12,7 +12,7 @@ fitfood/
 │   │   ├── orders.html               # Lịch sử đơn hàng + theo dõi trạng thái giao hàng realtime (shipper tracking)
 │   │   ├── subscription.html         # Đăng ký / quản lý Gói ăn định kỳ (tuần/tháng), tùy chỉnh lịch giao
 │   │   ├── nutrition-tracker.html    # Theo dõi calo tích lũy theo ngày/tuần, biểu đồ dinh dưỡng cá nhân
-│   │   └── profile.html             # Hồ sơ cá nhân: thông tin tài khoản, ví điểm thưởng, đổi mật khẩu
+│   │   └── profile.html              # Hồ sơ cá nhân: thông tin tài khoản, ví điểm thưởng loyalty, đổi mật khẩu
 │   │
 │   ├── kitchen/
 │   │   ├── kds.html                  # Kitchen Display System: hiển thị đơn realtime cho bếp, ghi chú cá nhân hóa, đánh dấu hoàn thành
@@ -26,7 +26,7 @@ fitfood/
 │       ├── suppliers.html            # Quản lý nhà cung cấp thực phẩm sạch: danh mục, lịch nhập hàng, theo dõi hạn sử dụng
 │       ├── marketing.html            # Tạo & quản lý chương trình khuyến mãi, phân phối voucher theo hành vi tiêu dùng
 │       ├── analytics.html            # Dự báo xu hướng nhu cầu dinh dưỡng, phân tích hành vi tiêu dùng chuyên sâu
-│       └── reports.html             # Báo cáo BI: món ăn phổ biến, food waste, retention rate, thống kê doanh thu
+│       └── reports.html              # Báo cáo BI: món ăn phổ biến, food waste, retention rate, thống kê doanh thu
 │
 ├── assets/
 │   ├── css/
@@ -36,7 +36,7 @@ fitfood/
 │   │   └── admin.css                 # Style riêng dashboard admin: layout bảng, biểu đồ, sidebar điều hướng
 │   ├── js/
 │   │   ├── auth.js                   # Xử lý đăng nhập / đăng xuất, lưu JWT token, kiểm tra phiên đăng nhập
-│   │   ├── api.js                    # Module gọi API trung tâm: wrapper fetch/axios, xử lý lỗi, đính kèm auth header
+│   │   ├── api.js                    # Module gọi API trung tâm: wrapper fetch, xử lý lỗi, đính kèm auth header, environment-aware base URL
 │   │   ├── socket.js                 # Client WebSocket: kết nối realtime cho KDS nhận đơn & shipper tracking
 │   │   ├── customer.js               # Logic frontend khách hàng: bộ lọc món, cập nhật giỏ hàng, theo dõi đơn realtime
 │   │   ├── kitchen.js                # Logic frontend bếp: nhận đơn realtime (WebSocket/polling), cập nhật trạng thái KDS
@@ -51,9 +51,9 @@ fitfood/
 │   └── 05_indexes.sql                # Index tối ưu hiệu năng truy vấn cho các bảng orders, inventory, users
 │
 └── server/
-    ├── package.json                  # Khai báo dependencies Node.js (Express, JWT, mysql2, bcrypt, socket.io…) & scripts
+    ├── package.json                  # Khai báo dependencies Node.js (Express, JWT, mssql, bcrypt, socket.io…) & scripts
     ├── server.js                     # Entry point: khởi tạo Express app, mount routes, cấu hình CORS, lắng nghe port
-    ├── db.js                         # Kết nối & quản lý connection pool đến MySQL / PostgreSQL
+    ├── db.js                         # Kết nối & quản lý connection pool đến SQL Server (mssql)
     ├── socket.js                     # WebSocket server (Socket.io): xử lý realtime cho KDS & shipper tracking
     ├── middleware/
     │   ├── jwtAuth.js                # Xác thực JWT: kiểm tra token hợp lệ, giải mã thông tin người dùng
@@ -65,19 +65,8 @@ fitfood/
         ├── orders.js                 # API tạo đơn, cập nhật trạng thái, lấy lịch sử đơn hàng
         ├── subscriptions.js          # API quản lý gói ăn định kỳ: đăng ký, gia hạn, tạm dừng, hủy gói
         ├── inventory.js              # API quản lý kho: cập nhật tồn kho, cảnh báo hạn sử dụng, lịch sử nhập/xuất
-        ├── users.js                  # API quản lý người dùng: hồ sơ, điểm thưởng, lịch sử calo, phân quyền nhân viên
+        ├── users.js                  # API quản lý người dùng: hồ sơ, điểm thưởng, lịch sử calo
         ├── suppliers.js              # API quản lý nhà cung cấp: danh mục, lịch nhập hàng, liên kết với inventory
         ├── marketing.js              # API voucher & campaign: tạo, phân phối, kiểm tra điều kiện áp dụng mã giảm giá
         ├── tracking.js               # API vị trí shipper realtime: cập nhật & lấy tọa độ giao hàng theo đơn
         └── notifications.js          # API thông báo: cảnh báo kho sắp hết, hạn sử dụng, đơn mới cho bếp
-
-server/ → Render.com
-
-Database → Railway
-
-frontend/ → GitHub Pages
-
-Bài tập lớn môn Cơ sở dữ liệu, cần sử dụng SQL Serve
-
-Tạo web host trên Github
-

@@ -173,9 +173,33 @@ const MOCK = {
     ],
 
     orders: [
-        { id: '#FF-2401', customer: 'Nguyễn Thị Lan', items: 3, total: 255000, status: 'preparing', time: '14:32', type: 'online' },
-        { id: '#FF-2402', customer: 'Trần Văn Minh', items: 1, total: 85000, status: 'ready', time: '14:28', type: 'online' },
-        { id: '#FF-2403', customer: 'Lê Hoàng Nam', items: 2, total: 167000, status: 'pending', time: '14:35', type: 'online' },
+        {
+            id: '#FF-2401', customer: 'Nguyễn Thị Lan', total: 255000,
+            status: 'preparing', time: '14:32', type: 'online',
+            arrivedAt: Date.now() - 8 * 60000,
+            items: [
+                { name: 'Cơm gà nướng Eat Clean', qty: 1, notes: 'Không hành' },
+                { name: 'Salad Keto Bơ Trứng', qty: 1, notes: '' },
+                { name: 'Bowl Quinoa Low-Carb', qty: 1, notes: 'Thêm sốt tahini' },
+            ]
+        },
+        {
+            id: '#FF-2402', customer: 'Trần Văn Minh', total: 85000,
+            status: 'ready', time: '14:28', type: 'online',
+            arrivedAt: Date.now() - 14 * 60000,
+            items: [
+                { name: 'Bò áp chảo Protein Bowl', qty: 1, notes: '' },
+            ]
+        },
+        {
+            id: '#FF-2403', customer: 'Lê Hoàng Nam', total: 167000,
+            status: 'pending', time: '14:35', type: 'online',
+            arrivedAt: Date.now() - 2 * 60000,
+            items: [
+                { name: 'Cháo yến mạch Detox', qty: 1, notes: '' },
+                { name: 'Cuốn diếp cá hồi', qty: 1, notes: 'Ít wasabi' },
+            ]
+        },
     ],
 
     kpi: {

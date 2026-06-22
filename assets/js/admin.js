@@ -3,6 +3,12 @@
    Biểu đồ BI, form cấu hình, xuất báo cáo
    ============================================================ */
 
+/* --- Hàm tiện ích dùng chung trong admin --- */
+function formatPrice(amount) {
+    if (typeof amount !== 'number') return '0 ₫';
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+}
+
 const AdminDashboard = (() => {
 
     /* --- Tải KPI tổng quan --- */

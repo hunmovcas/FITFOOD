@@ -134,8 +134,11 @@ h6 {
 .step-icon,
 .bar-label,
 .legend-item,
-.donut-wrapper text {
-    font-family: var(--font-body);
+.donut-wrapper text,
+.stat-number,
+[style*="font-family:var(--font-display)"][style*="font-size:1.75rem"],
+[style*="font-family: var(--font-display)"][style*="font-size: 1.75rem"] {
+    font-family: var(--font-body) !important;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1, "lnum" 1;
     line-height: 1;
