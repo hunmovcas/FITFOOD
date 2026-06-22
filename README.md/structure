@@ -25,7 +25,6 @@ fitfood/
 │       ├── menu-plan.html            # Lên lịch thực đơn theo ngày/tuần, tự tính định lượng nguyên liệu cần nhập theo subscription
 │       ├── suppliers.html            # Quản lý nhà cung cấp thực phẩm sạch: danh mục, lịch nhập hàng, theo dõi hạn sử dụng
 │       ├── marketing.html            # Tạo & quản lý chương trình khuyến mãi, phân phối voucher theo hành vi tiêu dùng
-│       ├── staff.html                # Quản lý nhân sự: tài khoản nhân viên, phân quyền (bếp / thu ngân / vận hành)
 │       ├── analytics.html            # Dự báo xu hướng nhu cầu dinh dưỡng, phân tích hành vi tiêu dùng chuyên sâu
 │       └── reports.html             # Báo cáo BI: món ăn phổ biến, food waste, retention rate, thống kê doanh thu
 │

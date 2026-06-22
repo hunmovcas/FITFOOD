@@ -13,7 +13,6 @@ Dinh dưỡng Tracker — Ring chart calo, progress bar macro (P/C/F), biểu đ
 👨‍🍳 Kitchen / POS (5 trang)
 
 KDS — Grid ticket realtime, màu priority theo thời gian, timer đếm ngược, cập nhật trạng thái, âm thanh thông báo
-POS Thu ngân — Grid menu, giỏ hàng realtime, tăng/giảm số lượng, 2 phương thức thanh toán
 Kho nguyên liệu — Bảng với mã #ID/loại/tên/tồn kho/ngày nhập/hết hạn, color-coded expiry, progress bar tồn kho, lọc danh mục, cảnh báo thống kê
 Nhập kho (receiving.html) — Route cơ bản tích hợp vào inventory
 In nhãn — Preview tem nhãn dinh dưỡng (brand/tên/kcal/macro/ngày), hỗ trợ in trình duyệt, tải từ URL params

@@ -200,3 +200,39 @@ GO
 
 PRINT N'✅ Stored procedures đã được tạo';
 GO
+
+-- ============================================================
+-- STORED PROCEDURE: sp_KiemTraDangNhap
+-- So sánh chuỗi thô, kiểm tra trạng thái mở và cập nhật last_login
+-- ============================================================
+CREATE PROCEDURE sp_KiemTraDangNhap
+    @email NVARCHAR(150),
+    @password NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @UserId INT;
+
+    -- Dò tìm ID của người dùng khớp email, mật khẩu thô và đang mở
+    SELECT @UserId = user_id
+    FROM Users
+    WHERE email = @email 
+      AND password_hash = @password 
+      AND is_active = 1;
+
+    -- Nếu tìm thấy người dùng hợp lệ
+    IF @UserId IS NOT NULL
+    BEGIN
+        -- Tự động cập nhật mốc giờ hiện tại vào last_login
+        UPDATE Users
+        SET last_login = GETDATE()
+        WHERE user_id = @UserId;
+
+        -- Trả về thông tin của người dùng đó
+        SELECT user_id, email, full_name, role, is_active, last_login
+        FROM Users
+        WHERE user_id = @UserId;
+    END
+END;
+GO

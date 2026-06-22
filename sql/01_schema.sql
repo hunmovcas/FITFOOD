@@ -11,24 +11,6 @@
 -- GO
 
 -- ============================================================
--- BẢNG NGƯỜI DÙNG
--- Lưu thông tin tất cả tài khoản: customer, kitchen, admin
--- ============================================================
-CREATE TABLE Users (
-    user_id         INT IDENTITY(1,1) PRIMARY KEY,
-    email           NVARCHAR(150) NOT NULL UNIQUE,
-    password_hash   NVARCHAR(255) NOT NULL,
-    full_name       NVARCHAR(100) NOT NULL,
-    phone           NVARCHAR(20),
-    role            NVARCHAR(20) NOT NULL DEFAULT 'customer'
-                    CHECK (role IN ('customer', 'kitchen', 'admin')),
-    loyalty_points  INT NOT NULL DEFAULT 0,
-    is_active       BIT NOT NULL DEFAULT 1,
-    created_at      DATETIME NOT NULL DEFAULT GETDATE(),
-    updated_at      DATETIME NOT NULL DEFAULT GETDATE()
-);
-
--- ============================================================
 -- BẢNG DANH MỤC MÓN ĂN
 -- ============================================================
 CREATE TABLE Categories (
@@ -324,4 +306,28 @@ CREATE TABLE Notifications (
 );
 
 PRINT N'✅ Schema FitFood đã được tạo thành công';
+GO
+
+-- ============================================================
+-- TẠO BẢNG USERS
+-- ============================================================
+CREATE TABLE Users (
+    user_id INT IDENTITY(1,1) PRIMARY KEY,
+    email NVARCHAR(150) UNIQUE NOT NULL,
+    password_hash NVARCHAR(255) NOT NULL, -- Cấm băm, lưu thô Plain-text
+    full_name NVARCHAR(100) NOT NULL,
+    role NVARCHAR(20) NOT NULL DEFAULT 'customer' CHECK (role IN ('admin', 'kitchen', 'customer')),
+    is_active BIT NOT NULL DEFAULT 1,
+    last_login DATETIME
+);
+GO
+
+-- ============================================================
+-- INSERT 3 NGƯỜI DÙNG MẪU KHỚP 100% VỚI 3 ROLE CHIPS (INDEX.HTML)
+-- ============================================================
+INSERT INTO Users (email, password_hash, full_name, role, is_active)
+VALUES 
+    ('customer@fitfood.vn', 'User@123', N'Khách hàng Demo', 'customer', 1),
+    ('kitchen@fitfood.vn', 'Kitchen@123', N'Bếp trưởng Demo', 'kitchen', 1),
+    ('admin@fitfood.vn', 'Admin@123', N'Quản trị viên Demo', 'admin', 1);
 GO
